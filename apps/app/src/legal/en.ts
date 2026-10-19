@@ -4,7 +4,7 @@ export const terms = `## 1. About BibleAlpha
 BibleAlpha is a non-profit Bible study app, available at biblealpha.com and in apps for phones and computers. By creating an account or using BibleAlpha, you agree to these Terms of Use and to the Privacy Policy.
 
 ## 2. Who can use it
-- You must be at least 13 years old. Users under 18 must have the knowledge and permission of a parent or guardian.
+- BibleAlpha is for all ages: God's Word is for everyone. Children and teenagers use it with the guidance and permission of their parents or guardians, who create or authorize the account.
 - When you sign up, provide accurate information and confirm your email.
 - You are responsible for keeping your password secret and for everything done in your account. If you notice misuse, change your password and sign out other sessions in your profile.
 
@@ -123,7 +123,7 @@ We use encrypted connections (HTTPS), passwords protected with Argon2id, session
 - We do not use advertising cookies or third-party trackers.
 
 ## 11. Children and teenagers
-BibleAlpha is not intended for children under 13. Between 13 and 18, use requires the permission of a parent or guardian.
+BibleAlpha is for all ages. Children's and teenagers' data is processed with the consent and guidance of their parents or guardians, as the law requires. If you are a parent or guardian and want to access, correct or delete a child's data, contact us.
 
 ## 12. Changes
 We may update this policy. When a change is important, we will notify you in the app or by email. The version date appears at the top of this page.`;
