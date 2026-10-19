@@ -1,0 +1,24 @@
+{
+  "code": "web",
+  "name": "World English Bible",
+  "abbreviation": "WEB",
+  "language": "en",
+  "search_config": "english",
+  "description": "The World English Bible is a Public Domain translation of the Holy Bible into modern English (edition without the Deuterocanon).",
+  "edition": "World English Bible (eBible.org engwebp, file updated 2026-10-18)",
+  "year": null,
+  "license": "Public Domain",
+  "license_url": "https://ebible.org/engwebp/copyright.htm",
+  "attribution": "World English Bible (WEB), public domain. \"World English Bible\" is a trademark of eBible.org.",
+  "source_url": "https://ebible.org/Scriptures/engwebp_vpl.zip",
+  "file": "engwebp_vpl.txt.gz",
+  "file_sha256": "bd5f4ac05c5742338b3b17086d5731cb2ca005f3ba5025f71494643eb7799833",
+  "downloaded_at": "2026-10-18",
+  "versification": "kjv",
+  "expected_verses": 31103,
+  "notes": {
+    "omitted_verses": "Versículos sem texto nesta tradução (omitidos por crítica textual) não são importados: ex. Lucas 17:36, Atos 8:37, Atos 15:34, Atos 24:7.",
+    "romans_doxology": "A doxologia aparece em Romanos 14:24-26, e Romanos 16 termina no versículo 24.",
+    "ebible_id": "engwebp"
+  }
+}

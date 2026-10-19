@@ -1,0 +1,61 @@
+# Cache por tipo de arquivo (definido aqui para que os cabeçalhos de segurança do server valham em todas as rotas)
+map $uri $ba_cache_control {
+    ~^/(_expo|assets)/                                   "public, max-age=31536000, immutable";
+    ~^/(sw\.js|workbox-.*\.js|manifest\.json|index\.html)$ "no-cache";
+    ~^/api/                                              "";
+    default                                              "no-cache";
+}
+
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+
+    client_max_body_size 10m;
+    server_tokens off;
+
+    # IP real do visitante: só se confia no X-Forwarded-For vindo do proxy do Easypanel (rede interna).
+    # Assim ninguém troca o próprio IP com um cabeçalho falso para driblar os limites de tentativas.
+    set_real_ip_from 10.0.0.0/8;
+    set_real_ip_from 172.16.0.0/12;
+    set_real_ip_from 192.168.0.0/16;
+    set_real_ip_from 127.0.0.1;
+    real_ip_header X-Forwarded-For;
+    real_ip_recursive on;
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+
+    add_header Cache-Control $ba_cache_control always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Permissions-Policy "camera=(self), geolocation=(), microphone=(self)" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header Cross-Origin-Opener-Policy "same-origin" always;
+    # Só código do próprio site; imagens também de data:/blob: (ilustrações e ícones); sem iframes de terceiros
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; media-src 'self' blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" always;
+
+    # API no mesmo domínio: cookie do refresh token fica first-party e não há CORS
+    location /api/ {
+        proxy_pass ${API_UPSTREAM};
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        # Só o IP real (já validado acima), nunca a lista enviada pelo cliente
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        # Respostas da IA chegam em streaming (Fase 3)
+        proxy_buffering off;
+        proxy_read_timeout 300s;
+    }
+
+    location ~ ^/(_expo|assets)/ {
+        try_files $uri =404;
+    }
+
+    # Rotas do app (SPA)
+    location / {
+        try_files $uri /index.html;
+    }
+}

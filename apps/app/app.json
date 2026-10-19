@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "BibleAlpha",
+    "slug": "biblealpha",
+    "version": "0.1.0",
+    "orientation": "default",
+    "icon": "./assets/images/icon.png",
+    "scheme": "biblealpha",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#0A0806",
+    "ios": {
+      "bundleIdentifier": "com.biblealpha.app",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.biblealpha.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#040302",
+        "foregroundImage": "./assets/images/adaptive-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "single",
+      "name": "BibleAlpha",
+      "shortName": "BibleAlpha",
+      "themeColor": "#0A0806",
+      "backgroundColor": "#0A0806",
+      "favicon": "./public/favicon.ico"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#040302",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200
+        }
+      ],
+      "expo-secure-store",
+      "expo-localization",
+      "expo-sharing",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "O BibleAlpha usa a câmera só para ler o QR code do telão da igreja.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": true
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

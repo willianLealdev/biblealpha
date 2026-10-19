@@ -1,0 +1,12 @@
+# Finais de linha do Linux no repositório (o servidor e o Docker rodam em Linux)
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.zip binary
+*.gz binary

@@ -1,0 +1,23 @@
+{
+  "code": "blivre",
+  "name": "Bíblia Livre",
+  "abbreviation": "BLIVRE",
+  "language": "pt-BR",
+  "search_config": "portuguese",
+  "description": "A Bíblia Sagrada em português do Brasil, atualizada a partir da tradução de 1819 de João Ferreira de Almeida, edição Textus Receptus.",
+  "edition": "Bíblia Livre, versão de fevereiro de 2018 (eBible.org, porbr2018, arquivo atualizado em 2026-10-17)",
+  "year": 2018,
+  "license": "CC BY 4.0 BR",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/deed.pt_BR",
+  "attribution": "Bíblia Livre (BLIVRE), Copyright © 2018 Diego Santos, Mario Sérgio e Marco Teles. Licença Creative Commons Atribuição 4.0 Brasil. Texto obtido em eBible.org.",
+  "source_url": "https://ebible.org/Scriptures/porbr2018_vpl.zip",
+  "file": "porbr2018_vpl.txt.gz",
+  "file_sha256": "20f7cccf95e99d0b07d3a483aeebe9a0dcad0c8b52cb169cf917c9e684a4d858",
+  "downloaded_at": "2026-10-18",
+  "versification": "kjv",
+  "expected_verses": 31102,
+  "notes": {
+    "romans_doxology": "Romanos 16:25-27 (como na Almeida/KJV).",
+    "ebible_id": "porbr2018"
+  }
+}

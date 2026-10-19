@@ -1,0 +1,22 @@
+{
+  "code": "rv1909",
+  "name": "Reina-Valera 1909",
+  "abbreviation": "RV1909",
+  "language": "es",
+  "search_config": "spanish",
+  "description": "La Santa Biblia, Antigua versión de Casiodoro de Reina (1569), revisada por Cipriano de Valera (1602), revisión de 1909.",
+  "edition": "Reina Valera 1909 (eBible.org spaRV1909, archivo descargado el 2026-10-18)",
+  "year": 1909,
+  "license": "Public Domain",
+  "license_url": "https://ebible.org/spaRV1909/copyright.htm",
+  "attribution": "Reina-Valera 1909 (RV1909), dominio público. Texto obtenido en eBible.org.",
+  "source_url": "https://ebible.org/Scriptures/spaRV1909_vpl.zip",
+  "file": "spaRV1909_vpl.txt.gz",
+  "file_sha256": "9d7aff52765d9e67b5d11ff667b6953319af39454ea32c53d6743401720594aa",
+  "downloaded_at": "2026-10-18",
+  "versification": "kjv",
+  "expected_verses": 31102,
+  "notes": {
+    "ebible_id": "spaRV1909"
+  }
+}

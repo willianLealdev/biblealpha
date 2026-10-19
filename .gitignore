@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.*
+!.env.example
+# Chaves e senhas locais: nunca no Git
+chaves.txt
+__pycache__/
+.venv/
+
+# Gerados
+dist/
+.expo/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.claude/

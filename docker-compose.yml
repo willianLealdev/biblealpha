@@ -1,0 +1,73 @@
+# Ambiente completo para desenvolvimento local:  docker compose up --build
+# Em homologação/produção, os mesmos serviços são criados no Easypanel (ver docs/02-deploy-easypanel.md).
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: biblealpha
+      POSTGRES_PASSWORD: biblealpha
+      POSTGRES_DB: biblealpha
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U biblealpha"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: biblealpha
+      MINIO_ROOT_PASSWORD: biblealpha-dev-only
+    volumes:
+      - miniodata:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  api:
+    build: ./services/api
+    env_file: .env
+    environment:
+      BA_DATABASE_URL: postgresql+asyncpg://biblealpha:biblealpha@postgres:5432/biblealpha
+      BA_REDIS_URL: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - "8000:8000"
+
+  worker:
+    build: ./services/api
+    command: celery -A app.worker worker --loglevel=info
+    env_file: .env
+    environment:
+      BA_DATABASE_URL: postgresql+asyncpg://biblealpha:biblealpha@postgres:5432/biblealpha
+      BA_REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - redis
+      - postgres
+
+  web:
+    build: ./apps/app
+    environment:
+      API_UPSTREAM: http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  pgdata:
+  miniodata:
