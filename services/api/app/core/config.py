@@ -65,8 +65,8 @@ class Settings(BaseSettings):
         return self.env in ("staging", "production")
 
     # Versões vigentes dos documentos legais; o cadastro registra o aceite de cada uma
-    terms_version: str = "2026-10-18"
-    privacy_version: str = "2026-10-18"
+    terms_version: str = "2026-10-20"
+    privacy_version: str = "2026-10-20"
 
     # Cookie do refresh token no web (PWA). A API é servida em /api no mesmo domínio do app.
     refresh_cookie_name: str = "ba_refresh"

@@ -669,7 +669,7 @@ const ptBR = {
   legal: {
     termsTitle: 'Termos de Uso',
     privacyTitle: 'Política de Privacidade',
-    draft: 'Versão {version}. Documento em elaboração, pendente de revisão jurídica antes do lançamento.',
+    version: 'Versão de {date}',
   },
   validation: {
     required: 'Preencha este campo.',

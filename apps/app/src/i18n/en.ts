@@ -671,7 +671,7 @@ const en: Dictionary = {
   legal: {
     termsTitle: 'Terms of Use',
     privacyTitle: 'Privacy Policy',
-    draft: 'Version {version}. Draft document, pending legal review before launch.',
+    version: 'Version of {date}',
   },
   validation: {
     required: 'This field is required.',

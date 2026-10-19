@@ -23,9 +23,12 @@ from app.models import (
     LegalAcceptance,
     NotificationPreference,
     PlanEnrollment,
+    PreachingEvent,
     ReadingHistory,
     ReadingProgress,
+    ScreenSession,
     Sermon,
+    SlideBackground,
     User,
     UserDevotional,
     UserPreferences,
@@ -373,6 +376,23 @@ async def export_data(db: AsyncSession, user: User) -> dict:
             }
             for s in await db.scalars(select(Sermon).where(Sermon.user_id == user.id))
         ],
+        "agenda": [
+            {
+                "date": e.local_date.isoformat(),
+                "time": e.local_time.strftime("%H:%M"),
+                "church": e.church_name,
+                "country": e.country,
+                "postal_code": e.postal_code,
+                "street": e.street,
+                "number": e.number,
+                "complement": e.complement,
+                "district": e.district,
+                "city": e.city,
+                "region": e.region,
+                "notes": e.notes,
+            }
+            for e in await db.scalars(select(PreachingEvent).where(PreachingEvent.user_id == user.id))
+        ],
         "reading_plans": [
             {"plan": e.plan_code, "start_date": e.start_date.isoformat(), "status": e.status}
             for e in await db.scalars(select(PlanEnrollment).where(PlanEnrollment.user_id == user.id))
@@ -440,9 +460,14 @@ async def delete_account(db: AsyncSession, user: User, password: str, meta: Requ
         UserDevotional,
         PlanEnrollment,
         NotificationPreference,
+        PreachingEvent,
+        ScreenSession,
+        SlideBackground,
         Sermon,
     ):
         await db.execute(delete(model).where(model.user_id == user.id))
+    user.ai_bonus = 0
+    user.country = None
     user.email = f"deleted+{user.id}@invalid.biblealpha"
     user.name = None
     user.password_hash = None

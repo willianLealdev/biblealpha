@@ -673,7 +673,7 @@ const es: DeepPartial<Dictionary> = {
   legal: {
     termsTitle: 'Términos de Uso',
     privacyTitle: 'Política de Privacidad',
-    draft: 'Versión {version}. Documento en elaboración, pendiente de revisión jurídica antes del lanzamiento.',
+    version: 'Versión del {date}',
   },
   validation: {
     required: 'Completa este campo.',

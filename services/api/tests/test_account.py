@@ -1,7 +1,7 @@
-from sqlalchemy import select
+from sqlalchemy import func, select
 
 from app.db.session import get_sessionmaker
-from app.models import Role, User, UserRole
+from app.models import PreachingEvent, Role, Sermon, User, UserRole
 from tests.conftest import PASSWORD, bearer, login, register
 
 
@@ -62,6 +62,17 @@ async def test_export_contains_account_without_secrets(client):
 async def test_delete_account(client):
     await register(client)
     tokens = await login(client)
+    # Agenda e ministração: também somem com a conta (e aparecem na exportação antes)
+    s = (await client.post("/api/v1/sermons", headers=bearer(tokens), json={"title": "Minha"})).json()
+    ev = {
+        "local_date": "2030-01-01",
+        "local_time": "19:00",
+        "church_name": "Igreja X",
+        "sermon_id": s["id"],
+    }
+    assert (await client.post("/api/v1/agenda", headers=bearer(tokens), json=ev)).status_code == 201
+    exported = (await client.get("/api/v1/me/export", headers=bearer(tokens))).json()
+    assert exported["agenda"][0]["church"] == "Igreja X"
 
     r = await client.request("DELETE", "/api/v1/me", headers=bearer(tokens), json={"password": "Errada#123"})
     assert r.status_code == 400
@@ -77,6 +88,9 @@ async def test_delete_account(client):
     assert user.deleted_at is not None
     assert user.name is None and user.password_hash is None
     assert "ana@example.com" not in user.email
+    async with get_sessionmaker()() as db:
+        assert await db.scalar(select(func.count()).select_from(PreachingEvent)) == 0
+        assert await db.scalar(select(func.count()).select_from(Sermon)) == 0
 
     # O mesmo e-mail pode criar uma conta nova
     await register(client)
