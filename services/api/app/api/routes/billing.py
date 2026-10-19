@@ -198,7 +198,7 @@ async def checkout(
     """Abre o pagamento do Pro no Stripe. O app redireciona para a URL devolvida."""
     if await active_subscription(db, cu.user.id):
         raise AppError(409, "already_pro", "You already have an active subscription")
-    currency = stripe_service.currency_for(cu.user.locale)
+    currency = stripe_service.currency_for(cu.user)
     price = await current_price(db, body.interval, currency) or await current_price(db, body.interval, "USD")
     if price is None:
         raise AppError(503, "price_not_set", "The Pro price is not set yet")
@@ -214,8 +214,8 @@ class DonateIn(BaseModel):
 async def donate(
     body: DonateIn, cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
 ) -> dict:
-    """Oferta avulsa no valor que o usuário quiser (não cria assinatura)."""
-    currency = body.currency or stripe_service.currency_for(cu.user.locale)
+    """Oferta avulsa no valor que o usuário quiser (não cria assinatura). A moeda segue o país."""
+    currency = stripe_service.currency_for(cu.user)
     stripe_service.check_donation(body.amount, currency)
     return {"url": await stripe_service.donation_url(db, cu.user, body.amount, currency)}
 

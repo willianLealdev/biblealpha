@@ -77,6 +77,21 @@ async def test_screen_pairing_and_slides(client):
     )
     assert r.status_code == 404
 
+    # A mesma conexão serve para outra ministração da Ana (sem escanear de novo)
+    s2 = await _sermon(client, ana, "Segunda ministração")
+    r = await client.put(f"/api/v1/screens/{screen['id']}/sermon", headers=ana, json={"sermon_id": s2["id"]})
+    assert r.status_code == 200 and r.json()["status"] == "paired" and r.json()["slide"] is None
+    r = await client.put(f"/api/v1/screens/{screen['id']}/slide", headers=ana, json={"text": "Outro texto"})
+    assert (await client.get(state_url, headers=display)).json()["slide"]["text"] == "Outro texto"
+    # Mas não com a ministração de outra pessoa
+    r = await client.put(f"/api/v1/screens/{screen['id']}/sermon", headers=ana, json={"sermon_id": sb["id"]})
+    assert r.status_code == 404
+
+    # Conectar sem escolher ministração também funciona
+    third = (await client.post("/api/v1/screens")).json()
+    r = await client.post("/api/v1/screens/pair", headers=ana, json={"code": third["code"]})
+    assert r.status_code == 200 and r.json()["status"] == "paired"
+
     assert (await client.delete(f"/api/v1/screens/{screen['id']}", headers=ana)).status_code == 204
     assert (await client.get(state_url, headers=display)).json()["status"] == "ended"
 

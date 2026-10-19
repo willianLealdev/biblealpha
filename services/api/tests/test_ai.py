@@ -109,7 +109,13 @@ async def test_free_daily_quota_and_pro_bypass(client):
     await set_settings(client, admin, quotas={"free_daily": 2})
 
     status = (await client.get("/api/v1/ai/status", headers=bearer(tokens))).json()
-    assert status == {"plan": "free", "enabled": True, "modes": status["modes"], "free_remaining_today": 2}
+    assert status == {
+        "plan": "free",
+        "enabled": True,
+        "modes": status["modes"],
+        "free_remaining_today": 2,
+        "bonus_questions": 0,
+    }
 
     for _ in range(2):
         assert (await ask(client, tokens, verse_key_start=JOHN_3_16)).status_code == 200
@@ -341,3 +347,14 @@ async def test_ai_teacher_quiz(client):
         json={"translation": "blivre", "verse_key_start": 19001001, "verse_key_end": 19119176},
     )
     assert too_long.status_code == 422
+
+
+async def test_admin_has_no_ai_limits(client):
+    await register(client)
+    await make_admin()
+    admin = await login(client)
+    await set_settings(client, admin, quotas={"free_daily": 1})
+    status = (await client.get("/api/v1/ai/status", headers=bearer(admin))).json()
+    assert "free_remaining_today" not in status
+    for _ in range(3):
+        assert (await ask(client, admin, verse_key_start=JOHN_3_16)).status_code == 200

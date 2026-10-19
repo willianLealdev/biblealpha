@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, View } from 'react-native';
 
 import { Button, Card, Divider, Notice, Screen, Seal, Segmented, Text, TextField } from '@/components/ui';
+import { useSession } from '@/lib/session';
 import { useI18n } from '@/i18n';
 import { api } from '@/lib/api';
 import { useTheme } from '@/theme';
@@ -18,12 +19,13 @@ type Plans = {
 
 type MySub = { plan: 'free' | 'pro'; subscription: { current_period_end: string | null; source: string } | null };
 
-// Brasil paga em reais; o resto do mundo em dólar (mesma regra do servidor)
-const currencyFor = (locale: string) => (locale.startsWith('pt') ? 'BRL' : 'USD');
+// Brasil paga em reais; o resto do mundo em dólar (mesma regra do servidor: vale o país do cadastro)
+const currencyFor = (country: string | null | undefined, locale: string) =>
+  country ? (country === 'BR' ? 'BRL' : 'USD') : locale.toLowerCase() === 'pt-br' ? 'BRL' : 'USD';
 
 // Valores sugeridos para a oferta avulsa (o usuário pode digitar outro)
 const PRESETS: Record<string, number[]> = { BRL: [10, 25, 50, 100], USD: [5, 10, 25, 50] };
-const DEFAULT_LIMITS: Record<string, [number, number]> = { BRL: [5, 10000], USD: [1, 2000] };
+const DEFAULT_LIMITS: Record<string, [number, number]> = { BRL: [5, 10000], USD: [3, 2000] };
 
 /** "25", "25,50" ou "25.50" → 25.5; vazio ou inválido → NaN */
 function parseAmount(text: string): number {
@@ -35,6 +37,7 @@ function parseAmount(text: string): number {
 export default function Pro() {
   const { t, locale, errorMessage } = useI18n();
   const { colors } = useTheme();
+  const country = useSession().user?.country;
   const { checkout, donation } = useLocalSearchParams<{ checkout?: string; donation?: string }>();
   const [plans, setPlans] = useState<Plans | null>(null);
   const [mine, setMine] = useState<MySub | null>(null);
@@ -82,12 +85,12 @@ export default function Pro() {
   }
 
   const prices = plans?.pro.prices ?? [];
-  const local = prices.filter((p) => p.currency === currencyFor(locale));
+  const local = prices.filter((p) => p.currency === currencyFor(country, locale));
   const shown = local.length ? local : prices.filter((p) => p.currency === 'USD');
 
   const money = (amount: number, currency: string) => amount.toLocaleString(locale, { style: 'currency', currency });
 
-  const giftCurrency = currencyFor(locale);
+  const giftCurrency = currencyFor(country, locale);
   const presets = PRESETS[giftCurrency];
   const [min, max] = plans?.donation_limits?.[giftCurrency] ?? DEFAULT_LIMITS[giftCurrency];
   const giftAmount = gift === 'other' ? parseAmount(custom) : Number(gift);
@@ -174,6 +177,7 @@ export default function Pro() {
           <Card>
             <Text variant="heading">{t('pro.donateTitle')}</Text>
             <Text variant="muted">{t('pro.donateHint')}</Text>
+            <Notice>{t('pro.donateBonus', { min: money(min, giftCurrency) })}</Notice>
             {donation === 'success' ? <Notice kind="success">{t('pro.donationThanks')}</Notice> : null}
             {donation === 'cancel' ? <Notice>{t('pro.checkoutCancel')}</Notice> : null}
             <Segmented

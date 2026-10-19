@@ -55,7 +55,8 @@ async def create_study(
     book: str, chapter: int, cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
 ) -> dict:
     """Gera o estudo do capítulo (conta na cota de estudos visuais; depois fica para todos)."""
-    await ratelimit.hit(f"visual:{cu.user.id}", limit=5, window_seconds=600)
+    if "admin" not in cu.user.role_names:
+        await ratelimit.hit(f"visual:{cu.user.id}", limit=5, window_seconds=600)
     b = bible_service.resolve_book_param(book)
     row = await service.generate(db, cu.user, b, chapter, cu.user.locale)
     return {"status": "ready", **(await service.allowance(db, cu.user)), "study": _out(row)}

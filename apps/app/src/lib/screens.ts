@@ -35,18 +35,21 @@ export const screenApi = {
   state: (id: string, token: string) =>
     api<ScreenState>(`/screens/${id}/state`, { auth: false, headers: { 'X-Screen-Token': token } }),
   check: (code: string) => api<{ code: string }>('/screens/check', { method: 'POST', body: { code } }),
-  pair: (code: string, sermonId: string) =>
-    api<ScreenState>('/screens/pair', { method: 'POST', body: { code, sermon_id: sermonId } }),
+  pair: (code: string, sermonId?: string | null) =>
+    api<ScreenState>('/screens/pair', { method: 'POST', body: { code, sermon_id: sermonId ?? null } }),
+  /** A tela já conectada passa a acompanhar esta ministração (troca o fundo) */
+  follow: (id: string, sermonId: string) =>
+    api<ScreenState>(`/screens/${id}/sermon`, { method: 'PUT', body: { sermon_id: sermonId } }),
   show: (id: string, text: string, reference?: string | null) =>
     api<ScreenState>(`/screens/${id}/slide`, { method: 'PUT', body: { text, reference: reference ?? null } }),
   background: (id: string) => api<ScreenState>(`/screens/${id}/background`, { method: 'POST' }),
   end: (id: string) => api<void>(`/screens/${id}`, { method: 'DELETE' }),
 };
 
-/** Tela conectada a cada ministração (para o púlpito voltar já conectado). */
-const key = (sermonId: string) => `screen:${sermonId}`;
-export const rememberScreen = (sermonId: string, screen: { id: string; code: string } | null) => kvSet(key(sermonId), screen);
-export const rememberedScreen = (sermonId: string) => kvGet<{ id: string; code: string } | null>(key(sermonId));
+/** Tela conectada a este aparelho: vale para todas as ministrações abertas no púlpito. */
+const ACTIVE_KEY = 'screen:active';
+export const rememberScreen = (screen: { id: string; code: string } | null) => kvSet(ACTIVE_KEY, screen);
+export const rememberedScreen = () => kvGet<{ id: string; code: string } | null>(ACTIVE_KEY);
 
 /** Código do QR code: aceita o link inteiro lido pela câmera ou o código digitado. */
 export function codeFrom(raw: string): string {

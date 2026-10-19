@@ -96,16 +96,16 @@ export default function PulpitScreen() {
     kvGet<number>(FONT_KEY).then((f) => f && setFont(f));
     kvGet<PulpitMode>(MODE_KEY).then((m) => m && setMode(m));
     kvGet<number>(minutesKey(id)).then((m) => m && setMinutes(m));
-    // Volta conectado ao telão que estava em uso com esta ministração
-    rememberedScreen(id).then(async (saved) => {
+    // Tela já conectada neste aparelho: passa a acompanhar esta ministração, sem escanear de novo
+    rememberedScreen().then(async (saved) => {
       if (!saved) return;
       try {
-        const state = await screenApi.pair(saved.code, id);
+        const state = await screenApi.follow(saved.id, id);
         setScreen(state);
         // Primeira vez desta ministração na tela: a IA cria o fundo dos slides
         if (!state.background.id && state.can_generate) newBackground(state.id);
       } catch {
-        rememberScreen(id, null);
+        rememberScreen(null);
       }
     });
     kvGet<number>(pulpitScrollKey(id)).then((y) => {
@@ -172,7 +172,7 @@ export default function PulpitScreen() {
     setConnectOpen(false);
     setScreen(state);
     setOnScreen(null);
-    rememberScreen(id, { id: state.id, code: state.code });
+    rememberScreen({ id: state.id, code: state.code });
     // Primeira vez com esta ministração: a IA cria o fundo dos slides
     if (!state.background.id && state.can_generate) newBackground(state.id);
   }
@@ -186,7 +186,7 @@ export default function PulpitScreen() {
     } catch (e) {
       if (e instanceof ApiError && e.code === 'screen_not_found') {
         setScreen(null);
-        rememberScreen(id, null);
+        rememberScreen(null);
         setScreenMsg(t('screen.lost'));
       } else setScreenMsg(t('study.errors.generic'));
     }
@@ -209,7 +209,7 @@ export default function PulpitScreen() {
   async function disconnect() {
     if (!screen) return;
     await screenApi.end(screen.id).catch(() => {});
-    rememberScreen(id, null);
+    rememberScreen(null);
     setScreen(null);
     setOnScreen(null);
   }

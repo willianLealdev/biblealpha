@@ -12,7 +12,7 @@ import base64
 import json
 import logging
 import re
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 
 import httpx
 from sqlalchemy import func, select
@@ -204,12 +204,10 @@ async def allowance(db: AsyncSession, user: User) -> dict:
     if "admin" in user.role_names:
         return {"can_generate": True, "remaining": None}
     now = datetime.now(UTC)
-    if await get_plan(db, user.id) == "pro":
-        used = await usage_count(db, user, now - timedelta(days=1))
-        left = int(quotas["pro_daily_cap"]) - used
-    else:
-        used = await usage_count(db, user, now.replace(day=1, hour=0, minute=0, second=0, microsecond=0))
-        left = int(quotas["free_monthly"]) - used
+    # Por mês: Ofertante 5, gratuito 3 (custo alto das ilustrações)
+    used = await usage_count(db, user, now.replace(day=1, hour=0, minute=0, second=0, microsecond=0))
+    key = "pro_monthly" if await get_plan(db, user.id) == "pro" else "free_monthly"
+    left = int(quotas.get(key, 5)) - used
     return {"can_generate": left > 0, "remaining": max(0, left)}
 
 

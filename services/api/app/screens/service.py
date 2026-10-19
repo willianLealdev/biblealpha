@@ -119,7 +119,8 @@ async def find_open(db: AsyncSession, raw_code: str) -> ScreenSession | None:
     return s
 
 
-async def pair(db: AsyncSession, user: User, raw_code: str, sermon: Sermon) -> ScreenSession:
+async def pair(db: AsyncSession, user: User, raw_code: str, sermon: Sermon | None = None) -> ScreenSession:
+    """Conecta a tela ao aparelho do pregador. A conexão vale para qualquer ministração dele."""
     s = await find_open(db, raw_code)
     if s is None:
         raise AppError(404, "screen_not_found", "Screen not found")
@@ -127,11 +128,23 @@ async def pair(db: AsyncSession, user: User, raw_code: str, sermon: Sermon) -> S
     if s.user_id is not None and s.user_id != user.id:
         raise AppError(409, "screen_taken", "This screen is already connected")
     s.user_id = user.id
-    s.sermon_id = sermon.id
+    if sermon is not None:
+        s.sermon_id = sermon.id
     s.paired_at = s.paired_at or _now()
     s.expires_at = _now() + PAIRED_TTL
     s.slide = None
     s.version += 1
+    await db.commit()
+    return s
+
+
+async def use_sermon(db: AsyncSession, s: ScreenSession, sermon: Sermon) -> ScreenSession:
+    """O pregador abriu outra ministração: a tela passa a usar o fundo dela (o texto some até ele escolher)."""
+    if s.sermon_id != sermon.id:
+        s.sermon_id = sermon.id
+        s.slide = None
+        s.version += 1
+    s.expires_at = _now() + PAIRED_TTL
     await db.commit()
     return s
 

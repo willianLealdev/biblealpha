@@ -8,6 +8,7 @@ from sqlalchemy import (
     Enum,
     ForeignKey,
     Index,
+    Integer,
     Numeric,
     String,
     Text,
@@ -49,6 +50,8 @@ class User(UUIDPk, Timestamps, Base):
     country: Mapped[str | None] = mapped_column(String(2))
     email_verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Perguntas extras à IA ganhas com ofertas avulsas (usadas depois da cota gratuita)
+    ai_bonus: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
     # Cliente no Stripe (criado na primeira assinatura)
     stripe_customer_id: Mapped[str | None] = mapped_column(String(80), unique=True, index=True)
     # Exclusão de conta: dados pessoais são anonimizados e a linha permanece para integridade/auditoria

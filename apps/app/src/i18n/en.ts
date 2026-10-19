@@ -343,7 +343,8 @@ const en: Dictionary = {
     donateOther: 'Other amount',
     donateButton: 'Give {amount}',
     donateInvalid: 'Enter an amount between {min} and {max}.',
-    donationThanks: 'Thank you for your gift! God bless you.',
+    donationThanks: 'Thank you for your gift! God bless you. You received 3 extra AI questions.',
+    donateBonus: 'Every one-time gift (from {min}) gives you 3 extra AI questions as a thank-you.',
   },
   devotional: {
     title: 'My Devotional',
@@ -760,10 +761,12 @@ const en: Dictionary = {
     orType: 'or type the code shown on the screen',
     step1: 'On the computer connected to the screen, open {url} and click "Share screen".',
     step2: 'Here in the app, scan the QR code (or type the code).',
-    step3: 'Choose the message and tap the screen icon next to the text the church will see.',
+    step3: 'Open any message in pulpit mode and tap the screen icon next to the text the church will see. You can switch messages anytime.',
     codeOk: 'Screen {code} found!',
     whichMessage: 'Which message do you want to share?',
     otherCode: 'Use another code',
+    connectedAll: 'Connected to screen {code}. The connection works for all your messages.',
+    openAny: 'Open any message in pulpit mode',
   },
   agenda: {
     title: 'Schedule',

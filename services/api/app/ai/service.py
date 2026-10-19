@@ -87,6 +87,9 @@ async def check_access(db: AsyncSession, user: User) -> str:
     if not (await get_setting(db, "ai.enabled")).get("value", True):
         raise AppError(503, "ai_unavailable", "AI is temporarily unavailable")
     plan = await get_plan(db, user.id)
+    # Administrador: sem cotas nem tetos de uso (os limites são para os usuários)
+    if "admin" in user.role_names:
+        return plan
     quotas = await get_setting(db, "ai.quotas")
     budget = await get_setting(db, "ai.budget")
     now = _now()
@@ -102,9 +105,16 @@ async def check_access(db: AsyncSession, user: User) -> str:
             str(budget["monthly_usd"])
         ):
             raise AppError(503, "ai_unavailable_free", "AI is temporarily unavailable for the free plan")
-        if await _user_requests_since(db, user.id, _day_start(now)) >= int(quotas["free_daily"]):
-            raise AppError(429, "ai_quota_free_daily", "Free daily AI limit reached")
-        if await _user_requests_since(db, user.id, _month_start(now)) >= int(quotas["free_monthly"]):
+        over_day = await _user_requests_since(db, user.id, _day_start(now)) >= int(quotas["free_daily"])
+        over_month = await _user_requests_since(db, user.id, _month_start(now)) >= int(quotas["free_monthly"])
+        if over_day or over_month:
+            # Perguntas extras ganhas com uma oferta avulsa
+            if (user.ai_bonus or 0) > 0:
+                user.ai_bonus -= 1
+                await db.flush()
+                return plan
+            if over_day:
+                raise AppError(429, "ai_quota_free_daily", "Free daily AI limit reached")
             raise AppError(429, "ai_quota_free_monthly", "Free monthly AI limit reached")
     else:
         # Pro: uso livre, com teto de segurança invisível no uso normal

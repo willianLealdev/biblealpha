@@ -271,6 +271,32 @@ async def retranslate_day(day: date) -> None:
                 await db.commit()
 
 
+def incomplete(row: DailyDevotional) -> bool:
+    """Devocional "reserva" (feito sem IA: só a passagem e perguntas fixas), ou tradução dele."""
+    return row.model == "none" or not str((row.content or {}).get("reflection") or "").strip()
+
+
+async def _complete(db: AsyncSession, row: DailyDevotional) -> DailyDevotional:
+    """Refaz um devocional reserva assim que a IA estiver disponível (ex.: chaves cadastradas depois)."""
+    if row.locale == BASE_LOCALE:
+        content, model = await generate_daily_content(
+            db, row.locale, row.theme, row.verse_key_start, row.verse_key_end
+        )
+    else:
+        base = await daily(db, BASE_LOCALE, row.day)
+        if incomplete(base):
+            return row
+        translated = await translate_content(db, base.content, row.locale)
+        if translated is None:
+            return row
+        content, model = translated
+    if model != "none" and str(content.get("reflection") or "").strip():
+        row.content, row.model = content, model
+        await db.commit()
+        log.info("devocional %s %s refeito com a IA", row.day, row.locale)
+    return row
+
+
 async def daily(db: AsyncSession, locale: str, day: date | None = None) -> DailyDevotional:
     day = day or date.today()
     locale = await devotional_locale(db, locale)
@@ -278,7 +304,7 @@ async def daily(db: AsyncSession, locale: str, day: date | None = None) -> Daily
         select(DailyDevotional).where(DailyDevotional.day == day, DailyDevotional.locale == locale)
     )
     if existing:
-        return existing
+        return await _complete(db, existing) if incomplete(existing) else existing
 
     code = await translation_code(db, locale)
     if locale == BASE_LOCALE:

@@ -345,7 +345,8 @@ const es: DeepPartial<Dictionary> = {
     donateOther: 'Otro monto',
     donateButton: 'Ofrendar {amount}',
     donateInvalid: 'Escribe un monto entre {min} y {max}.',
-    donationThanks: '¡Gracias por tu ofrenda! Que Dios te bendiga.',
+    donationThanks: '¡Gracias por tu ofrenda! Dios te bendiga. Recibiste 3 preguntas extra a la IA.',
+    donateBonus: 'Cada ofrenda única (desde {min}) te da 3 preguntas extra a la IA, como agradecimiento.',
   },
   devotional: {
     title: 'Mi Devocional',
@@ -762,10 +763,12 @@ const es: DeepPartial<Dictionary> = {
     orType: 'o escribe el código que aparece en la pantalla',
     step1: 'En la computadora conectada a la pantalla, abre {url} y haz clic en "Compartir pantalla".',
     step2: 'Aquí en la app, escanea el código QR (o escribe el código).',
-    step3: 'Elige la predicación y toca el icono de la pantalla junto al texto que verá la iglesia.',
+    step3: 'Abre cualquier predicación en modo púlpito y toca el icono de la pantalla junto al texto que verá la iglesia. Puedes cambiar de predicación cuando quieras.',
     codeOk: '¡Pantalla {code} encontrada!',
     whichMessage: '¿Qué predicación quieres compartir?',
     otherCode: 'Usar otro código',
+    connectedAll: 'Conectado a la pantalla {code}. La conexión sirve para todas tus predicaciones.',
+    openAny: 'Abre cualquier predicación en modo púlpito',
   },
   agenda: {
     title: 'Agenda',

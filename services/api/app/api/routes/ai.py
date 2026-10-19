@@ -88,11 +88,13 @@ async def ai_status(cu: CurrentUser = Depends(current_user), db: AsyncSession = 
     is_admin = "admin" in cu.user.role_names
     modes = [m for m in MODES if is_admin or m not in ADMIN_ONLY_MODES]
     out: dict = {"plan": plan, "enabled": enabled, "modes": modes}
-    if plan == "free":
+    # Administrador não tem contador de perguntas
+    if plan == "free" and not is_admin:
         quotas = await get_setting(db, "ai.quotas")
         now = datetime.now(UTC)
         used = await ai_service._user_requests_since(db, cu.user.id, ai_service._day_start(now))
         out["free_remaining_today"] = max(0, int(quotas["free_daily"]) - used)
+        out["bonus_questions"] = cu.user.ai_bonus or 0
     return out
 
 

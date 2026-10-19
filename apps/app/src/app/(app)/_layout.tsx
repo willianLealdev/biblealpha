@@ -25,7 +25,8 @@ export default function AppTabs() {
           name={tab.name}
           options={{
             title: t(`tabs.${tab.label}`),
-            href: tab.hidden ? null : undefined,
+            // Escondida só do menu: com `href: null` a rota deixa de abrir (a Biblioteca voltava ao Início)
+            ...(tab.hidden ? { tabBarItemStyle: { display: 'none' as const }, tabBarButton: () => null } : {}),
             tabBarIcon: ({ color, size }) => <Ionicons name={tab.icon} size={size} color={String(color)} />,
           }}
         />

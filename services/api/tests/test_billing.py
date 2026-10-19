@@ -105,3 +105,61 @@ async def test_expired_subscription_falls_back_to_free(client):
         "plan": "free",
         "subscription": None,
     }
+
+
+async def test_canceled_subscription_lasts_until_period_end(client):
+    """Quem cancela continua Ofertante até o fim do período que já pagou."""
+    await register(client)
+    tokens = await login(client)
+    async with get_sessionmaker()() as db:
+        uid = await db.scalar(select(User.id))
+        await apply_gateway_event(
+            db,
+            user_id=uid,
+            source="gateway",
+            external_id="sub_c",
+            status="canceled",
+            current_period_end=datetime.now(UTC) + timedelta(days=10),
+            price_id=None,
+        )
+        await db.commit()
+    assert (await client.get("/api/v1/me/subscription", headers=bearer(tokens))).json()["plan"] == "pro"
+
+
+def test_currency_follows_country():
+    from app.billing.stripe_service import DONATION_LIMITS, currency_for
+
+    assert currency_for(User(country="BR", locale="en")) == "BRL"
+    assert currency_for(User(country="PT", locale="pt-BR")) == "USD"
+    assert currency_for(User(country="US", locale="en")) == "USD"
+    assert currency_for(User(country=None, locale="pt-BR")) == "BRL"
+    assert DONATION_LIMITS["BRL"][0] == 5 and DONATION_LIMITS["USD"][0] == 3
+
+
+async def test_donation_gives_three_extra_ai_questions(client):
+    from app.billing.stripe_service import _donation_bonus
+    from tests.test_ai import JOHN_3_16, ask, set_settings
+
+    await register(client)
+    await register(client, email="admin@example.com", name="Admin")
+    await make_admin("admin@example.com")
+    admin = await login(client, email="admin@example.com")
+    tokens = await login(client)
+    await set_settings(client, admin, quotas={"free_daily": 1})
+    assert (await ask(client, tokens, verse_key_start=JOHN_3_16)).status_code == 200
+    assert (await ask(client, tokens, verse_key_start=JOHN_3_16)).status_code == 429
+
+    async with get_sessionmaker()() as db:
+        uid = await db.scalar(select(User.id).where(User.email == "ana@example.com"))
+        session = {
+            "mode": "payment",
+            "payment_status": "paid",
+            "metadata": {"kind": "donation", "user_id": str(uid)},
+        }
+        await _donation_bonus(db, "checkout.session.completed", session)
+        await db.commit()
+    status = (await client.get("/api/v1/ai/status", headers=bearer(tokens))).json()
+    assert status["bonus_questions"] == 3
+    for _ in range(3):
+        assert (await ask(client, tokens, verse_key_start=JOHN_3_16)).status_code == 200
+    assert (await ask(client, tokens, verse_key_start=JOHN_3_16)).status_code == 429

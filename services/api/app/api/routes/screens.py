@@ -89,7 +89,8 @@ async def check_code(
 
 class PairIn(BaseModel):
     code: Annotated[str, StringConstraints(strip_whitespace=True, min_length=4, max_length=300)]
-    sermon_id: uuid.UUID
+    # Opcional: a conexão vale para todas as ministrações; esta só define o fundo inicial
+    sermon_id: uuid.UUID | None = None
 
 
 @router.post("/pair")
@@ -98,8 +99,28 @@ async def pair(
 ) -> dict:
     # Poucas tentativas: o código é curto
     await ratelimit.hit(f"screen-pair:{cu.user.id}", limit=10, window_seconds=600)
-    sermon = await _own_sermon(db, cu, body.sermon_id)
+    sermon = await _own_sermon(db, cu, body.sermon_id) if body.sermon_id else None
     s = await service.pair(db, cu.user, body.code, sermon)
+    bg = await service.latest_background(db, s.sermon_id)
+    return {**_state(s, bg), **await service.allowance(db, cu.user)}
+
+
+class SermonIn(BaseModel):
+    sermon_id: uuid.UUID
+
+
+@router.put("/{screen_id}/sermon")
+async def use_sermon(
+    screen_id: uuid.UUID,
+    body: SermonIn,
+    cu: CurrentUser = Depends(current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """A tela já conectada passa a acompanhar outra ministração do pregador."""
+    await ratelimit.hit(f"screen-sermon:{cu.user.id}", limit=60, window_seconds=60)
+    s = await service.owned(db, screen_id, cu.user)
+    sermon = await _own_sermon(db, cu, body.sermon_id)
+    s = await service.use_sermon(db, s, sermon)
     bg = await service.latest_background(db, sermon.id)
     return {**_state(s, bg), **await service.allowance(db, cu.user)}
 
@@ -129,7 +150,8 @@ async def new_background(
     screen_id: uuid.UUID, cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
 ) -> dict:
     """A IA cria (ou troca) o fundo dos slides desta ministração."""
-    await ratelimit.hit(f"screen-bg:{cu.user.id}", limit=5, window_seconds=600)
+    if "admin" not in cu.user.role_names:
+        await ratelimit.hit(f"screen-bg:{cu.user.id}", limit=5, window_seconds=600)
     s = await service.owned(db, screen_id, cu.user)
     sermon = await _own_sermon(db, cu, s.sermon_id) if s.sermon_id else None
     if sermon is None:

@@ -331,3 +331,19 @@ async def test_my_devotionals_lists_only_completed(client):
         "devotionals"
     ]
     assert len(done) == 1 and done[0]["kind"] == "daily" and done[0]["mine"]["completed_on"]
+
+
+async def test_daily_made_without_ai_is_redone_when_ai_returns(client):
+    """Sem IA (ex.: antes de as chaves serem cadastradas) sai a versão reserva curta; depois ela é refeita."""
+    from app.devotional import service
+    from app.services.settings import set_setting
+
+    async with get_sessionmaker()() as db:
+        await set_setting(db, "ai.enabled", {"value": False})
+        await db.commit()
+        short = await service.daily(db, "pt-BR")
+        assert service.incomplete(short) and short.model == "none"
+        await set_setting(db, "ai.enabled", {"value": True})
+        await db.commit()
+        full = await service.daily(db, "pt-BR")
+        assert full.id == short.id and not service.incomplete(full) and full.model != "none"

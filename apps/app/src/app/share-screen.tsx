@@ -1,51 +1,60 @@
 // Compartilhar tela (igual ao WhatsApp Web): no computador aparece um QR code; aqui a pessoa
-// escaneia (ou digita o código), escolhe a ministração e vai para o púlpito já conectada.
+// escaneia (ou digita o código) e o aparelho fica conectado à tela. A conexão vale para
+// todas as ministrações: é só abrir qualquer uma no púlpito.
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, Text as RNText, View } from 'react-native';
 
-import { Card, Divider, Notice, Screen, Text } from '@/components/ui';
+import { Button, Card, Divider, Notice, Screen, Text } from '@/components/ui';
 import { useI18n } from '@/i18n';
-import { ApiError } from '@/lib/api';
-import { APP_URL, codeFrom, rememberScreen, screenApi } from '@/lib/screens';
+import { APP_URL, codeFrom, rememberedScreen, rememberScreen, screenApi } from '@/lib/screens';
 import { sermonApi, type SermonSummary } from '@/lib/sermons';
 import { ScanCode } from '@/sermon/scan-code';
 import { useTheme } from '@/theme';
-import { fonts, radius } from '@/theme/tokens';
+import { fonts } from '@/theme/tokens';
+
+type Connected = { id: string; code: string };
 
 export default function ShareScreen() {
   const params = useLocalSearchParams<{ code?: string; sermon?: string }>();
   const { t } = useI18n();
   const { colors } = useTheme();
-  const [code, setCode] = useState<string | null>(null);
+  const [connected, setConnected] = useState<Connected | null>(null);
   const [sermons, setSermons] = useState<SermonSummary[] | null>(null);
-  const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function connect(c: string, sermonId: string) {
-    const s = await screenApi.pair(c, sermonId);
-    await rememberScreen(sermonId, { id: s.id, code: s.code });
-    router.replace({ pathname: '/sermon/[id]/pulpit', params: { id: sermonId } });
+  function loadSermons() {
+    sermonApi.list().then((r) => setSermons(r.sermons)).catch(() => setSermons([]));
   }
 
-  // Código lido e conferido: com a ministração já escolhida (aberto do editor) conecta direto
+  // Lido o código: o aparelho fica conectado à tela (para qualquer ministração)
   async function gotCode(c: string) {
-    await screenApi.check(c);
-    if (params.sermon) return connect(c, params.sermon);
-    setCode(c);
-    if (!sermons) sermonApi.list().then((r) => setSermons(r.sermons)).catch(() => setSermons([]));
+    const s = await screenApi.pair(c, params.sermon ?? null);
+    const info = { id: s.id, code: s.code };
+    await rememberScreen(info);
+    if (params.sermon) {
+      router.replace({ pathname: '/sermon/[id]/pulpit', params: { id: params.sermon } });
+      return;
+    }
+    setConnected(info);
+    loadSermons();
   }
 
-  // Aberto pelo link do QR code (câmera do celular fora do app)
   useEffect(() => {
-    const c = codeFrom(params.code ?? '');
-    if (c.length !== 6) return;
     let alive = true;
     (async () => {
+      const c = codeFrom(params.code ?? '');
       try {
-        await gotCode(c);
+        // Aberto pelo link do QR code (câmera do celular fora do app)
+        if (c.length === 6) return await gotCode(c);
+        // Já conectado antes: mostra a conexão atual
+        const saved = await rememberedScreen();
+        if (saved && alive) {
+          setConnected(saved);
+          loadSermons();
+        }
       } catch {
         if (alive) setError(t('screen.notFound'));
       }
@@ -56,18 +65,10 @@ export default function ShareScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.code]);
 
-  async function choose(sermonId: string) {
-    setBusy(sermonId);
-    setError(null);
-    try {
-      await connect(code!, sermonId);
-    } catch (e) {
-      const k = e instanceof ApiError ? e.code : '';
-      setError(k === 'screen_taken' ? t('screen.taken') : k === 'screen_not_found' ? t('screen.notFound') : t('study.errors.generic'));
-      if (k === 'screen_not_found') setCode(null);
-    } finally {
-      setBusy(null);
-    }
+  async function disconnect() {
+    if (connected) await screenApi.end(connected.id).catch(() => {});
+    await rememberScreen(null);
+    setConnected(null);
   }
 
   const steps = [t('screen.step1', { url: APP_URL ? APP_URL.replace(/^https?:\/\//, '') : 'BibleAlpha' }), t('screen.step2'), t('screen.step3')];
@@ -80,7 +81,7 @@ export default function ShareScreen() {
       </View>
       {error ? <Notice kind="error">{error}</Notice> : null}
 
-      {!code ? (
+      {!connected ? (
         <>
           <Card>
             {steps.map((s, i) => (
@@ -98,8 +99,8 @@ export default function ShareScreen() {
         </>
       ) : (
         <>
-          <Notice kind="success">{t('screen.codeOk', { code })}</Notice>
-          <Text variant="heading">{t('screen.whichMessage')}</Text>
+          <Notice kind="success">{t('screen.connectedAll', { code: connected.code })}</Notice>
+          <Text variant="heading">{t('screen.openAny')}</Text>
           {sermons === null ? <ActivityIndicator color={colors.gold} /> : null}
           {sermons?.length === 0 ? <Text variant="muted">{t('sermons.empty')}</Text> : null}
           {sermons?.length ? (
@@ -109,25 +110,22 @@ export default function ShareScreen() {
                   {i > 0 ? <Divider /> : null}
                   <Pressable
                     accessibilityRole="button"
-                    onPress={() => choose(s.id)}
-                    disabled={!!busy}
+                    onPress={() => router.push({ pathname: '/sermon/[id]/pulpit', params: { id: s.id } })}
                     style={({ pressed }) => ({ paddingVertical: 12, flexDirection: 'row', gap: 12, alignItems: 'center', opacity: pressed ? 0.7 : 1 })}>
-                    <Ionicons name="document-text-outline" size={22} color={colors.gold} />
+                    <Ionicons name="easel-outline" size={22} color={colors.gold} />
                     <View style={{ flex: 1 }}>
                       <Text variant="heading" numberOfLines={1}>
                         {s.title}
                       </Text>
                       {s.main_reference ? <Text variant="small">{s.main_reference}</Text> : null}
                     </View>
-                    {busy === s.id ? <ActivityIndicator color={colors.gold} /> : <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />}
+                    <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
                   </Pressable>
                 </View>
               ))}
             </Card>
           ) : null}
-          <Pressable accessibilityRole="button" onPress={() => setCode(null)} style={{ alignSelf: 'center', padding: 8, borderRadius: radius.pill }}>
-            <RNText style={{ color: colors.gold, fontFamily: fonts.bodyMedium }}>{t('screen.otherCode')}</RNText>
-          </Pressable>
+          <Button kind="secondary" icon="close-circle-outline" title={t('screen.disconnect')} onPress={disconnect} />
         </>
       )}
     </Screen>

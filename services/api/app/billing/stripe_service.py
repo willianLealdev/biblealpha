@@ -64,10 +64,12 @@ def client(api_key: str | None = None) -> stripe.StripeClient:
     return stripe.StripeClient(key, http_client=stripe.HTTPXClient(), max_network_retries=2)
 
 
-def currency_for(locale: str) -> str:
-    """Brasil paga em reais; o resto do mundo em dólar (o Stripe mostra o valor convertido
-    para a moeda local quando a conversão automática estiver ligada no Stripe)."""
-    return "BRL" if locale.lower().startswith("pt") else "USD"
+def currency_for(user: User) -> str:
+    """Brasil paga em reais; o resto do mundo em dólar. Vale o país do cadastro; sem país,
+    o idioma português do Brasil indica reais."""
+    if user.country:
+        return "BRL" if user.country == "BR" else "USD"
+    return "BRL" if user.locale.lower() in ("pt-br", "pt") else "USD"
 
 
 async def _product_id(db: AsyncSession, sc: stripe.StripeClient) -> str:
@@ -139,7 +141,10 @@ async def checkout_url(db: AsyncSession, user: User, price: PlanPrice) -> str:
 
 
 # Limites da oferta avulsa por moeda (mínimo cobre a taxa do Stripe; máximo evita erro de digitação)
-DONATION_LIMITS = {"BRL": (Decimal("5"), Decimal("10000")), "USD": (Decimal("1"), Decimal("2000"))}
+# Oferta mínima: R$ 5 no Brasil, US$ 3 no resto do mundo
+DONATION_LIMITS = {"BRL": (Decimal("5"), Decimal("10000")), "USD": (Decimal("3"), Decimal("2000"))}
+# Quem faz uma oferta avulsa ganha perguntas extras à IA
+DONATION_BONUS_QUESTIONS = 3
 
 
 def check_donation(amount: Decimal, currency: str) -> None:
@@ -260,6 +265,18 @@ async def apply_subscription(db: AsyncSession, sub: dict) -> None:
     )
 
 
+async def _donation_bonus(db: AsyncSession, event_type: str, data: dict) -> None:
+    if event_type != "checkout.session.completed" or data.get("payment_status") != "paid":
+        return
+    raw = (data.get("metadata") or {}).get("user_id") or data.get("client_reference_id")
+    try:
+        user = await db.get(User, uuid.UUID(str(raw))) if raw else None
+    except ValueError:
+        user = None
+    if user is not None:
+        user.ai_bonus = (user.ai_bonus or 0) + DONATION_BONUS_QUESTIONS
+
+
 async def handle_webhook(db: AsyncSession, payload: bytes, signature: str | None) -> str:
     secret = secrets.get("stripe_webhook_secret")
     if not secret:
@@ -277,8 +294,9 @@ async def handle_webhook(db: AsyncSession, payload: bytes, signature: str | None
     db.add(row)
 
     if is_donation(event.type, data):
-        # Oferta avulsa: fica registrada (payment_events) e entra no resumo do painel
+        # Oferta avulsa: fica registrada (payment_events), entra no resumo do painel e dá perguntas extras
         log.info("Oferta avulsa recebida: %s %s", data.get("amount_total"), data.get("currency"))
+        await _donation_bonus(db, event.type, data)
     elif event.type.startswith("customer.subscription."):
         await apply_subscription(db, data)
     elif event.type in ("checkout.session.completed", "invoice.paid", "invoice.payment_failed"):

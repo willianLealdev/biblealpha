@@ -47,7 +47,9 @@ async def prepare(days_ahead: int = DAYS_AHEAD) -> int:
             day = date.today() + timedelta(days=i)
             async with get_sessionmaker()() as db:
                 target = await service.devotional_locale(db, locale)
-                if await service.find_daily(db, day, target) is None:
+                row = await service.find_daily(db, day, target)
+                # Ainda não existe, ou é a versão reserva feita sem IA: prepara (ou refaz) agora
+                if row is None or service.incomplete(row):
                     await service.daily(db, target, day)
                     made += 1
     return made

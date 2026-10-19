@@ -341,7 +341,8 @@ const ptBR = {
     donateOther: 'Outro valor',
     donateButton: 'Ofertar {amount}',
     donateInvalid: 'Informe um valor entre {min} e {max}.',
-    donationThanks: 'Obrigado pela sua oferta! Que Deus abençoe você.',
+    donationThanks: 'Obrigado pela sua oferta! Que Deus abençoe você. Você ganhou 3 perguntas extras à IA.',
+    donateBonus: 'Cada oferta avulsa (a partir de {min}) dá 3 perguntas extras à IA, como agradecimento.',
   },
   devotional: {
     title: 'Meu Devocional',
@@ -758,10 +759,12 @@ const ptBR = {
     orType: 'ou digite o código que aparece na tela',
     step1: 'No computador ligado ao telão, abra {url} e clique em "Compartilhar tela".',
     step2: 'Aqui no app, escaneie o QR code (ou digite o código).',
-    step3: 'Escolha a ministração e toque no ícone da tela ao lado do texto que a igreja vai ver.',
+    step3: 'Abra qualquer ministração no púlpito e toque no ícone da tela ao lado do texto que a igreja vai ver. Pode trocar de ministração à vontade.',
     codeOk: 'Tela {code} encontrada!',
     whichMessage: 'Qual ministração você quer compartilhar?',
     otherCode: 'Usar outro código',
+    connectedAll: 'Conectado à tela {code}. A conexão vale para todas as suas ministrações.',
+    openAny: 'Abra qualquer ministração no púlpito',
   },
   agenda: {
     title: 'Agenda',

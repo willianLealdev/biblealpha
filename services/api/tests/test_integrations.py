@@ -3,7 +3,7 @@ import hmac
 import json
 import time
 
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, update
 
 from app.ai.provider import AnthropicProvider, FakeProvider, get_provider
 from app.billing import stripe_service
@@ -111,9 +111,10 @@ async def test_stripe_webhook_activates_and_cancels_pro(client):
     )
     assert bad.status_code == 400
 
+    # Cancelou: continua Ofertante até o fim do período que já pagou
     body, sig = _signed(event("evt_2", "canceled"))
     await client.post("/api/v1/billing/stripe/webhook", content=body, headers={"stripe-signature": sig})
-    assert (await client.get("/api/v1/me/subscription", headers=bearer(tokens))).json()["plan"] == "free"
+    assert (await client.get("/api/v1/me/subscription", headers=bearer(tokens))).json()["plan"] == "pro"
 
 
 class _Obj:
@@ -196,12 +197,18 @@ async def test_one_time_donation_checkout_and_limits(client, monkeypatch):
     assert session["success_url"].endswith("/pro?donation=success")
     assert not any(name == "price" for name, _ in fake.calls)  # oferta avulsa não cria Price recorrente
 
-    # Dólar, e valores fora dos limites
-    r = await client.post(
-        "/api/v1/billing/donate", headers=bearer(tokens), json={"amount": "1", "currency": "USD"}
-    )
+    # No Brasil o mínimo é R$ 5 (a moeda segue o país; pedir dólar não muda isso)
+    for body in ({"amount": "4.99"}, {"amount": "10001"}, {"amount": "3", "currency": "USD"}):
+        bad = await client.post("/api/v1/billing/donate", headers=bearer(tokens), json=body)
+        assert bad.status_code == 422 and bad.json()["error"]["code"] == "invalid_amount", bad.text
+
+    # Fora do Brasil: dólar, mínimo de US$ 3
+    async with get_sessionmaker()() as db:
+        await db.execute(update(User).values(country="US"))
+        await db.commit()
+    r = await client.post("/api/v1/billing/donate", headers=bearer(tokens), json={"amount": "3"})
     assert r.status_code == 200
-    for body in ({"amount": "4.99"}, {"amount": "10001"}, {"amount": "2001", "currency": "USD"}):
+    for body in ({"amount": "2.99"}, {"amount": "2001"}):
         bad = await client.post("/api/v1/billing/donate", headers=bearer(tokens), json=body)
         assert bad.status_code == 422 and bad.json()["error"]["code"] == "invalid_amount", bad.text
     assert (await client.post("/api/v1/billing/donate", json={"amount": "10"})).status_code == 401
