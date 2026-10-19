@@ -1,20 +1,90 @@
 {
-  "name": "BibleAlpha — AI Bible Study",
+  "name": "BibleAlpha — Bíblia, estudo com IA e ministrações",
   "short_name": "BibleAlpha",
-  "description": "Discover the Depth of God's Word.",
+  "description": "Bíblia em mais de mil idiomas, estudo com IA que mostra as fontes, hebraico e grego, devocional diário e ferramentas para quem ministra: editor, púlpito, cronômetro e compartilhar tela.",
   "id": "/",
-  "start_url": "/",
+  "start_url": "/home",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#0A0806",
   "background_color": "#0A0806",
   "lang": "pt-BR",
-  "categories": ["books", "education", "lifestyle"],
+  "categories": [
+    "books",
+    "education",
+    "lifestyle"
+  ],
   "icons": [
-    { "src": "/favicon.ico", "sizes": "48x48 32x32 16x16", "type": "image/x-icon" },
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 32x32 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "shortcuts": [
+    {
+      "name": "Bíblia",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Devocional",
+      "url": "/devotional",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Ministrações",
+      "url": "/sermons",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Compartilhar tela",
+      "url": "/screen",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }

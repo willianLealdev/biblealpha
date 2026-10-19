@@ -12,17 +12,14 @@ import { Button, Notice, Text } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { aiApi, askAI } from '@/lib/ai';
 import { ApiError } from '@/lib/api';
+import { ensureSpeechPermission, speechRecognitionClass } from '@/lib/speech';
 import { useTheme } from '@/theme';
 import { fonts, radius } from '@/theme/tokens';
 
 type Turn = { q: string; a: string; invalid?: string[] };
 
-// Reconhecimento de voz do navegador (Chrome, Edge, Safari). No app nativo entra no build das lojas.
-function speechRecognition(): any {
-  if (Platform.OS !== 'web') return null;
-  const w = globalThis as any;
-  return w.SpeechRecognition || w.webkitSpeechRecognition || null;
-}
+// Reconhecimento de voz: do navegador no site, do aparelho nos apps
+const speechRecognition = speechRecognitionClass;
 
 export function AskSheet({
   visible,
@@ -80,12 +77,13 @@ export function AskSheet({
     onClose();
   }
 
-  function listen() {
+  async function listen() {
     if (!Speech) return;
     if (listening) {
       recognizer.current?.stop();
       return;
     }
+    if (!(await ensureSpeechPermission())) return;
     const r = new Speech();
     r.lang = locale;
     r.interimResults = true;

@@ -1,14 +1,9 @@
-// Ditado por voz: reconhecimento de fala do navegador (Chrome, Edge, Safari). No app nativo
-// entra no build das lojas com o reconhecimento do próprio aparelho.
+// Ditado por voz: reconhecimento de fala do navegador (Chrome, Edge, Safari) ou, nos apps,
+// do próprio aparelho (Android e iPhone).
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Platform } from 'react-native';
 
-function recognitionClass(): any {
-  if (Platform.OS !== 'web') return null;
-  const w = globalThis as any;
-  return w.SpeechRecognition || w.webkitSpeechRecognition || null;
-}
+import { ensureSpeechPermission, speechRecognitionClass as recognitionClass } from './speech';
 
 export function useDictation(locale: string) {
   const Recognition = recognitionClass();
@@ -19,12 +14,13 @@ export function useDictation(locale: string) {
 
   /** Começa a ouvir; cada frase reconhecida chega em `onText`. Tocar de novo para. */
   const toggle = useCallback(
-    (onText: (text: string) => void) => {
+    async (onText: (text: string) => void) => {
       if (!Recognition) return;
       if (recognizer.current) {
         recognizer.current.stop();
         return;
       }
+      if (!(await ensureSpeechPermission())) return;
       const r = new Recognition();
       r.lang = locale;
       r.continuous = true;
