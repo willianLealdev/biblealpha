@@ -127,13 +127,12 @@ async def test_canceled_subscription_lasts_until_period_end(client):
 
 
 def test_currency_follows_country():
-    from app.billing.stripe_service import DONATION_LIMITS, currency_for
+    from app.billing.stripe_service import currency_for
 
     assert currency_for(User(country="BR", locale="en")) == "BRL"
     assert currency_for(User(country="PT", locale="pt-BR")) == "USD"
     assert currency_for(User(country="US", locale="en")) == "USD"
     assert currency_for(User(country=None, locale="pt-BR")) == "BRL"
-    assert DONATION_LIMITS["BRL"][0] == 5 and DONATION_LIMITS["USD"][0] == 3
 
 
 async def test_donation_gives_three_extra_ai_questions(client):
@@ -163,3 +162,25 @@ async def test_donation_gives_three_extra_ai_questions(client):
     for _ in range(3):
         assert (await ask(client, tokens, verse_key_start=JOHN_3_16)).status_code == 200
     assert (await ask(client, tokens, verse_key_start=JOHN_3_16)).status_code == 429
+
+
+async def test_admin_sets_monthly_limits_and_donation_values(client):
+    """O admin define no painel os limites por mês e os valores da oferta (valem na hora)."""
+    await register(client)
+    await make_admin()
+    admin = bearer(await login(client))
+    current = (await client.get("/api/v1/admin/limits", headers=admin)).json()
+    assert current["visual"] == {"free_monthly": 3, "pro_monthly": 5}
+    assert current["slides"] == {"free_monthly": 2, "pro_monthly": 5}
+    assert current["donation"]["min_brl"] == 5 and current["donation"]["min_usd"] == 3
+    body = {
+        "visual": {"free_monthly": 1, "pro_monthly": 8},
+        "slides": {"free_monthly": 0, "pro_monthly": 4},
+        "donation": {"min_brl": 10, "max_brl": 5000, "min_usd": 5, "max_usd": 1000, "bonus_questions": 5},
+    }
+    r = await client.put("/api/v1/admin/limits", headers=admin, json=body)
+    assert r.status_code == 200 and r.json()["visual"]["pro_monthly"] == 8
+    plans = (await client.get("/api/v1/billing/plans")).json()
+    assert plans["donation_limits"]["BRL"] == [10, 5000] and plans["donation_bonus_questions"] == 5
+    bad = {**body, "donation": {**body["donation"], "max_usd": 2}}
+    assert (await client.put("/api/v1/admin/limits", headers=admin, json=bad)).status_code == 422

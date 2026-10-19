@@ -15,6 +15,7 @@ type Plans = {
   pro: { features: string[]; prices: { interval: 'month' | 'year'; currency: string; amount: number }[] };
   checkout_available: boolean;
   donation_limits?: Record<string, [number, number]>;
+  donation_bonus_questions?: number;
 };
 
 type MySub = { plan: 'free' | 'pro'; subscription: { current_period_end: string | null; source: string } | null };
@@ -177,7 +178,9 @@ export default function Pro() {
           <Card>
             <Text variant="heading">{t('pro.donateTitle')}</Text>
             <Text variant="muted">{t('pro.donateHint')}</Text>
-            <Notice>{t('pro.donateBonus', { min: money(min, giftCurrency) })}</Notice>
+            {(plans?.donation_bonus_questions ?? 3) > 0 ? (
+              <Notice>{t('pro.donateBonus', { min: money(min, giftCurrency), n: plans?.donation_bonus_questions ?? 3 })}</Notice>
+            ) : null}
             {donation === 'success' ? <Notice kind="success">{t('pro.donationThanks')}</Notice> : null}
             {donation === 'cancel' ? <Notice>{t('pro.checkoutCancel')}</Notice> : null}
             <Segmented

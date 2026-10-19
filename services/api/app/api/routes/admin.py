@@ -346,6 +346,55 @@ async def _settings_out(db: AsyncSession) -> dict:
     }
 
 
+class MonthlyQuota(BaseModel):
+    free_monthly: int = Field(ge=0, le=10_000)
+    pro_monthly: int = Field(ge=0, le=10_000)
+
+
+class DonationConfig(BaseModel):
+    min_brl: float = Field(ge=1, le=100_000)
+    max_brl: float = Field(ge=1, le=1_000_000)
+    min_usd: float = Field(ge=1, le=100_000)
+    max_usd: float = Field(ge=1, le=1_000_000)
+    bonus_questions: int = Field(ge=0, le=1000)
+
+
+class LimitsIn(BaseModel):
+    visual: MonthlyQuota
+    slides: MonthlyQuota
+    donation: DonationConfig
+
+
+async def _limits_out(db: AsyncSession) -> dict:
+    return {
+        "visual": await get_setting(db, "visual.quotas"),
+        "slides": await get_setting(db, "slides.quotas"),
+        "donation": await get_setting(db, "billing.donation"),
+    }
+
+
+@router.get("/limits")
+async def get_limits(_: CurrentUser = Depends(admin_only), db: AsyncSession = Depends(get_db)) -> dict:
+    """Limites por mês do que custa caro (estudo visual, fundos do telão) e valores da oferta avulsa."""
+    return await _limits_out(db)
+
+
+@router.put("/limits")
+async def put_limits(
+    body: LimitsIn, cu: CurrentUser = Depends(admin_only), db: AsyncSession = Depends(get_db)
+) -> dict:
+    d = body.donation
+    if d.max_brl < d.min_brl or d.max_usd < d.min_usd:
+        raise AppError(422, "invalid_amount", "The maximum must be at least the minimum")
+    by = cu.user.id
+    await set_setting(db, "visual.quotas", body.visual.model_dump(), by)
+    await set_setting(db, "slides.quotas", body.slides.model_dump(), by)
+    await set_setting(db, "billing.donation", d.model_dump(), by)
+    audit.record(db, "admin.limits_updated", audit.RequestMeta(None, None), by)
+    await db.commit()
+    return await _limits_out(db)
+
+
 @router.get("/settings")
 async def get_settings_route(
     _: CurrentUser = Depends(admin_only), db: AsyncSession = Depends(get_db)

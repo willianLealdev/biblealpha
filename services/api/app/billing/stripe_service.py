@@ -140,22 +140,24 @@ async def checkout_url(db: AsyncSession, user: User, price: PlanPrice) -> str:
     return session.url
 
 
-# Limites da oferta avulsa por moeda (mínimo cobre a taxa do Stripe; máximo evita erro de digitação)
-# Oferta mínima: R$ 5 no Brasil, US$ 3 no resto do mundo
-DONATION_LIMITS = {"BRL": (Decimal("5"), Decimal("10000")), "USD": (Decimal("3"), Decimal("2000"))}
-# Quem faz uma oferta avulsa ganha perguntas extras à IA
-DONATION_BONUS_QUESTIONS = 3
+async def donation_limits(db: AsyncSession) -> dict[str, tuple[Decimal, Decimal]]:
+    """Limites da oferta avulsa por moeda, definidos no painel (padrão: R$ 5 e US$ 3 de mínimo)."""
+    cfg = await get_setting(db, "billing.donation")
+    return {
+        "BRL": (Decimal(str(cfg["min_brl"])), Decimal(str(cfg["max_brl"]))),
+        "USD": (Decimal(str(cfg["min_usd"])), Decimal(str(cfg["max_usd"]))),
+    }
 
 
-def check_donation(amount: Decimal, currency: str) -> None:
-    low, high = DONATION_LIMITS[currency]
+async def check_donation(db: AsyncSession, amount: Decimal, currency: str) -> None:
+    low, high = (await donation_limits(db))[currency]
     if not (low <= amount <= high):
         raise AppError(422, "invalid_amount", f"Amount must be between {low} and {high} {currency}")
 
 
 async def donation_url(db: AsyncSession, user: User, amount: Decimal, currency: str) -> str:
     """Oferta única no valor escolhido pelo usuário."""
-    check_donation(amount, currency)
+    await check_donation(db, amount, currency)
     sc = client()
     customer = await ensure_customer(db, user, sc)
     base = get_settings().app_url.rstrip("/")
@@ -274,7 +276,8 @@ async def _donation_bonus(db: AsyncSession, event_type: str, data: dict) -> None
     except ValueError:
         user = None
     if user is not None:
-        user.ai_bonus = (user.ai_bonus or 0) + DONATION_BONUS_QUESTIONS
+        bonus = int((await get_setting(db, "billing.donation")).get("bonus_questions", 3))
+        user.ai_bonus = (user.ai_bonus or 0) + max(0, bonus)
 
 
 async def handle_webhook(db: AsyncSession, payload: bytes, signature: str | None) -> str:

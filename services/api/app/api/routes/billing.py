@@ -59,8 +59,11 @@ async def plans(db: AsyncSession = Depends(get_db)) -> dict:
         "checkout_available": stripe_service.configured(),
         # Limites da oferta avulsa por moeda
         "donation_limits": {
-            c: [float(lo), float(hi)] for c, (lo, hi) in stripe_service.DONATION_LIMITS.items()
+            c: [float(lo), float(hi)] for c, (lo, hi) in (await stripe_service.donation_limits(db)).items()
         },
+        "donation_bonus_questions": int(
+            (await get_setting(db, "billing.donation")).get("bonus_questions", 3)
+        ),
     }
 
 
@@ -216,7 +219,7 @@ async def donate(
 ) -> dict:
     """Oferta avulsa no valor que o usuário quiser (não cria assinatura). A moeda segue o país."""
     currency = stripe_service.currency_for(cu.user)
-    stripe_service.check_donation(body.amount, currency)
+    await stripe_service.check_donation(db, body.amount, currency)
     return {"url": await stripe_service.donation_url(db, cu.user, body.amount, currency)}
 
 

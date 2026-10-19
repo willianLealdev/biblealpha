@@ -15,6 +15,7 @@ export default function AdminLayout() {
       screenOptions={stackOptions}>
       <Stack.Screen name="index" options={{ title: t('admin.title') }} />
       <Stack.Screen name="settings" options={{ title: t('admin.settings') }} />
+      <Stack.Screen name="limits" options={{ title: t('admin.limits.title') }} />
       <Stack.Screen name="users/[id]" options={{ title: t('admin.userDetail') }} />
       <Stack.Screen name="bibles" options={{ title: t('admin.bibles') }} />
       <Stack.Screen name="integrations" options={{ title: t('admin.integrations') }} />
