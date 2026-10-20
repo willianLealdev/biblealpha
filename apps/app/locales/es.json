@@ -3,6 +3,8 @@
     "CFBundleDisplayName": "BibleAlpha",
     "NSCameraUsageDescription": "BibleAlpha usa la cámara solo para leer el código QR de la pantalla de la iglesia.",
     "NSMicrophoneUsageDescription": "BibleAlpha usa el micrófono para que dictes tus predicaciones y preguntas.",
-    "NSSpeechRecognitionUsageDescription": "BibleAlpha convierte tu voz en texto cuando dictas predicaciones y preguntas."
+    "NSSpeechRecognitionUsageDescription": "BibleAlpha convierte tu voz en texto cuando dictas predicaciones y preguntas.",
+    "NSPhotoLibraryUsageDescription": "BibleAlpha no accede a tus fotos. Este permiso solo se solicita si eliges guardar o compartir una imagen.",
+    "NSPhotoLibraryAddUsageDescription": "BibleAlpha guarda una imagen en tus fotos solo cuando eliges guardarla."
   }
 }
