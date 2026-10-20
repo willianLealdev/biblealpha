@@ -1,6 +1,8 @@
 {
-  "CFBundleDisplayName": "BibleAlpha",
-  "NSCameraUsageDescription": "BibleAlpha uses the camera only to scan the QR code of the church screen.",
-  "NSMicrophoneUsageDescription": "BibleAlpha uses the microphone so you can dictate your messages and questions.",
-  "NSSpeechRecognitionUsageDescription": "BibleAlpha turns your voice into text when you dictate messages and questions."
+  "ios": {
+    "CFBundleDisplayName": "BibleAlpha",
+    "NSCameraUsageDescription": "BibleAlpha uses the camera only to scan the QR code of the church screen.",
+    "NSMicrophoneUsageDescription": "BibleAlpha uses the microphone so you can dictate your messages and questions.",
+    "NSSpeechRecognitionUsageDescription": "BibleAlpha turns your voice into text when you dictate messages and questions."
+  }
 }

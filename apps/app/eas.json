@@ -9,7 +9,8 @@
       "env": {
         "EXPO_PUBLIC_API_URL": "https://biblealpha.com",
         "EXPO_PUBLIC_APP_URL": "https://biblealpha.com"
-      }
+      },
+      "channel": "base"
     },
     "preview": {
       "extends": "base",
