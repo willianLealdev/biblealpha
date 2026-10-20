@@ -27,6 +27,7 @@ import { ApiError } from '@/lib/api';
 import { screenApi } from '@/lib/screens';
 import { KINDS, sermonApi, type Block, type Role, type Sermon } from '@/lib/sermons';
 import { AskSheet } from '@/components/ask-sheet';
+import { Markdown } from '@/components/markdown';
 import { useSession } from '@/lib/session';
 import { AssistSheet } from '@/sermon/assist-sheet';
 import { BackgroundLibrary } from '@/sermon/background-library';
@@ -74,7 +75,7 @@ function canonical(r: Reference) {
 }
 
 export default function SermonEditor() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, edit } = useLocalSearchParams<{ id: string; edit?: string }>();
   const { t, locale, errorMessage } = useI18n();
   const { colors } = useTheme();
 
@@ -88,6 +89,10 @@ export default function SermonEditor() {
   const localTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [status, setStatus] = useState<Status>('saved');
+  // A ministração abre só para ler; o lápis libera a edição (ministração nova já abre editando).
+  // Com rascunho ainda não salvo, fica editando para a pessoa ver e terminar de salvar.
+  const [wantsEdit, setWantsEdit] = useState(edit === '1');
+  const editing = wantsEdit || status === 'dirty' || status === 'offline' || status === 'error';
   const [banner, setBanner] = useState<Banner | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [translation, setTranslation] = useState('blivre');
@@ -459,17 +464,28 @@ export default function SermonEditor() {
       {/* Barra fixa */}
       <View style={{ borderBottomWidth: 1, borderColor: colors.border, paddingHorizontal: 12, paddingVertical: 6 }}>
         <View style={{ width: '100%', maxWidth: 720, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-          <ToolButton icon="arrow-undo" label={t('sermons.undo')} onPress={doUndo} disabled={!canUndo} />
-          <ToolButton icon="arrow-redo" label={t('sermons.redo')} onPress={doRedo} disabled={!canRedo} />
+          <ToolButton
+            icon={editing ? 'checkmark-circle' : 'create-outline'}
+            label={editing ? t('sermons.doneEditing') : t('sermons.edit')}
+            highlight
+            onPress={() => (editing ? run(async () => {
+              await flush();
+              setWantsEdit(false);
+            }) : setWantsEdit(true))}
+          />
+          {editing ? <ToolButton icon="arrow-undo" label={t('sermons.undo')} onPress={doUndo} disabled={!canUndo} /> : null}
+          {editing ? <ToolButton icon="arrow-redo" label={t('sermons.redo')} onPress={doRedo} disabled={!canRedo} /> : null}
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 6 }}>
-            <Ionicons
+            {editing ? <Ionicons
               name={status === 'saved' ? 'cloud-done-outline' : status === 'saving' ? 'sync-outline' : status === 'dirty' ? 'ellipse-outline' : 'cloud-offline-outline'}
               size={16}
               color={status === 'error' || status === 'offline' ? colors.danger : colors.textMuted}
-            />
-            <Text variant="small" numberOfLines={1} style={{ flexShrink: 1 }} accessibilityLiveRegion="polite">
-              {status === 'offline' || status === 'error' ? t('sermons.unsaved') : statusText}
-            </Text>
+            /> : null}
+            {editing ? (
+              <Text variant="small" numberOfLines={1} style={{ flexShrink: 1 }} accessibilityLiveRegion="polite">
+                {status === 'offline' || status === 'error' ? t('sermons.unsaved') : statusText}
+              </Text>
+            ) : null}
           </View>
           <ToolButton
             icon="tv-outline"
@@ -604,6 +620,8 @@ export default function SermonEditor() {
             <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
           </Pressable>
 
+          {editing ? (
+            <>
           {/* Título e detalhes */}
           <TextInput
             value={doc.meta.title}
@@ -705,6 +723,10 @@ export default function SermonEditor() {
             }}
             onScripture={(raw) => insertByReference(null, raw)}
           />
+            </>
+          ) : (
+            <ReadView doc={doc} />
+          )}
         </View>
       </ScrollView>
 
@@ -769,11 +791,14 @@ function ToolButton({
   label,
   onPress,
   disabled,
+  highlight,
 }: {
   icon: ComponentProps<typeof Ionicons>['name'];
   label: string;
   onPress: () => void;
   disabled?: boolean;
+  /** Botão principal da barra (lápis): fundo dourado */
+  highlight?: boolean;
 }) {
   const { colors } = useTheme();
   return (
@@ -784,9 +809,79 @@ function ToolButton({
       disabled={disabled}
       onPress={onPress}
       hitSlop={6}
-      style={({ pressed }) => ({ padding: 8, borderRadius: radius.sm, opacity: disabled ? 0.35 : pressed ? 0.6 : 1 })}>
-      <Ionicons name={icon} size={21} color={colors.gold} />
+      style={({ pressed }) => ({
+        padding: 8,
+        borderRadius: highlight ? radius.pill : radius.sm,
+        backgroundColor: highlight ? colors.gold : 'transparent',
+        opacity: disabled ? 0.35 : pressed ? 0.6 : 1,
+      })}>
+      <Ionicons name={icon} size={21} color={highlight ? colors.onGold : colors.gold} />
     </Pressable>
+  );
+}
+
+/** Ministração inteira, só para ler (sem campos de edição). */
+function ReadView({ doc }: { doc: Doc }) {
+  const { t, locale } = useI18n();
+  const { colors } = useTheme();
+  const m = doc.meta;
+  const info: [string, string][] = (
+    [
+      [t('sermons.theme'), m.theme],
+      [t('sermons.mainReference'), m.main_reference],
+      [t('sermons.otherReferences'), m.other_references],
+      [t('sermons.objective'), m.objective],
+      [t('sermons.audience'), m.audience],
+      [t('sermons.event'), m.event],
+      [t('sermons.date').replace(/\s*\(.*\)$/, ''), m.scheduled_for ? new Date(`${m.scheduled_for}T12:00:00`).toLocaleDateString(locale) : ''],
+      [t('sermons.duration').replace(/\s*\(.*\)$/, ''), m.duration ? `${m.duration} ${t('sermons.minutes')}` : ''],
+    ] as [string, string][]
+  ).filter(([, v]) => v.trim());
+  const body = { color: colors.text, fontFamily: fonts.body, fontSize: 17, lineHeight: 27 };
+  return (
+    <View style={{ gap: 14 }}>
+      <RNText style={{ fontFamily: fonts.display, fontSize: 32, lineHeight: 38, color: colors.text }}>{m.title || t('sermons.untitled')}</RNText>
+      <Text variant="small">
+        {[t(`sermons.kinds.${m.kind}`), t('sermons.estimated', { n: speakingMinutes(doc.blocks) })].join(' · ')}
+      </Text>
+      {info.length ? (
+        <Card>
+          {info.map(([label, value]) => (
+            <View key={label}>
+              <Text variant="small">{label}</Text>
+              <RNText style={{ color: colors.text, fontFamily: fonts.body, fontSize: 16, lineHeight: 24 }}>{value}</RNText>
+            </View>
+          ))}
+        </Card>
+      ) : null}
+      {doc.blocks.length === 0 ? <Text variant="muted">{t('sermons.emptySermon')}</Text> : null}
+      {doc.blocks.map((b) => {
+        if (b.type === 'section') {
+          return (
+            <RNText key={b.id} style={{ color: colors.gold, fontFamily: fonts.bodyBold, fontSize: 21, lineHeight: 28, marginTop: 14 }}>
+              {b.title || t(`sermons.roles.${b.role}`)}
+            </RNText>
+          );
+        }
+        if (b.type === 'text') {
+          return b.text.trim() ? <Markdown key={b.id} text={b.text.replace(/==/g, '')} /> : null;
+        }
+        if (b.type === 'scripture') {
+          return (
+            <View key={b.id} style={{ borderLeftWidth: 3, borderColor: colors.gold, paddingLeft: 12, gap: 4 }}>
+              <RNText style={{ ...body, fontFamily: fonts.bodyBold }}>{b.reference}</RNText>
+              <RNText style={{ ...body, fontStyle: 'italic' }}>{b.verses.map((v) => v.text).join(' ')}</RNText>
+            </View>
+          );
+        }
+        return b.text.trim() ? (
+          <View key={b.id} style={{ borderWidth: 1, borderStyle: 'dashed', borderColor: colors.goldMuted, borderRadius: radius.sm, padding: 10 }}>
+            <Text variant="small">{t('sermons.noteLabel')}</Text>
+            <RNText style={{ ...body, fontSize: 15, color: colors.textMuted }}>{b.text}</RNText>
+          </View>
+        ) : null;
+      })}
+    </View>
   );
 }
 

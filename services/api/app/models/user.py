@@ -114,6 +114,9 @@ class AuthSession(UUIDPk, Base):
     previous_token_hash: Mapped[str | None] = mapped_column(String(64), index=True)
     client: Mapped[str] = mapped_column(String(20), nullable=False)  # web | native
     user_agent: Mapped[str | None] = mapped_column(String(400))
+    # Aparelho que a pessoa marcou como confiável no login (só apps): não pede senha de novo até sair
+    trusted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    device_name: Mapped[str | None] = mapped_column(String(80))
     ip: Mapped[str | None] = mapped_column(INET)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     last_used_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

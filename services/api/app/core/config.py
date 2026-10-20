@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     jwt_issuer: str = "biblealpha"
     access_token_ttl_minutes: int = 15
     refresh_token_ttl_days: int = 60
+    # Site: a sessão acaba ao fechar o navegador (cookie sem validade); no servidor vale 24 h sem uso
+    web_session_hours: int = 24
+    # Aparelho em que a pessoa marcou "confiar": fica conectado enquanto usar, até sair
+    trusted_device_days: int = 365
     email_token_ttl_hours: int = 24
     password_reset_ttl_minutes: int = 60
 

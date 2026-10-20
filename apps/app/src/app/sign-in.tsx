@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
-import { Button, Gap, LinkText, Logo, Notice, Screen, Text, TextField } from '@/components/ui';
+import { Button, Checkbox, Gap, LinkText, Logo, Notice, Screen, Text, TextField } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { ApiError, authApi } from '@/lib/api';
 import { useSession } from '@/lib/session';
@@ -18,6 +18,9 @@ export default function SignIn() {
   const [unverified, setUnverified] = useState(false);
   const [resent, setResent] = useState(false);
 
+  // "Confiar neste dispositivo": só nos apps (no site a sessão acaba ao fechar o navegador)
+  const [trust, setTrust] = useState(false);
+
   async function submit() {
     const emailError = validateEmail(email);
     if (emailError || !password) {
@@ -28,7 +31,7 @@ export default function SignIn() {
     setError(null);
     setUnverified(false);
     try {
-      await signIn(email.trim(), password);
+      await signIn(email.trim(), password, trust);
       // A guarda de rota leva para as abas automaticamente
     } catch (e) {
       if (e instanceof ApiError && e.code === 'email_not_verified') setUnverified(true);
@@ -81,6 +84,14 @@ export default function SignIn() {
         returnKeyType="go"
         onSubmitEditing={submit}
       />
+      {Platform.OS !== 'web' ? (
+        <View style={{ gap: 2 }}>
+          <Checkbox checked={trust} onChange={setTrust}>
+            {t('auth.trustDevice')}
+          </Checkbox>
+          <Text variant="small">{t('auth.trustDeviceHint')}</Text>
+        </View>
+      ) : null}
       <View style={{ alignItems: 'flex-end' }}>
         <LinkText onPress={() => router.push('/forgot-password')}>{t('auth.forgotPassword')}</LinkText>
       </View>

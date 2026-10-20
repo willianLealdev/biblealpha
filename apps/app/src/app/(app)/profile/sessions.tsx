@@ -72,8 +72,8 @@ export default function Sessions() {
             <Fragment key={s.id} divider={i > 0}>
               <ListItem
                 icon={s.client === 'web' ? 'globe-outline' : 'phone-portrait-outline'}
-                title={`${s.current ? t('sessions.current') : t(`sessions.${s.client}`)}${describeAgent(s.user_agent) ? ` — ${describeAgent(s.user_agent)}` : ''}`}
-                subtitle={t('sessions.lastUsed', { date: format(s.last_used_at) })}
+                title={`${s.current ? t('sessions.current') : t(`sessions.${s.client}`)}${s.device_name ?? describeAgent(s.user_agent) ? ` — ${s.device_name ?? describeAgent(s.user_agent)}` : ''}`}
+                subtitle={`${t('sessions.lastUsed', { date: format(s.last_used_at) })}${s.trusted ? ` · ${t('sessions.trusted')}` : ''}`}
                 right={
                   s.current ? null : (
                     <Text variant="label" style={{ color: colors.danger }} onPress={() => revoke(s.id)} accessibilityRole="button">

@@ -40,6 +40,9 @@ class LoginIn(BaseModel):
     email: EmailStr
     password: Annotated[str, StringConstraints(min_length=1, max_length=128)]
     client: Client = "native"
+    # "Confiar neste dispositivo" (só vale nos apps; no site a sessão acaba ao fechar o navegador)
+    trust_device: bool = False
+    device_name: Annotated[str, StringConstraints(strip_whitespace=True, max_length=80)] | None = None
 
     _email = field_validator("email")(_normalize_email)
 
@@ -126,6 +129,8 @@ class SessionOut(BaseModel):
     client: str
     user_agent: str | None
     ip: str | None
+    trusted: bool = False
+    device_name: str | None = None
     created_at: datetime
     last_used_at: datetime
     current: bool

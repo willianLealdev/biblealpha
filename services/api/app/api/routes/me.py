@@ -92,6 +92,8 @@ async def list_sessions(
             client=s.client,
             user_agent=s.user_agent,
             ip=str(s.ip) if s.ip else None,
+            trusted=s.trusted,
+            device_name=s.device_name,
             created_at=s.created_at,
             last_used_at=s.last_used_at,
             current=s.id == cu.session.id,

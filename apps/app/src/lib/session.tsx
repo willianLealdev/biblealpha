@@ -10,7 +10,7 @@ type Status = 'loading' | 'signedIn' | 'signedOut';
 type SessionContextValue = {
   status: Status;
   user: User | null;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string, trustDevice?: boolean) => Promise<void>;
   signOut: () => Promise<void>;
   /** Atualiza o usuário em memória depois de uma alteração de perfil. */
   setUser: (user: User) => void;
@@ -66,8 +66,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     () => ({
       status,
       user,
-      async signIn(email, password) {
-        await authApi.login(email, password);
+      async signIn(email, password, trustDevice = false) {
+        await authApi.login(email, password, trustDevice);
         applyUser(await meApi.get());
         setStatus('signedIn');
       },

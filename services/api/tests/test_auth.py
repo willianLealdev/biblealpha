@@ -250,3 +250,75 @@ async def test_tampered_token_rejected(client):
     forged = tokens["access_token"][:-4] + "abcd"
     assert (await client.get("/api/v1/me", headers={"Authorization": f"Bearer {forged}"})).status_code == 401
     assert (await client.get("/api/v1/me")).status_code == 401
+
+
+async def _session_rows():
+    from app.models import AuthSession
+
+    async with get_sessionmaker()() as db:
+        return list(await db.scalars(select(AuthSession).order_by(AuthSession.created_at)))
+
+
+async def test_web_session_ends_when_the_browser_closes(client):
+    await register(client)
+    # No site o "confiar neste dispositivo" não existe: o pedido é ignorado
+    r = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "ana@example.com", "password": PASSWORD, "client": "web", "trust_device": True},
+    )
+    assert r.status_code == 200
+    # Cookie de sessão: sem Max-Age nem Expires, então some quando o navegador fecha
+    set_cookie = r.headers["set-cookie"].lower()
+    assert "max-age" not in set_cookie and "expires" not in set_cookie
+    (row,) = await _session_rows()
+    assert row.client == "web" and row.trusted is False
+    # No servidor a sessão do site vale 24 h de uso (renovada a cada refresh)
+    left = row.expires_at - datetime.now(UTC)
+    assert timedelta(hours=23) < left <= timedelta(hours=24)
+
+
+async def test_trusted_device_stays_signed_in_until_logout(client):
+    await register(client)
+    r = await client.post(
+        "/api/v1/auth/login",
+        json={
+            "email": "ana@example.com",
+            "password": PASSWORD,
+            "client": "native",
+            "trust_device": True,
+            "device_name": "Samsung SM-S918B",
+        },
+    )
+    assert r.status_code == 200
+    tokens = r.json()
+    (row,) = await _session_rows()
+    assert row.trusted is True and row.device_name == "Samsung SM-S918B"
+    assert row.expires_at - datetime.now(UTC) > timedelta(days=360)
+
+    # Aparece na lista de aparelhos
+    sessions = (await client.get("/api/v1/me/sessions", headers=bearer(tokens))).json()
+    assert sessions[0]["trusted"] is True and sessions[0]["device_name"] == "Samsung SM-S918B"
+
+    # Cada uso renova a validade: um aparelho em uso nunca expira
+    async with get_sessionmaker()() as db:
+        await db.execute(update(type(row)).values(expires_at=datetime.now(UTC) + timedelta(days=2)))
+        await db.commit()
+    r = await client.post("/api/v1/auth/refresh", json={"refresh_token": tokens["refresh_token"]})
+    assert r.status_code == 200
+    (row,) = await _session_rows()
+    assert row.expires_at - datetime.now(UTC) > timedelta(days=360)
+
+    # Só sai quando a própria pessoa toca em Sair
+    new_tokens = r.json()
+    assert (await client.post("/api/v1/auth/logout", headers=bearer(new_tokens))).status_code == 204
+    r = await client.post("/api/v1/auth/refresh", json={"refresh_token": new_tokens["refresh_token"]})
+    assert r.status_code == 401
+
+
+async def test_native_without_trust_keeps_the_normal_expiry(client):
+    await register(client)
+    await login(client)
+    (row,) = await _session_rows()
+    assert row.trusted is False
+    left = row.expires_at - datetime.now(UTC)
+    assert timedelta(days=59) < left <= timedelta(days=60)

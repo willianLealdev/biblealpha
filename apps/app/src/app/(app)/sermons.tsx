@@ -18,6 +18,8 @@ export default function SermonsTab() {
   const [view, setView] = useState<'all' | 'trash'>('all');
   const [q, setQ] = useState('');
   const [folder, setFolder] = useState<string | null>(null);
+  // Filtro por tipo de ministração (expositiva, temática...): vários podem ficar marcados
+  const [kinds, setKinds] = useState<Kind[]>([]);
   const [items, setItems] = useState<SermonSummary[] | null>(null);
   const [folders, setFolders] = useState<string[]>([]);
   const [choosing, setChoosing] = useState(false);
@@ -39,11 +41,15 @@ export default function SermonsTab() {
     try {
       const s = await sermonApi.create({ kind, use_template: true });
       setChoosing(false);
-      router.push({ pathname: '/sermon/[id]', params: { id: s.id } });
+      // Ministração nova já abre para escrever
+      router.push({ pathname: '/sermon/[id]', params: { id: s.id, edit: '1' } });
     } catch (e) {
       setError(errorMessage(e));
     }
   }
+
+  const toggleKind = (k: Kind) => setKinds((cur) => (cur.includes(k) ? cur.filter((x) => x !== k) : [...cur, k]));
+  const shown = items && view === 'all' && kinds.length ? items.filter((s) => kinds.includes(s.kind)) : items;
 
   return (
     <Screen>
@@ -126,11 +132,47 @@ export default function SermonsTab() {
         </View>
       ) : null}
 
-      {items === null ? <ActivityIndicator color={colors.gold} /> : null}
-      {items?.length === 0 ? <Text variant="muted">{view === 'trash' ? t('sermons.emptyTrash') : t('sermons.empty')}</Text> : null}
-      {items?.length ? (
+      {view === 'all' ? (
+        <View style={{ gap: 6 }}>
+          <Text variant="label">{t('sermons.filterKind')}</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            {[null, ...KINDS].map((k) => {
+              const active = k === null ? kinds.length === 0 : kinds.includes(k);
+              const count = items ? (k === null ? items.length : items.filter((s) => s.kind === k).length) : null;
+              return (
+                <Pressable
+                  key={k ?? '__all'}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: active }}
+                  onPress={() => (k === null ? setKinds([]) : toggleKind(k))}
+                  style={{
+                    flexDirection: 'row',
+                    gap: 6,
+                    alignItems: 'center',
+                    borderWidth: 1,
+                    borderColor: active ? colors.gold : colors.border,
+                    backgroundColor: active ? colors.gold : 'transparent',
+                    borderRadius: radius.pill,
+                    paddingHorizontal: 12,
+                    paddingVertical: 6,
+                  }}>
+                  <Ionicons name={active ? 'checkbox' : 'square-outline'} size={15} color={active ? colors.onGold : colors.textMuted} />
+                  <RNText style={{ color: active ? colors.onGold : colors.text, fontFamily: fonts.body }}>
+                    {k === null ? t('sermons.allKinds') : t(`sermons.kinds.${k}`)}
+                    {count !== null ? ` (${count})` : ''}
+                  </RNText>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+      ) : null}
+
+      {shown === null ? <ActivityIndicator color={colors.gold} /> : null}
+      {shown?.length === 0 ? <Text variant="muted">{view === 'trash' ? t('sermons.emptyTrash') : kinds.length ? t('sermons.emptyFilter') : t('sermons.empty')}</Text> : null}
+      {shown?.length ? (
         <Card style={{ paddingVertical: 4 }}>
-          {items.map((s, i) => (
+          {shown.map((s, i) => (
             <View key={s.id}>
               {i > 0 ? <Divider /> : null}
               <Pressable

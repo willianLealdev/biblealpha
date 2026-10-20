@@ -39,7 +39,7 @@ def _tokens(response: Response, user: User, session: AuthSession, refresh: str) 
         response.set_cookie(
             settings.refresh_cookie_name,
             refresh,
-            max_age=settings.refresh_token_ttl_days * 86400,
+            # Sem max_age: cookie de sessão, some quando o navegador é fechado
             path=settings.refresh_cookie_path,
             httponly=True,
             secure=settings.cookie_secure,
@@ -135,7 +135,13 @@ async def login(
     await ratelimit.hit(f"login:{body.email}", limit=10, window_seconds=900)
     await ratelimit.hit(f"login-ip:{meta.ip}", limit=30, window_seconds=900)
     user, session, refresh = await auth_service.login(
-        db, email=body.email, password=body.password, client=body.client, meta=meta
+        db,
+        email=body.email,
+        password=body.password,
+        client=body.client,
+        meta=meta,
+        trust_device=body.trust_device,
+        device_name=body.device_name,
     )
     return _tokens(response, user, session, refresh)
 

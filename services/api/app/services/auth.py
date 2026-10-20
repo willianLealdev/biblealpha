@@ -161,7 +161,14 @@ async def new_verification_token(db: AsyncSession, email: str) -> tuple[User, st
 
 
 async def login(
-    db: AsyncSession, *, email: str, password: str, client: str, meta: RequestMeta
+    db: AsyncSession,
+    *,
+    email: str,
+    password: str,
+    client: str,
+    meta: RequestMeta,
+    trust_device: bool = False,
+    device_name: str | None = None,
 ) -> tuple[User, AuthSession, str]:
     user = await get_active_user_by_email(db, email)
     # verify_password roda mesmo sem usuário, para o tempo de resposta não revelar se o e-mail existe
@@ -175,23 +182,39 @@ async def login(
     if security.password_needs_rehash(user.password_hash):
         user.password_hash = security.hash_password(password)
     user.last_login_at = _now()
-    session, refresh = _new_session(user, client, meta)
+    session, refresh = _new_session(user, client, meta, trust_device=trust_device, device_name=device_name)
     db.add(session)
-    audit.record(db, "auth.login", meta, user.id, client=client)
+    audit.record(db, "auth.login", meta, user.id, client=client, trusted=session.trusted)
     await db.commit()
     return user, session, refresh
 
 
-def _new_session(user: User, client: str, meta: RequestMeta) -> tuple[AuthSession, str]:
+def session_lifetime(client: str, trusted: bool) -> timedelta:
+    """Quanto a sessão vale a partir de agora (renovado a cada uso do refresh token)."""
+    settings = get_settings()
+    if client == "web":
+        return timedelta(hours=settings.web_session_hours)
+    if trusted:
+        return timedelta(days=settings.trusted_device_days)
+    return timedelta(days=settings.refresh_token_ttl_days)
+
+
+def _new_session(
+    user: User, client: str, meta: RequestMeta, *, trust_device: bool = False, device_name: str | None = None
+) -> tuple[AuthSession, str]:
     raw = security.new_opaque_token()
+    # Só os apps podem confiar no aparelho; o site sempre pede login de novo ao fechar o navegador
+    trusted = trust_device and client != "web"
     session = AuthSession(
         id=uuid.uuid4(),
         user_id=user.id,
         refresh_token_hash=security.hash_token(raw),
         client=client,
         user_agent=(meta.user_agent or "")[:400] or None,
+        trusted=trusted,
+        device_name=(device_name or "")[:80] or None,
         ip=meta.ip,
-        expires_at=_now() + timedelta(days=get_settings().refresh_token_ttl_days),
+        expires_at=_now() + session_lifetime(client, trusted),
     )
     return session, raw
 
@@ -223,6 +246,9 @@ async def refresh(db: AsyncSession, raw_token: str, meta: RequestMeta) -> tuple[
     session.refresh_token_hash = security.hash_token(new_raw)
     session.last_used_at = _now()
     session.ip = meta.ip or session.ip
+    # Site e aparelho confiável: a validade anda junto com o uso (sem uso por muito tempo, expira)
+    if session.client == "web" or session.trusted:
+        session.expires_at = _now() + session_lifetime(session.client, session.trusted)
     await db.commit()
     return user, session, new_raw
 

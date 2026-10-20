@@ -1,3 +1,4 @@
+import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 
 import { getItem, setItem } from './storage';
@@ -40,6 +41,8 @@ export type SessionInfo = {
   client: 'web' | 'native';
   user_agent: string | null;
   ip: string | null;
+  trusted?: boolean;
+  device_name?: string | null;
   created_at: string;
   last_used_at: string;
   current: boolean;
@@ -120,6 +123,12 @@ export async function api<T>(path: string, options: RequestOptions = {}): Promis
   return parse<T>(response);
 }
 
+/** Nome do aparelho para a lista de aparelhos conectados (ex.: "Samsung SM-S918B"). */
+function deviceName(): string | undefined {
+  const name = [Device.manufacturer, Device.modelName].filter(Boolean).join(' ').trim();
+  return name || undefined;
+}
+
 type TokenResponse = { access_token: string; expires_in: number; refresh_token?: string };
 
 async function storeTokens(tokens: TokenResponse) {
@@ -162,11 +171,18 @@ export function refreshSession(): Promise<boolean> {
 }
 
 export const authApi = {
-  async login(email: string, password: string) {
+  async login(email: string, password: string, trustDevice = false) {
     const tokens = await api<TokenResponse>('/auth/login', {
       method: 'POST',
       auth: false,
-      body: { email, password, client: IS_WEB ? 'web' : 'native' },
+      // "Confiar neste dispositivo" só existe nos apps; no site a sessão acaba ao fechar o navegador
+      body: {
+        email,
+        password,
+        client: IS_WEB ? 'web' : 'native',
+        trust_device: !IS_WEB && trustDevice,
+        device_name: IS_WEB ? undefined : deviceName(),
+      },
     });
     await storeTokens(tokens);
   },
