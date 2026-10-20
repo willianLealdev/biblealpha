@@ -179,12 +179,12 @@ export default function PulpitScreen() {
     if (!state.background.id && state.can_generate) newBackground(state.id);
   }
 
-  async function show(key: string | null, text: string, reference?: string | null) {
+  async function show(key: string | null, text: string, reference?: string | null, title?: string | null) {
     if (!screen) return;
     setOnScreen(key);
     setScreenMsg(null);
     try {
-      setScreen(await screenApi.show(screen.id, text, reference));
+      setScreen(await screenApi.show(screen.id, text, reference, title));
     } catch (e) {
       if (e instanceof ApiError && e.code === 'screen_not_found') {
         setScreen(null);
@@ -281,14 +281,14 @@ export default function PulpitScreen() {
   const sections = doc.blocks.filter((b): b is Extract<Block, { type: 'section' }> => b.type === 'section');
   const body = { color: colors.text, fontFamily: fonts.body, fontSize: font, lineHeight: Math.round(font * 1.5) };
 
-  function screenButton(k: string, text: string, reference?: string | null) {
+  function screenButton(k: string, text: string, reference?: string | null, title?: string | null) {
     if (!screen) return null;
     const active = onScreen === k;
     return (
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t('screen.showOnScreen')}
-        onPress={() => (active ? show(null, '') : show(k, text, reference))}
+        onPress={() => (active ? show(null, '') : show(k, text, reference, title))}
         hitSlop={6}
         style={{
           padding: 7,
@@ -303,7 +303,7 @@ export default function PulpitScreen() {
     );
   }
 
-  function showable(key: string | number, k: string, text: string, reference: string | null, children: ReactNode) {
+  function showable(key: string | number, k: string, text: string, reference: string | null, children: ReactNode, title?: string | null) {
     if (!screen) return children;
     return (
       <View
@@ -316,20 +316,32 @@ export default function PulpitScreen() {
           backgroundColor: onScreen === k ? colors.surfaceAlt : 'transparent',
           padding: onScreen === k ? 6 : 0,
         }}>
-        {screenButton(k, text, reference)}
+        {screenButton(k, text, reference, title)}
         <View style={{ flex: 1 }}>{children}</View>
       </View>
     );
   }
 
+  // Título da seção em que cada bloco está: o texto vai ao telão junto com ele
+  const sectionOf: Record<string, string | null> = {};
+  let currentSection: string | null = null;
+  for (const b of doc.blocks) {
+    if (b.type === 'section') currentSection = b.title || t(`sermons.roles.${b.role}`);
+    sectionOf[b.id] = currentSection;
+  }
+
   function renderBlock(b: Block) {
     switch (b.type) {
-      case 'section':
-        return (
+      case 'section': {
+        const title = b.title || t(`sermons.roles.${b.role}`);
+        const label = (
           <RNText style={{ color: colors.gold, fontFamily: fonts.bodyBold, fontSize: Math.round(font * 1.2), lineHeight: Math.round(font * 1.6), marginTop: 12 }}>
-            {b.title || t(`sermons.roles.${b.role}`)}
+            {title}
           </RNText>
         );
+        // Com o telão: o título vai sozinho
+        return screen ? showable('title', `${b.id}:title`, '', null, label, title) : label;
+      }
       case 'text': {
         if (!b.text.trim()) return null;
         if (mode === 'outline') {
@@ -348,7 +360,7 @@ export default function PulpitScreen() {
           return (
             <View style={{ gap: Math.round(font * 0.5) }}>
               {paragraphs(b.text).map((para, i) => (
-                showable(i, `${b.id}:${i}`, para, null, <RNText style={body}>{mode === 'memorize' ? memorize(para) : para}</RNText>)
+                showable(i, `${b.id}:${i}`, para, null, <RNText style={body}>{mode === 'memorize' ? memorize(para) : para}</RNText>, sectionOf[b.id])
               ))}
             </View>
           );
@@ -361,7 +373,11 @@ export default function PulpitScreen() {
           // Passagem inteira ou um versículo de cada vez
           return (
             <View style={{ borderLeftWidth: 3, borderColor: colors.gold, paddingLeft: 12, gap: 6 }}>
-              {showable('all', b.id, verses, b.reference, <RNText style={{ ...body, fontFamily: fonts.bodyBold }}>{b.reference}</RNText>)}
+              {/* A referência é o título: sozinha; o texto vai com a referência embaixo */}
+              {showable('title', `${b.id}:title`, '', null, <RNText style={{ ...body, fontFamily: fonts.bodyBold }}>{b.reference}</RNText>, b.reference)}
+              {b.verses.length > 1
+                ? showable('all', b.id, verses, b.reference, <RNText style={{ ...body, fontSize: Math.round(font * 0.8), color: colors.textMuted }}>{t('screen.wholePassage')}</RNText>)
+                : null}
               {b.verses.length > 1
                 ? b.verses.map((v) => (
                     showable(
@@ -375,7 +391,7 @@ export default function PulpitScreen() {
                       </RNText>,
                     )
                   ))
-                : <RNText style={{ ...body, fontStyle: 'italic' }}>{verses}</RNText>}
+                : showable('verse', b.id, verses, b.reference, <RNText style={{ ...body, fontStyle: 'italic' }}>{verses}</RNText>)}
             </View>
           );
         }
@@ -526,12 +542,12 @@ export default function PulpitScreen() {
       {connectOpen ? <ScreenConnect sermonId={id} onClose={() => setConnectOpen(false)} onConnected={connected} /> : null}
       {libraryOpen && screen ? (
         <BackgroundLibrary
+          sermonId={id}
           screenId={screen.id}
-          currentId={screen.background.id}
           creating={bgBusy}
           onClose={() => setLibraryOpen(false)}
           onUsed={(state) => {
-            setScreen(state);
+            if (state) setScreen(state);
             setLibraryOpen(false);
           }}
           onCreate={() => newBackground()}

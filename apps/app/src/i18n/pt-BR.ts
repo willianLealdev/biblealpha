@@ -782,7 +782,9 @@ const ptBR = {
     connected: 'Telão conectado: toque no ícone ao lado do texto para mostrar',
     clear: 'Limpar tela',
     newBackground: 'Novo fundo (IA)',
+    wholePassage: 'Mostrar a passagem inteira',
     library: {
+      chosen: 'Fundo do telão escolhido para esta ministração.',
       open: 'Fundos',
       title: 'Biblioteca de fundos',
       hint: 'Seus fundos ficam guardados (até {max}) e você usa em qualquer ministração, sem gastar de novo. Para criar outro com a biblioteca cheia, apague um.',

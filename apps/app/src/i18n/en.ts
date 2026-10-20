@@ -784,7 +784,9 @@ const en: Dictionary = {
     connected: 'Screen connected: tap the icon next to the text to show it',
     clear: 'Clear screen',
     newBackground: 'New background (AI)',
+    wholePassage: 'Show the whole passage',
     library: {
+      chosen: 'Screen background chosen for this sermon.',
       open: 'Backgrounds',
       title: 'Background library',
       hint: 'Your backgrounds are saved (up to {max}) and you can use them in any sermon without spending again. To create another one when the library is full, delete one.',

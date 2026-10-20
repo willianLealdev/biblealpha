@@ -17,12 +17,22 @@ export type ScreenState = {
   code: string;
   status: 'waiting' | 'paired' | 'ended';
   version: number;
-  slide: { text: string; reference: string | null } | null;
+  slide: { text: string; reference: string | null; title?: string | null } | null;
   background: { id: string | null; image: boolean; style: SlideStyle };
   can_generate?: boolean;
   remaining?: number | null;
   library_count?: number;
   library_max?: number;
+};
+
+export type Library = {
+  items: LibraryBackground[];
+  current_id?: string | null;
+  background?: ScreenState['background'];
+  library_count: number;
+  library_max: number;
+  can_generate: boolean;
+  remaining: number | null;
 };
 
 /** Fundo guardado na biblioteca da pessoa (a imagem vem de backgroundUrl) */
@@ -45,11 +55,17 @@ export const screenApi = {
   /** A tela já conectada passa a acompanhar esta ministração (troca o fundo) */
   follow: (id: string, sermonId: string) =>
     api<ScreenState>(`/screens/${id}/sermon`, { method: 'PUT', body: { sermon_id: sermonId } }),
-  show: (id: string, text: string, reference?: string | null) =>
-    api<ScreenState>(`/screens/${id}/slide`, { method: 'PUT', body: { text, reference: reference ?? null } }),
+  /** Título sozinho (text vazio), ou texto com o título acima */
+  show: (id: string, text: string, reference?: string | null, title?: string | null) =>
+    api<ScreenState>(`/screens/${id}/slide`, { method: 'PUT', body: { text, reference: reference ?? null, title: title ?? null } }),
   background: (id: string) => api<ScreenState>(`/screens/${id}/background`, { method: 'POST' }),
-  library: () =>
-    api<{ items: LibraryBackground[]; library_count: number; library_max: number; can_generate: boolean; remaining: number | null }>('/screens/library'),
+  library: (sermonId?: string) =>
+    api<Library>(`/screens/library${sermonId ? `?sermon_id=${sermonId}` : ''}`),
+  /** Direto da ministração (sem tela conectada) */
+  useSermonBackground: (sermonId: string, backgroundId: string) =>
+    api<Library>(`/screens/sermons/${sermonId}/background`, { method: 'PUT', body: { background_id: backgroundId } }),
+  newSermonBackground: (sermonId: string) =>
+    api<Library>(`/screens/sermons/${sermonId}/background`, { method: 'POST' }),
   /** Usa um fundo da biblioteca na ministração da tela (não gasta cota nem IA) */
   useBackground: (id: string, backgroundId: string) =>
     api<ScreenState>(`/screens/${id}/background`, { method: 'PUT', body: { background_id: backgroundId } }),

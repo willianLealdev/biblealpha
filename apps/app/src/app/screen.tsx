@@ -152,19 +152,37 @@ export default function ChurchScreen() {
         <Animated.View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: width * 0.07, opacity: fade }}>
           {slide ? (
             <>
-              <RNText
-                style={{
-                  color: style!.text_color,
-                  fontFamily: style!.font === 'serif' ? fonts.display : fonts.bodyMedium,
-                  fontSize: fitFont(slide.text, width, height),
-                  lineHeight: Math.round(fitFont(slide.text, width, height) * 1.25),
-                  textAlign: 'center',
-                  textShadowColor: 'rgba(0,0,0,0.65)',
-                  textShadowRadius: 12,
-                }}>
-                {slide.text}
-              </RNText>
-              {slide.reference ? (
+              {slide.title ? (
+                // Sozinho: grande no meio. Com texto: menor, acima dele
+                <RNText
+                  style={{
+                    color: slide.text ? style!.accent_color : style!.text_color,
+                    fontFamily: slide.text ? fonts.bodyBold : style!.font === 'serif' ? fonts.display : fonts.bodyMedium,
+                    fontSize: slide.text ? Math.max(24, Math.round(height / 17)) : fitFont(slide.title, width, height),
+                    lineHeight: slide.text ? undefined : Math.round(fitFont(slide.title, width, height) * 1.25),
+                    marginBottom: slide.text ? height / 36 : 0,
+                    textAlign: 'center',
+                    textShadowColor: 'rgba(0,0,0,0.65)',
+                    textShadowRadius: 12,
+                  }}>
+                  {slide.title}
+                </RNText>
+              ) : null}
+              {slide.text ? (
+                <RNText
+                  style={{
+                    color: style!.text_color,
+                    fontFamily: style!.font === 'serif' ? fonts.display : fonts.bodyMedium,
+                    fontSize: fitFont(slide.text, width, slide.title ? height * 0.8 : height),
+                    lineHeight: Math.round(fitFont(slide.text, width, slide.title ? height * 0.8 : height) * 1.25),
+                    textAlign: 'center',
+                    textShadowColor: 'rgba(0,0,0,0.65)',
+                    textShadowRadius: 12,
+                  }}>
+                  {slide.text}
+                </RNText>
+              ) : null}
+              {slide.reference && slide.text ? (
                 <RNText style={{ color: style!.accent_color, fontFamily: fonts.bodyBold, fontSize: Math.max(22, height / 26), marginTop: height / 30, textShadowColor: 'rgba(0,0,0,0.6)', textShadowRadius: 8 }}>
                   {slide.reference}
                 </RNText>

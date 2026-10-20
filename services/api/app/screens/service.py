@@ -233,6 +233,22 @@ async def library(db: AsyncSession, user: User) -> list[dict]:
     ]
 
 
+async def refresh_screens(db: AsyncSession, user: User, sermon_id) -> None:
+    """Telas conectadas que acompanham esta ministração redesenham com o fundo novo."""
+    from sqlalchemy import update
+
+    await db.execute(
+        update(ScreenSession)
+        .where(
+            ScreenSession.user_id == user.id,
+            ScreenSession.sermon_id == sermon_id,
+            ScreenSession.ended_at.is_(None),
+            ScreenSession.expires_at > _now(),
+        )
+        .values(version=ScreenSession.version + 1)
+    )
+
+
 async def delete_from_library(db: AsyncSession, user: User, background_id) -> None:
     bg = await db.get(SlideBackground, background_id)
     if bg is None or bg.user_id != user.id:
@@ -248,6 +264,7 @@ async def use_background(db: AsyncSession, user: User, sermon: Sermon, backgroun
     if bg is None or bg.user_id != user.id:
         raise AppError(404, "background_not_found", "Background not found")
     sermon.slide_background_id = bg.id
+    await refresh_screens(db, user, sermon.id)
     await db.commit()
     return bg
 
@@ -319,6 +336,7 @@ async def generate_background(db: AsyncSession, user: User, sermon: Sermon) -> S
     db.add(bg)
     await db.flush()
     sermon.slide_background_id = bg.id
+    await refresh_screens(db, user, sermon.id)
     await db.commit()
     await db.refresh(bg)
     return bg

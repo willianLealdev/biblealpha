@@ -786,7 +786,9 @@ const es: DeepPartial<Dictionary> = {
     connected: 'Pantalla conectada: toca el icono junto al texto para mostrarlo',
     clear: 'Limpiar pantalla',
     newBackground: 'Nuevo fondo (IA)',
+    wholePassage: 'Mostrar el pasaje completo',
     library: {
+      chosen: 'Fondo de la pantalla elegido para esta ministración.',
       open: 'Fondos',
       title: 'Biblioteca de fondos',
       hint: 'Tus fondos quedan guardados (hasta {max}) y los usas en cualquier ministración sin gastar de nuevo. Para crear otro con la biblioteca llena, borra uno.',

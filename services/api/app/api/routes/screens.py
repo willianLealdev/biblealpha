@@ -128,6 +128,8 @@ async def use_sermon(
 class SlideIn(BaseModel):
     text: Annotated[str, StringConstraints(strip_whitespace=True, max_length=4000)] = ""
     reference: Annotated[str, StringConstraints(strip_whitespace=True, max_length=120)] | None = None
+    # Título do trecho (aparece sozinho, ou acima do texto quando há texto)
+    title: Annotated[str, StringConstraints(strip_whitespace=True, max_length=200)] | None = None
 
 
 @router.put("/{screen_id}/slide")
@@ -137,10 +139,14 @@ async def show_slide(
     cu: CurrentUser = Depends(current_user),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Mostra um texto na tela (texto vazio: só o fundo)."""
+    """Mostra na tela um título, um texto ou os dois (tudo vazio: só o fundo)."""
     await ratelimit.hit(f"screen-slide:{cu.user.id}", limit=120, window_seconds=60)
     s = await service.owned(db, screen_id, cu.user)
-    slide = {"text": body.text, "reference": body.reference or None} if body.text else None
+    slide = None
+    if body.text or body.title:
+        slide = {"text": body.text, "reference": body.reference or None}
+        if body.title:
+            slide["title"] = body.title
     s = await service.show(db, s, slide)
     return _state(s, await service.current_background(db, s.sermon_id))
 
@@ -163,10 +169,21 @@ async def new_background(
 
 @router.get("/library")
 async def background_library(
-    cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
+    sermon_id: uuid.UUID | None = None,
+    cu: CurrentUser = Depends(current_user),
+    db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Biblioteca de fundos da pessoa (no máximo LIBRARY_MAX) e quanto ainda dá para criar."""
-    return {"items": await service.library(db, cu.user), **await service.allowance(db, cu.user)}
+    """Biblioteca de fundos da pessoa (no máximo LIBRARY_MAX) e quanto ainda dá para criar.
+    Com `sermon_id`, devolve também qual fundo essa ministração está usando."""
+    current = None
+    if sermon_id is not None:
+        sermon = await _own_sermon(db, cu, sermon_id)
+        current = str(sermon.slide_background_id) if sermon.slide_background_id else None
+    return {
+        "items": await service.library(db, cu.user),
+        "current_id": current,
+        **await service.allowance(db, cu.user),
+    }
 
 
 @router.delete("/library/{background_id}", status_code=204)
@@ -197,6 +214,32 @@ async def use_background(
     bg = await service.use_background(db, cu.user, sermon, body.background_id)
     s = await service.show(db, s, s.slide)
     return {**_state(s, bg), **await service.allowance(db, cu.user)}
+
+
+@router.put("/sermons/{sermon_id}/background")
+async def use_sermon_background(
+    sermon_id: uuid.UUID,
+    body: BackgroundIn,
+    cu: CurrentUser = Depends(current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Escolhe, na própria ministração, um fundo da biblioteca (vale também para a tela conectada)."""
+    await ratelimit.hit(f"screen-bg-use:{cu.user.id}", limit=60, window_seconds=60)
+    sermon = await _own_sermon(db, cu, sermon_id)
+    bg = await service.use_background(db, cu.user, sermon, body.background_id)
+    return {"background": service.background_out(bg), **await service.allowance(db, cu.user)}
+
+
+@router.post("/sermons/{sermon_id}/background")
+async def new_sermon_background(
+    sermon_id: uuid.UUID, cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
+) -> dict:
+    """A IA cria um fundo novo para esta ministração, direto da ministração (sem tela conectada)."""
+    if "admin" not in cu.user.role_names:
+        await ratelimit.hit(f"screen-bg:{cu.user.id}", limit=5, window_seconds=600)
+    sermon = await _own_sermon(db, cu, sermon_id)
+    bg = await service.generate_background(db, cu.user, sermon)
+    return {"background": service.background_out(bg), **await service.allowance(db, cu.user)}
 
 
 @router.delete("/{screen_id}", status_code=204)

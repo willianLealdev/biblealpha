@@ -250,3 +250,78 @@ async def test_deleting_the_sermon_keeps_the_background(client):
     assert (await client.delete(f"/api/v1/sermons/{s['id']}", headers=ana)).status_code in (200, 204)
     lib = (await client.get("/api/v1/screens/library", headers=ana)).json()
     assert [i["id"] for i in lib["items"]] == [bg]
+
+
+async def test_choose_background_from_the_sermon_without_a_screen(client):
+    await register(client, email="ana@example.com")
+    ana = bearer(await login(client, email="ana@example.com"))
+    s1 = await _sermon(client, ana, "Primeira")
+    s2 = await _sermon(client, ana, "Segunda")
+
+    # Sem tela conectada: a IA cria o fundo direto da ministração e ele já fica em uso
+    r = await client.post(f"/api/v1/screens/sermons/{s1['id']}/background", headers=ana)
+    assert r.status_code == 200, r.text
+    first = r.json()["background"]["id"]
+    lib = (await client.get(f"/api/v1/screens/library?sermon_id={s1['id']}", headers=ana)).json()
+    assert lib["current_id"] == first and [i["id"] for i in lib["items"]] == [first]
+
+    # Outra ministração começa sem fundo e escolhe o mesmo da biblioteca (sem gastar a cota)
+    assert (await client.get(f"/api/v1/screens/library?sermon_id={s2['id']}", headers=ana)).json()[
+        "current_id"
+    ] is None
+    r = await client.put(
+        f"/api/v1/screens/sermons/{s2['id']}/background", headers=ana, json={"background_id": first}
+    )
+    assert r.status_code == 200 and r.json()["background"]["id"] == first
+    lib = (await client.get(f"/api/v1/screens/library?sermon_id={s2['id']}", headers=ana)).json()
+    assert lib["current_id"] == first and lib["library_count"] == 1
+
+    # Ministração ou fundo de outra pessoa: não
+    await register(client, email="bia@example.com", name="Bia")
+    bia = bearer(await login(client, email="bia@example.com"))
+    sb = await _sermon(client, bia, "Da Bia")
+    assert (
+        await client.put(
+            f"/api/v1/screens/sermons/{s1['id']}/background", headers=bia, json={"background_id": first}
+        )
+    ).status_code == 404
+    assert (
+        await client.put(
+            f"/api/v1/screens/sermons/{sb['id']}/background", headers=bia, json={"background_id": first}
+        )
+    ).status_code == 404
+    assert (await client.get(f"/api/v1/screens/library?sermon_id={s1['id']}", headers=bia)).status_code == 404
+
+    # A tela conectada que acompanha a ministração redesenha quando o fundo muda
+    screen = await _paired_screen(client, ana, s2["id"])
+    display = {"X-Screen-Token": screen["token"]}
+    state_url = f"/api/v1/screens/{screen['id']}/state"
+    before = (await client.get(state_url, headers=display)).json()["version"]
+    await client.post(f"/api/v1/screens/sermons/{s2['id']}/background", headers=ana)
+    after = (await client.get(state_url, headers=display)).json()
+    assert after["version"] > before and after["background"]["id"] != first
+
+
+async def test_slide_title_alone_and_with_text(client):
+    await register(client, email="ana@example.com")
+    ana = bearer(await login(client, email="ana@example.com"))
+    s = await _sermon(client, ana)
+    screen = await _paired_screen(client, ana, s["id"])
+    put = f"/api/v1/screens/{screen['id']}/slide"
+    state_url = f"/api/v1/screens/{screen['id']}/state"
+    display = {"X-Screen-Token": screen["token"]}
+
+    # Só o título: aparece sozinho
+    r = await client.put(put, headers=ana, json={"text": "", "title": "1. Primeiro ponto"})
+    assert r.status_code == 200
+    slide = (await client.get(state_url, headers=display)).json()["slide"]
+    assert slide == {"text": "", "reference": None, "title": "1. Primeiro ponto"}
+
+    # O texto vai junto com o título
+    await client.put(put, headers=ana, json={"text": "Jesus chorou.", "title": "1. Primeiro ponto"})
+    slide = (await client.get(state_url, headers=display)).json()["slide"]
+    assert slide["text"] == "Jesus chorou." and slide["title"] == "1. Primeiro ponto"
+
+    # Sem título nem texto: só o fundo
+    await client.put(put, headers=ana, json={"text": "", "title": None})
+    assert (await client.get(state_url, headers=display)).json()["slide"] is None

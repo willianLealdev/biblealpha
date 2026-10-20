@@ -24,10 +24,12 @@ import { Button, Card, Notice, Text, TextField } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { useDictation } from '@/lib/dictation';
 import { ApiError } from '@/lib/api';
+import { screenApi } from '@/lib/screens';
 import { KINDS, sermonApi, type Block, type Role, type Sermon } from '@/lib/sermons';
 import { AskSheet } from '@/components/ask-sheet';
 import { useSession } from '@/lib/session';
 import { AssistSheet } from '@/sermon/assist-sheet';
+import { BackgroundLibrary } from '@/sermon/background-library';
 import {
   candidateId,
   docFromSermon,
@@ -91,6 +93,14 @@ export default function SermonEditor() {
   const [translation, setTranslation] = useState('blivre');
   const [showMeta, setShowMeta] = useState(false);
   const [showMore, setShowMore] = useState(false);
+  const [bgOpen, setBgOpen] = useState(false);
+  const [bgBusy, setBgBusy] = useState(false);
+  const [bgMsg, setBgMsg] = useState<string | null>(null);
+  useEffect(() => {
+    if (!bgMsg || bgBusy) return;
+    const timer = setTimeout(() => setBgMsg(null), 3500);
+    return () => clearTimeout(timer);
+  }, [bgMsg, bgBusy]);
   const [focused, setFocused] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState<string[]>([]);
   const [fetching, setFetching] = useState<string | null>(null);
@@ -359,6 +369,26 @@ export default function SermonEditor() {
 
   // ---------- Ações gerais ----------
 
+  // Fundo novo do telão (IA), direto da ministração
+  async function createBackground() {
+    setBgBusy(true);
+    setBgMsg(t('screen.creatingBackground'));
+    try {
+      await screenApi.newSermonBackground(id);
+      setBgMsg(t('screen.library.chosen'));
+    } catch (e) {
+      setBgMsg(
+        e instanceof ApiError && e.code === 'slides_quota'
+          ? t('screen.quota')
+          : e instanceof ApiError && e.code === 'slides_library_full'
+            ? t('screen.library.full', { max: 10 })
+            : t('screen.backgroundFailed'),
+      );
+    } finally {
+      setBgBusy(false);
+    }
+  }
+
   async function run(task: () => Promise<void>) {
     setShowMore(false);
     setBusy(true);
@@ -449,6 +479,7 @@ export default function SermonEditor() {
               router.push({ pathname: '/share-screen', params: { sermon: id } });
             })}
           />
+          <ToolButton icon="images-outline" label={t('screen.library.title')} onPress={() => setBgOpen(true)} />
           <ToolButton
             icon="easel-outline"
             label={t('sermons.pulpit.open')}
@@ -707,6 +738,25 @@ export default function SermonEditor() {
           setAssistFor(null);
         }}
       />
+      ) : null}
+      {bgOpen ? (
+        <BackgroundLibrary
+          sermonId={id}
+          creating={bgBusy}
+          onClose={() => setBgOpen(false)}
+          onUsed={() => {
+            setBgOpen(false);
+            setBgMsg(t('screen.library.chosen'));
+          }}
+          onCreate={createBackground}
+        />
+      ) : null}
+      {bgMsg ? (
+        <View style={{ position: 'absolute', left: 16, right: 16, bottom: 24, alignItems: 'center' }} pointerEvents="none">
+          <View style={{ backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.gold, borderRadius: radius.pill, paddingHorizontal: 16, paddingVertical: 10 }}>
+            <Text variant="small">{bgMsg}</Text>
+          </View>
+        </View>
       ) : null}
     </KeyboardAvoidingView>
   );

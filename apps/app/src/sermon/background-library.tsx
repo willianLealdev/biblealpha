@@ -9,23 +9,24 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradientBg } from '@/components/gradient-bg';
 import { Notice, Text } from '@/components/ui';
 import { useI18n } from '@/i18n';
-import { backgroundUrl, screenApi, type LibraryBackground, type ScreenState } from '@/lib/screens';
+import { backgroundUrl, screenApi, type Library, type ScreenState } from '@/lib/screens';
 import { useTheme } from '@/theme';
 import { fonts, radius } from '@/theme/tokens';
 
 export function BackgroundLibrary({
+  sermonId,
   screenId,
-  currentId,
   onClose,
   onUsed,
   onCreate,
   creating,
 }: {
-  screenId: string;
-  currentId: string | null;
+  sermonId: string;
+  /** Tela conectada (púlpito): ela redesenha com o fundo escolhido. Sem tela, só a ministração muda. */
+  screenId?: string | null;
   onClose: () => void;
-  /** A tela passou a usar um fundo da biblioteca */
-  onUsed: (state: ScreenState) => void;
+  /** Escolheu um fundo da biblioteca (devolve o estado da tela, quando há) */
+  onUsed: (state: ScreenState | null) => void;
   /** Criar um fundo novo com a IA (só quando há espaço e cota) */
   onCreate: () => void;
   creating: boolean;
@@ -33,7 +34,7 @@ export function BackgroundLibrary({
   const { t, errorMessage } = useI18n();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-  const [data, setData] = useState<{ items: LibraryBackground[]; library_count: number; library_max: number; can_generate: boolean; remaining: number | null } | null>(null);
+  const [data, setData] = useState<Library | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [confirm, setConfirm] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -41,10 +42,10 @@ export function BackgroundLibrary({
   const load = useCallback(
     () =>
       screenApi
-        .library()
+        .library(sermonId)
         .then(setData)
         .catch((e) => setError(errorMessage(e))),
-    [errorMessage],
+    [errorMessage, sermonId],
   );
   useEffect(() => {
     load();
@@ -54,7 +55,11 @@ export function BackgroundLibrary({
     setBusy(id);
     setError(null);
     try {
-      onUsed(await screenApi.useBackground(screenId, id));
+      if (screenId) onUsed(await screenApi.useBackground(screenId, id));
+      else {
+        await screenApi.useSermonBackground(sermonId, id);
+        onUsed(null);
+      }
     } catch (e) {
       setError(errorMessage(e));
     } finally {
@@ -118,7 +123,7 @@ export function BackgroundLibrary({
               <ScrollView style={{ maxHeight: 360 }} contentContainerStyle={{ gap: 10 }}>
                 {data.items.length === 0 ? <Text variant="muted">{t('screen.library.empty')}</Text> : null}
                 {data.items.map((b) => {
-                  const active = b.id === currentId;
+                  const active = b.id === data.current_id;
                   return (
                     <View
                       key={b.id}
