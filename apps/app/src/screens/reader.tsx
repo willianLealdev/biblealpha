@@ -16,6 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useReadAloud } from '@/bible/read-aloud';
+import { VoicePicker } from '@/bible/voice-picker';
 import { bookName, formatKeyRange, verseKey } from '@/bible/reference';
 import { loadPosition, loadTranslation, savePosition, type Position } from '@/bible/reader-state';
 import { getChapter, listTranslations, type ChapterData, type Translation } from '@/bible/text';
@@ -145,6 +146,7 @@ export default function Reader() {
   const abbr = current?.abbreviation ?? translation?.toUpperCase() ?? '';
   // Ouvir o capítulo (vozes do aparelho)
   const aloud = useReadAloud();
+  const [voiceOpen, setVoiceOpen] = useState(false);
   const { stop: stopAloud } = aloud;
   useEffect(() => stopAloud, [data?.book, data?.chapter, translation, stopAloud]);
 
@@ -453,8 +455,12 @@ export default function Reader() {
             style={[styles.chip, { borderColor: colors.border }]}>
             <RNText style={{ color: colors.text, fontFamily: fonts.bodyBold, fontSize: 13 }}>{aloud.rate}×</RNText>
           </Pressable>
+          <IconButton icon="mic-outline" label={t('bible.voice')} onPress={() => setVoiceOpen(true)} />
           <IconButton icon="stop" label={t('bible.stopListening')} onPress={aloud.stop} />
         </View>
+      ) : null}
+      {voiceOpen && aloud.language ? (
+        <VoicePicker language={aloud.language} onClose={() => setVoiceOpen(false)} onChanged={aloud.reloadVoice} />
       ) : null}
     </SafeAreaView>
   );

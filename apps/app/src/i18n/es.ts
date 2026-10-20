@@ -52,6 +52,12 @@ const es: DeepPartial<Dictionary> = {
     },
   },
   bible: {
+    voice: 'Voz de lectura',
+    voiceHint: 'Las voces masculinas aparecen primero. Toca una para oírla y usarla. La lista depende de las voces instaladas en tu dispositivo.',
+    voiceNone: 'Tu dispositivo no tiene otras voces en este idioma. Instala más voces en los ajustes de voz del celular.',
+    voiceMale: 'Voz masculina',
+    voiceEnhanced: 'Alta calidad',
+    voiceAuto: 'Usar la voz automática (masculina)',
     chapter: 'Capítulo',
     chapters: 'Capítulos',
     oldTestament: 'Antiguo Testamento',

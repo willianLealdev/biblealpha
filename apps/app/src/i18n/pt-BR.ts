@@ -48,6 +48,12 @@ const ptBR = {
     },
   },
   bible: {
+    voice: 'Voz da leitura',
+    voiceHint: 'As vozes masculinas aparecem primeiro. Toque em uma para ouvir e usar. A lista depende das vozes instaladas no seu aparelho.',
+    voiceNone: 'Seu aparelho não tem outras vozes neste idioma. Instale mais vozes nas configurações de voz do celular.',
+    voiceMale: 'Voz masculina',
+    voiceEnhanced: 'Alta qualidade',
+    voiceAuto: 'Usar a voz automática (masculina)',
     chapter: 'Capítulo',
     chapters: 'Capítulos',
     oldTestament: 'Antigo Testamento',

@@ -50,6 +50,12 @@ const en: Dictionary = {
     },
   },
   bible: {
+    voice: 'Reading voice',
+    voiceHint: 'Male voices are listed first. Tap one to hear it and use it. The list depends on the voices installed on your device.',
+    voiceNone: 'Your device has no other voices in this language. Install more voices in your phone\'s speech settings.',
+    voiceMale: 'Male voice',
+    voiceEnhanced: 'High quality',
+    voiceAuto: 'Use the automatic voice (male)',
     chapter: 'Chapter',
     chapters: 'Chapters',
     oldTestament: 'Old Testament',
