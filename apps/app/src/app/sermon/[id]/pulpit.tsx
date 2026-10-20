@@ -16,6 +16,7 @@ import { rememberedScreen, rememberScreen, screenApi, type ScreenState } from '@
 import { sermonApi, type Block } from '@/lib/sermons';
 import { docFromSermon, formatClock, memorize, outlineLines, stripMarkdown, type Doc, type PulpitMode } from '@/sermon/document';
 import { loadLocal, localFromServer, pulpitScrollKey, queuePulpitNote, saveLocal, takePendingNotes } from '@/sermon/local';
+import { BackgroundLibrary } from '@/sermon/background-library';
 import { ScreenConnect } from '@/sermon/screen-connect';
 import { useTheme } from '@/theme';
 import { fonts, radius } from '@/theme/tokens';
@@ -64,6 +65,7 @@ export default function PulpitScreen() {
   const [onScreen, setOnScreen] = useState<string | null>(null);
   const [screenMsg, setScreenMsg] = useState<string | null>(null);
   const [bgBusy, setBgBusy] = useState(false);
+  const [libraryOpen, setLibraryOpen] = useState(false);
 
   // Rolagem e seções
   const scroll = useRef<ScrollViewInstance>(null);
@@ -200,7 +202,13 @@ export default function PulpitScreen() {
       setScreen(await screenApi.background(screenId));
       setScreenMsg(null);
     } catch (e) {
-      setScreenMsg(e instanceof ApiError && e.code === 'slides_quota' ? t('screen.quota') : t('screen.backgroundFailed'));
+      setScreenMsg(
+        e instanceof ApiError && e.code === 'slides_quota'
+          ? t('screen.quota')
+          : e instanceof ApiError && e.code === 'slides_library_full'
+            ? t('screen.library.full', { max: 10 })
+            : t('screen.backgroundFailed'),
+      );
     } finally {
       setBgBusy(false);
     }
@@ -459,7 +467,7 @@ export default function PulpitScreen() {
               {t('screen.connected')}
             </Text>
             <Chip label={t('screen.clear')} onPress={() => show(null, '')} />
-            <Chip label={bgBusy ? t('screen.creatingShort') : t('screen.newBackground')} onPress={() => (bgBusy ? undefined : newBackground())} />
+            <Chip label={bgBusy ? t('screen.creatingShort') : t('screen.library.open')} onPress={() => (bgBusy ? undefined : setLibraryOpen(true))} />
             <Chip label={t('screen.disconnect')} onPress={disconnect} />
           </View>
         ) : null}
@@ -516,6 +524,19 @@ export default function PulpitScreen() {
       </ScrollView>
 
       {connectOpen ? <ScreenConnect sermonId={id} onClose={() => setConnectOpen(false)} onConnected={connected} /> : null}
+      {libraryOpen && screen ? (
+        <BackgroundLibrary
+          screenId={screen.id}
+          currentId={screen.background.id}
+          creating={bgBusy}
+          onClose={() => setLibraryOpen(false)}
+          onUsed={(state) => {
+            setScreen(state);
+            setLibraryOpen(false);
+          }}
+          onCreate={() => newBackground()}
+        />
+      ) : null}
 
       {/* Notas rápidas */}
       <View style={{ borderTopWidth: 1, borderColor: colors.border, padding: 10, gap: 6 }}>

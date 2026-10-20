@@ -36,6 +36,12 @@ class Sermon(UUIDPk, Timestamps, Base):
     # Cresce a cada gravação; o app envia a versão que conhecia para detectar edição em dois aparelhos
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Fundo do telão escolhido da biblioteca de fundos (apagar o fundo limpa a escolha)
+    slide_background_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey(
+            "slide_backgrounds.id", ondelete="SET NULL", use_alter=True, name="fk_sermons_slide_background"
+        )
+    )
 
     __table_args__ = (Index("ix_sermons_user_updated", "user_id", "updated_at"),)
 

@@ -56,7 +56,7 @@ async def screen_state(
 ) -> dict:
     """Lido pela tela a cada segundo."""
     s = await service.for_display(db, screen_id, x_screen_token)
-    return _state(s, await service.latest_background(db, s.sermon_id))
+    return _state(s, await service.current_background(db, s.sermon_id))
 
 
 @router.get("/backgrounds/{background_id}")
@@ -101,7 +101,7 @@ async def pair(
     await ratelimit.hit(f"screen-pair:{cu.user.id}", limit=10, window_seconds=600)
     sermon = await _own_sermon(db, cu, body.sermon_id) if body.sermon_id else None
     s = await service.pair(db, cu.user, body.code, sermon)
-    bg = await service.latest_background(db, s.sermon_id)
+    bg = await service.current_background(db, s.sermon_id)
     return {**_state(s, bg), **await service.allowance(db, cu.user)}
 
 
@@ -121,7 +121,7 @@ async def use_sermon(
     s = await service.owned(db, screen_id, cu.user)
     sermon = await _own_sermon(db, cu, body.sermon_id)
     s = await service.use_sermon(db, s, sermon)
-    bg = await service.latest_background(db, sermon.id)
+    bg = await service.current_background(db, sermon.id)
     return {**_state(s, bg), **await service.allowance(db, cu.user)}
 
 
@@ -142,14 +142,14 @@ async def show_slide(
     s = await service.owned(db, screen_id, cu.user)
     slide = {"text": body.text, "reference": body.reference or None} if body.text else None
     s = await service.show(db, s, slide)
-    return _state(s, await service.latest_background(db, s.sermon_id))
+    return _state(s, await service.current_background(db, s.sermon_id))
 
 
 @router.post("/{screen_id}/background")
 async def new_background(
     screen_id: uuid.UUID, cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
 ) -> dict:
-    """A IA cria (ou troca) o fundo dos slides desta ministração."""
+    """A IA cria um fundo novo, guarda na biblioteca e já usa nesta ministração."""
     if "admin" not in cu.user.role_names:
         await ratelimit.hit(f"screen-bg:{cu.user.id}", limit=5, window_seconds=600)
     s = await service.owned(db, screen_id, cu.user)
@@ -158,6 +158,44 @@ async def new_background(
         raise AppError(404, "sermon_not_found", "Sermon not found")
     bg = await service.generate_background(db, cu.user, sermon)
     s = await service.show(db, s, s.slide)  # a tela redesenha com o fundo novo
+    return {**_state(s, bg), **await service.allowance(db, cu.user)}
+
+
+@router.get("/library")
+async def background_library(
+    cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
+) -> dict:
+    """Biblioteca de fundos da pessoa (no máximo LIBRARY_MAX) e quanto ainda dá para criar."""
+    return {"items": await service.library(db, cu.user), **await service.allowance(db, cu.user)}
+
+
+@router.delete("/library/{background_id}", status_code=204)
+async def delete_background(
+    background_id: uuid.UUID, cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
+) -> Response:
+    await service.delete_from_library(db, cu.user, background_id)
+    return Response(status_code=204)
+
+
+class BackgroundIn(BaseModel):
+    background_id: uuid.UUID
+
+
+@router.put("/{screen_id}/background")
+async def use_background(
+    screen_id: uuid.UUID,
+    body: BackgroundIn,
+    cu: CurrentUser = Depends(current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Usa um fundo da biblioteca na ministração desta tela (sem gastar cota nem IA)."""
+    await ratelimit.hit(f"screen-bg-use:{cu.user.id}", limit=60, window_seconds=60)
+    s = await service.owned(db, screen_id, cu.user)
+    if s.sermon_id is None:
+        raise AppError(404, "sermon_not_found", "Sermon not found")
+    sermon = await _own_sermon(db, cu, s.sermon_id)
+    bg = await service.use_background(db, cu.user, sermon, body.background_id)
+    s = await service.show(db, s, s.slide)
     return {**_state(s, bg), **await service.allowance(db, cu.user)}
 
 

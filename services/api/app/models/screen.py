@@ -42,12 +42,16 @@ class ScreenSession(UUIDPk, Timestamps, Base):
 
 
 class SlideBackground(UUIDPk, Timestamps, Base):
-    """Fundo e estilo dos slides de uma ministração, criados pela IA (imagem opcional)."""
+    """Fundo e estilo dos slides criados pela IA (imagem opcional). Fica na biblioteca de fundos da
+    pessoa (no máximo LIBRARY_MAX) e pode ser usado em qualquer ministração dela."""
 
     __tablename__ = "slide_backgrounds"
 
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    sermon_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sermons.id", ondelete="CASCADE"), nullable=False)
+    # Ministração para a qual foi criado (só informativo: apagar a ministração não apaga o fundo)
+    sermon_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("sermons.id", ondelete="SET NULL"))
+    # Nome mostrado na biblioteca (o título da ministração na hora da criação)
+    label: Mapped[str | None] = mapped_column(String(200))
     # {"text_color", "accent_color", "overlay", "font", "gradient": [c1, c2]}
     style: Mapped[dict] = mapped_column(JSONB, nullable=False)
     prompt: Mapped[str] = mapped_column(Text, nullable=False, default="")
@@ -55,7 +59,10 @@ class SlideBackground(UUIDPk, Timestamps, Base):
     data: Mapped[bytes | None] = mapped_column(LargeBinary)
     model: Mapped[str | None] = mapped_column(String(60))
 
-    __table_args__ = (Index("ix_slide_backgrounds_sermon", "sermon_id", "created_at"),)
+    __table_args__ = (
+        Index("ix_slide_backgrounds_sermon", "sermon_id", "created_at"),
+        Index("ix_slide_backgrounds_user", "user_id", "created_at"),
+    )
 
 
 class PreachingEvent(UUIDPk, Timestamps, Base):

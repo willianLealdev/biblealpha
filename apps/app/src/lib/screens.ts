@@ -21,7 +21,12 @@ export type ScreenState = {
   background: { id: string | null; image: boolean; style: SlideStyle };
   can_generate?: boolean;
   remaining?: number | null;
+  library_count?: number;
+  library_max?: number;
 };
+
+/** Fundo guardado na biblioteca da pessoa (a imagem vem de backgroundUrl) */
+export type LibraryBackground = { id: string; label: string | null; image: boolean; style: SlideStyle; created_at: string };
 
 // Endereço do app para abrir o telão no computador
 export const APP_URL = (
@@ -43,6 +48,12 @@ export const screenApi = {
   show: (id: string, text: string, reference?: string | null) =>
     api<ScreenState>(`/screens/${id}/slide`, { method: 'PUT', body: { text, reference: reference ?? null } }),
   background: (id: string) => api<ScreenState>(`/screens/${id}/background`, { method: 'POST' }),
+  library: () =>
+    api<{ items: LibraryBackground[]; library_count: number; library_max: number; can_generate: boolean; remaining: number | null }>('/screens/library'),
+  /** Usa um fundo da biblioteca na ministração da tela (não gasta cota nem IA) */
+  useBackground: (id: string, backgroundId: string) =>
+    api<ScreenState>(`/screens/${id}/background`, { method: 'PUT', body: { background_id: backgroundId } }),
+  deleteBackground: (backgroundId: string) => api<void>(`/screens/library/${backgroundId}`, { method: 'DELETE' }),
   end: (id: string) => api<void>(`/screens/${id}`, { method: 'DELETE' }),
 };
 

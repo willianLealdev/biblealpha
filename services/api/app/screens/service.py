@@ -18,7 +18,7 @@ from app.ai import service as ai_service
 from app.ai.provider import Completion, ProviderError, Usage, get_provider
 from app.core import security
 from app.core.errors import AppError
-from app.models import ScreenSession, Sermon, SlideBackground, User
+from app.models import AIUsage, ScreenSession, Sermon, SlideBackground, User
 from app.services import secrets
 from app.services.plans import get_plan
 from app.services.settings import get_setting
@@ -30,6 +30,8 @@ _ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 CODE_LENGTH = 6
 WAITING_TTL = timedelta(minutes=30)
 PAIRED_TTL = timedelta(hours=12)
+# Quantos fundos cada pessoa guarda na biblioteca; para criar outro, apaga um (economiza armazenamento e IA)
+LIBRARY_MAX = 10
 
 DEFAULT_STYLE = {
     "text_color": "#FFFFFF",
@@ -157,14 +159,14 @@ async def show(db: AsyncSession, s: ScreenSession, slide: dict | None) -> Screen
     return s
 
 
-async def latest_background(db: AsyncSession, sermon_id) -> SlideBackground | None:
+async def current_background(db: AsyncSession, sermon_id) -> SlideBackground | None:
+    """Fundo escolhido para a ministração (da biblioteca da pessoa); sem escolha, só as cores padrão."""
     if sermon_id is None:
         return None
     return await db.scalar(
         select(SlideBackground)
-        .where(SlideBackground.sermon_id == sermon_id)
-        .order_by(SlideBackground.created_at.desc())
-        .limit(1)
+        .join(Sermon, Sermon.slide_background_id == SlideBackground.id)
+        .where(Sermon.id == sermon_id)
     )
 
 
@@ -175,18 +177,79 @@ def background_out(bg: SlideBackground | None) -> dict:
 
 
 async def allowance(db: AsyncSession, user: User) -> dict:
+    """Quanto ainda dá para criar de fundo novo neste mês. Conta as criações feitas (registro de uso da
+    IA), então apagar um fundo da biblioteca não devolve a cota. Usar um fundo que já existe é grátis."""
+    count = await library_count(db, user)
+    library_info = {"library_count": count, "library_max": LIBRARY_MAX}
     if "admin" in user.role_names:
-        return {"can_generate": True, "remaining": None}
+        return {"can_generate": count < LIBRARY_MAX, "remaining": None, **library_info}
     quotas = await get_setting(db, "slides.quotas")
     month = _now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     used = await db.scalar(
         select(func.count())
-        .select_from(SlideBackground)
-        .where(SlideBackground.user_id == user.id, SlideBackground.created_at >= month)
+        .select_from(AIUsage)
+        .where(
+            AIUsage.user_id == user.id,
+            AIUsage.feature == "slide_design",
+            AIUsage.status == "ok",
+            AIUsage.created_at >= month,
+        )
     )
     limit = int(quotas["pro_monthly"] if await get_plan(db, user.id) == "pro" else quotas["free_monthly"])
-    left = limit - int(used or 0)
-    return {"can_generate": left > 0, "remaining": max(0, left)}
+    left = max(0, limit - int(used or 0))
+    # can_generate: ainda tem cota do mês E espaço na biblioteca
+    return {"can_generate": left > 0 and count < LIBRARY_MAX, "remaining": left, **library_info}
+
+
+async def library_count(db: AsyncSession, user: User) -> int:
+    total = await db.scalar(
+        select(func.count()).select_from(SlideBackground).where(SlideBackground.user_id == user.id)
+    )
+    return int(total or 0)
+
+
+async def library(db: AsyncSession, user: User) -> list[dict]:
+    """Fundos da pessoa, do mais novo para o mais antigo (sem os bytes da imagem)."""
+    rows = await db.execute(
+        select(
+            SlideBackground.id,
+            SlideBackground.label,
+            SlideBackground.style,
+            SlideBackground.created_at,
+            SlideBackground.data.is_not(None),
+        )
+        .where(SlideBackground.user_id == user.id)
+        .order_by(SlideBackground.created_at.desc())
+    )
+    return [
+        {
+            "id": str(bg_id),
+            "label": label,
+            "image": bool(has_image),
+            "style": {**DEFAULT_STYLE, **(style or {})},
+            "created_at": created.isoformat(),
+        }
+        for bg_id, label, style, created, has_image in rows
+    ]
+
+
+async def delete_from_library(db: AsyncSession, user: User, background_id) -> None:
+    bg = await db.get(SlideBackground, background_id)
+    if bg is None or bg.user_id != user.id:
+        raise AppError(404, "background_not_found", "Background not found")
+    # As ministrações que usavam este fundo voltam ao visual padrão (FK com SET NULL)
+    await db.delete(bg)
+    await db.commit()
+
+
+async def use_background(db: AsyncSession, user: User, sermon: Sermon, background_id) -> SlideBackground:
+    """Escolhe um fundo da biblioteca para a ministração. Não gasta cota nem IA."""
+    bg = await db.get(SlideBackground, background_id)
+    if bg is None or bg.user_id != user.id:
+        raise AppError(404, "background_not_found", "Background not found")
+    sermon.slide_background_id = bg.id
+    await db.commit()
+    return bg
 
 
 def _clean_style(data: dict) -> dict:
@@ -207,7 +270,12 @@ def _clean_style(data: dict) -> dict:
 
 
 async def generate_background(db: AsyncSession, user: User, sermon: Sermon) -> SlideBackground:
-    """Cria o visual dos slides desta ministração (cores + imagem de fundo, quando há chave da OpenAI)."""
+    """Cria um fundo novo (cores + imagem, quando há chave da OpenAI), guarda na biblioteca da pessoa e
+    já o usa nesta ministração."""
+    if await library_count(db, user) >= LIBRARY_MAX:
+        raise AppError(
+            409, "slides_library_full", f"The background library is full ({LIBRARY_MAX}); delete one first"
+        )
     if not (await allowance(db, user))["can_generate"]:
         raise AppError(429, "slides_quota", "Monthly limit of slide backgrounds reached")
 
@@ -242,11 +310,15 @@ async def generate_background(db: AsyncSession, user: User, sermon: Sermon) -> S
 
     style = _clean_style(data if isinstance(data, dict) else {})
     image_prompt = str(data.get("image_prompt") or "")[:1500] if isinstance(data, dict) else ""
-    bg = SlideBackground(user_id=user.id, sermon_id=sermon.id, style=style, prompt=image_prompt)
+    bg = SlideBackground(
+        user_id=user.id, sermon_id=sermon.id, label=sermon.title[:200], style=style, prompt=image_prompt
+    )
     image = await _image(db, user, plan, image_prompt) if image_prompt else None
     if image:
         bg.data, bg.mime, bg.model = image
     db.add(bg)
+    await db.flush()
+    sermon.slide_background_id = bg.id
     await db.commit()
     await db.refresh(bg)
     return bg

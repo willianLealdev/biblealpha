@@ -2,7 +2,7 @@ from datetime import UTC, datetime, timedelta
 
 from app.agenda import reminders
 from app.services import email as email_service
-from tests.conftest import bearer, login, register
+from tests.conftest import bearer, login, make_admin, register
 
 
 async def _sermon(client, headers, title="Jesus chorou"):
@@ -162,3 +162,91 @@ async def test_agenda_crud_and_reminder(client):
 
     assert (await client.delete(f"/api/v1/agenda/{ev['id']}", headers=ana)).status_code == 204
     assert (await client.get("/api/v1/agenda", headers=ana)).json()["items"] == []
+
+
+async def _paired_screen(client, headers, sermon_id):
+    screen = (await client.post("/api/v1/screens")).json()
+    r = await client.post(
+        "/api/v1/screens/pair", headers=headers, json={"code": screen["code"], "sermon_id": sermon_id}
+    )
+    assert r.status_code == 200, r.text
+    return screen
+
+
+async def test_background_library(client):
+    await register(client, email="admin@example.com", name="Admin")
+    await make_admin("admin@example.com")
+    ana = bearer(await login(client, email="admin@example.com"))
+    s1 = await _sermon(client, ana, "Primeira")
+    s2 = await _sermon(client, ana, "Segunda")
+    screen = await _paired_screen(client, ana, s1["id"])
+    url = f"/api/v1/screens/{screen['id']}/background"
+
+    # Cria um fundo: vai para a biblioteca e já fica em uso na ministração
+    r = await client.post(url, headers=ana)
+    assert r.status_code == 200, r.text
+    first = r.json()["background"]["id"]
+    assert r.json()["library_count"] == 1 and r.json()["library_max"] == 10
+    lib = (await client.get("/api/v1/screens/library", headers=ana)).json()
+    assert [i["id"] for i in lib["items"]] == [first] and lib["items"][0]["label"] == "Primeira"
+
+    # Usar outro fundo da biblioteca em outra ministração não gasta IA nem aumenta a biblioteca
+    r = await client.put(f"/api/v1/screens/{screen['id']}/sermon", headers=ana, json={"sermon_id": s2["id"]})
+    assert r.json()["background"]["id"] is None  # ministração nova: só as cores padrão
+    r = await client.put(url, headers=ana, json={"background_id": first})
+    assert r.status_code == 200 and r.json()["background"]["id"] == first
+    assert r.json()["library_count"] == 1
+
+    # Fundo de outra pessoa não pode ser usado nem apagado
+    await register(client, email="bia@example.com", name="Bia")
+    bia = bearer(await login(client, email="bia@example.com"))
+    sb = await _sermon(client, bia, "Da Bia")
+    bia_screen = await _paired_screen(client, bia, sb["id"])
+    r = await client.put(
+        f"/api/v1/screens/{bia_screen['id']}/background", headers=bia, json={"background_id": first}
+    )
+    assert r.status_code == 404
+    assert (await client.delete(f"/api/v1/screens/library/{first}", headers=bia)).status_code == 404
+
+    # Biblioteca cheia (10): não cria mais e não gasta IA; apagar um libera espaço
+    for _ in range(9):
+        r = await client.post(url, headers=ana)
+        assert r.status_code == 200, r.text
+    assert (await client.get("/api/v1/screens/library", headers=ana)).json()["library_count"] == 10
+    r = await client.post(url, headers=ana)
+    assert r.status_code == 409 and r.json()["error"]["code"] == "slides_library_full"
+
+    assert (await client.delete(f"/api/v1/screens/library/{first}", headers=ana)).status_code == 204
+    lib = (await client.get("/api/v1/screens/library", headers=ana)).json()
+    assert lib["library_count"] == 9 and first not in [i["id"] for i in lib["items"]]
+    assert (await client.post(url, headers=ana)).status_code == 200
+
+
+async def test_deleting_a_background_does_not_refund_the_monthly_quota(client):
+    await register(client, email="ana@example.com")
+    ana = bearer(await login(client, email="ana@example.com"))
+    s = await _sermon(client, ana)
+    screen = await _paired_screen(client, ana, s["id"])
+    url = f"/api/v1/screens/{screen['id']}/background"
+
+    # Gratuito: 2 por mês. Apagar o fundo não devolve a cota (senão geraria sem parar)
+    for _ in range(2):
+        r = await client.post(url, headers=ana)
+        assert r.status_code == 200, r.text
+        await client.delete(f"/api/v1/screens/library/{r.json()['background']['id']}", headers=ana)
+    r = await client.post(url, headers=ana)
+    assert r.status_code == 429 and r.json()["error"]["code"] == "slides_quota"
+    lib = (await client.get("/api/v1/screens/library", headers=ana)).json()
+    assert lib["items"] == [] and lib["remaining"] == 0 and lib["can_generate"] is False
+
+
+async def test_deleting_the_sermon_keeps_the_background(client):
+    await register(client, email="ana@example.com")
+    ana = bearer(await login(client, email="ana@example.com"))
+    s = await _sermon(client, ana)
+    screen = await _paired_screen(client, ana, s["id"])
+    r = await client.post(f"/api/v1/screens/{screen['id']}/background", headers=ana)
+    bg = r.json()["background"]["id"]
+    assert (await client.delete(f"/api/v1/sermons/{s['id']}", headers=ana)).status_code in (200, 204)
+    lib = (await client.get("/api/v1/screens/library", headers=ana)).json()
+    assert [i["id"] for i in lib["items"]] == [bg]
