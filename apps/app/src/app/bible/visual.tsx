@@ -7,6 +7,7 @@ import Svg, { Circle, Rect, Text as SvgText } from 'react-native-svg';
 
 import { bookName } from '@/bible/reference';
 import { Button, Card, Notice, Screen, Text } from '@/components/ui';
+import { PassagePicker } from '@/components/passage-picker';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { API_BASE, api, ApiError } from '@/lib/api';
 import { useTheme } from '@/theme';
@@ -36,7 +37,10 @@ type Response = { status: 'ready' | 'none'; can_generate: boolean; remaining: nu
 
 /** Estudo visual do capítulo: ilustrações, resumo, mapa, linha do tempo, personagens e profecias. */
 export default function VisualStudy() {
-  const { book, chapter } = useLocalSearchParams<{ book: string; chapter: string }>();
+  const params = useLocalSearchParams<{ book: string; chapter: string }>();
+  // A pessoa escolhe qualquer livro e capítulo aqui dentro; o que veio da tela anterior é só o ponto de partida
+  const [book, setBook] = useState(params.book ?? 'JHN');
+  const [chapter, setChapter] = useState(params.chapter ?? '3');
   const { t, locale } = useI18n();
   const { colors } = useTheme();
   const [data, setData] = useState<Response | null>(null);
@@ -48,6 +52,13 @@ export default function VisualStudy() {
       .then(setData)
       .catch((e) => setError(e instanceof ApiError ? e.code : 'generic'));
   }, [book, chapter]);
+
+  function pick(nextBook: string, nextChapter: number) {
+    setData(null);
+    setError(null);
+    setBook(nextBook);
+    setChapter(String(nextChapter));
+  }
 
   async function generate() {
     setBusy(true);
@@ -67,6 +78,7 @@ export default function VisualStudy() {
 
   return (
     <Screen>
+      <PassagePicker book={book} chapter={Number(chapter) || 1} onChange={pick} />
       <Text variant="title">{s?.title || label}</Text>
       {s ? <Text variant="muted">{label}</Text> : null}
       {errorText ? <Notice kind="error">{errorText}</Notice> : null}

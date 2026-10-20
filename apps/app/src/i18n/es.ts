@@ -712,6 +712,9 @@ const es: DeepPartial<Dictionary> = {
     terms: 'Debes aceptar los Términos y la Política de Privacidad.',
   },
   home: {
+    plansBadge: 'Nuevo · 30 planes',
+    plansCta: 'Empieza tu viaje por la Biblia',
+    plansCtaHint: 'La Biblia en un año, Evangelios, Salmos, oraciones, Navidad y más. Lee un poco cada día.',
     myPlan: 'Mi plan de lectura',
     learn: 'Aprender',
     quizHint: 'Prueba lo que entendiste de un pasaje',
@@ -763,6 +766,8 @@ const es: DeepPartial<Dictionary> = {
     again: 'Nueva prueba',
   },
   visual: {
+    book: 'Libro',
+    chapter: 'Capítulo',
     title: 'Estudio visual',
     intro: 'Ilustraciones de la época, resumen, mapa de los lugares, línea de tiempo, personajes, conexiones con el Antiguo Testamento y profecías cumplidas — todo con fuentes. Una vez generado, queda disponible para todos.',
     generate: 'Generar estudio visual',

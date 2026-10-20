@@ -6,7 +6,8 @@ import { Pressable, Text as RNText, View } from 'react-native';
 
 import { loadPosition, type Position } from '@/bible/reader-state';
 import { bookName } from '@/bible/reference';
-import { Button, Card, Divider, ListItem, Screen, Seal, Text } from '@/components/ui';
+import { LinearGradientBg } from '@/components/gradient-bg';
+import { Card, Divider, ListItem, Screen, Seal, Text } from '@/components/ui';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { devotionalApi, type Devotional, type Enrollment } from '@/lib/devotional';
 import { useSession } from '@/lib/session';
@@ -159,7 +160,25 @@ export default function Home() {
           </Card>
         </Pressable>
       ) : null}
-      <Button kind="secondary" icon="calendar-outline" title={t('devotional.explorePlans')} onPress={() => router.push('/devotionals/plans')} />
+      {/* Chamada em destaque para os planos de leitura */}
+      <Pressable accessibilityRole="button" onPress={() => router.push('/devotionals/plans')}>
+        <View style={{ borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1.5, borderColor: colors.gold, padding: 18, flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+          <LinearGradientBg colors={['#3a2a10', '#120d06']} />
+          <View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: colors.gold, alignItems: 'center', justifyContent: 'center' }}>
+            <Ionicons name="map" size={26} color={colors.onGold} />
+          </View>
+          <View style={{ flex: 1, gap: 2 }}>
+            <RNText style={{ color: colors.gold, fontFamily: fonts.bodyBold, fontSize: 11, letterSpacing: 1.5, textTransform: 'uppercase' }}>
+              {t('home.plansBadge')}
+            </RNText>
+            <RNText style={{ color: '#fff', fontFamily: fonts.display, fontSize: 22, lineHeight: 26 }}>{t('home.plansCta')}</RNText>
+            <Text variant="small" style={{ color: '#d8d2c4' }}>
+              {t('home.plansCtaHint')}
+            </Text>
+          </View>
+          <Ionicons name="arrow-forward-circle" size={30} color={colors.gold} />
+        </View>
+      </Pressable>
 
       {/* Aprender de várias maneiras */}
       <Text variant="label">{t('home.learn')}</Text>

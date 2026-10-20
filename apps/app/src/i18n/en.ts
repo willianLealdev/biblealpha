@@ -710,6 +710,9 @@ const en: Dictionary = {
     terms: 'You need to accept the Terms and the Privacy Policy.',
   },
   home: {
+    plansBadge: 'New · 30 plans',
+    plansCta: 'Start your journey through the Bible',
+    plansCtaHint: 'Bible in a year, Gospels, Psalms, prayers, Christmas and more. Read a little each day.',
     myPlan: 'My reading plan',
     learn: 'Learn',
     quizHint: 'Test what you understood from a passage',
@@ -761,6 +764,8 @@ const en: Dictionary = {
     again: 'New quiz',
   },
   visual: {
+    book: 'Book',
+    chapter: 'Chapter',
     title: 'Visual study',
     intro: 'Period illustrations, summary, map of the places, timeline, characters, Old Testament links and fulfilled prophecies — all with sources. Once generated, it is available to everyone.',
     generate: 'Generate visual study',

@@ -708,6 +708,9 @@ const ptBR = {
     terms: 'É preciso aceitar os Termos e a Política de Privacidade.',
   },
   home: {
+    plansBadge: 'Novo · 30 planos',
+    plansCta: 'Comece sua jornada pela Bíblia',
+    plansCtaHint: 'Bíblia em um ano, Evangelhos, Salmos, orações, Natal e mais. Leia um pouco a cada dia.',
     myPlan: 'Meu plano de leitura',
     learn: 'Aprender',
     quizHint: 'Teste o que você entendeu de uma passagem',
@@ -759,6 +762,8 @@ const ptBR = {
     again: 'Novo teste',
   },
   visual: {
+    book: 'Livro',
+    chapter: 'Capítulo',
     title: 'Estudo visual',
     intro: 'Ilustrações da época, resumo, mapa dos lugares, linha do tempo, personagens, ligações com o Antigo Testamento e profecias cumpridas — tudo com fontes. Depois de gerado, fica disponível para todos.',
     generate: 'Gerar estudo visual',
