@@ -6,9 +6,9 @@ import { Pressable, Text as RNText, View } from 'react-native';
 
 import { loadPosition, type Position } from '@/bible/reader-state';
 import { bookName } from '@/bible/reference';
-import { Card, Screen, Seal, Text } from '@/components/ui';
+import { Button, Card, Divider, ListItem, Screen, Seal, Text } from '@/components/ui';
 import { useI18n, type TranslationKey } from '@/i18n';
-import { devotionalApi, type Devotional } from '@/lib/devotional';
+import { devotionalApi, type Devotional, type Enrollment } from '@/lib/devotional';
 import { useSession } from '@/lib/session';
 import { useTheme } from '@/theme';
 import { fonts, radius } from '@/theme/tokens';
@@ -26,6 +26,14 @@ const SHORTCUTS: { label: TranslationKey; icon: IconName; href: string }[] = [
   { label: 'home.agenda', icon: 'calendar-outline', href: '/agenda' },
 ];
 
+// Formas de aprender além da leitura simples
+const LEARN: { title: TranslationKey; hint: TranslationKey; icon: IconName; href: string }[] = [
+  { title: 'quiz.title', hint: 'home.quizHint', icon: 'school-outline', href: '/bible/quiz' },
+  { title: 'visual.title', hint: 'home.visualHint', icon: 'map-outline', href: 'visual' },
+  { title: 'home.askAI', hint: 'home.askHint', icon: 'sparkles-outline', href: '/study' },
+  { title: 'home.devotional', hint: 'home.devotionalHint', icon: 'sunny-outline', href: '/devotional' },
+];
+
 function greetingKey(): TranslationKey {
   const h = new Date().getHours();
   return h < 12 ? 'home.morning' : h < 18 ? 'home.afternoon' : 'home.evening';
@@ -38,6 +46,7 @@ export default function Home() {
   const { user } = useSession();
   const [today, setToday] = useState<Devotional | null>(null);
   const [position, setPosition] = useState<Position | null>(null);
+  const [plan, setPlan] = useState<Enrollment | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -47,6 +56,11 @@ export default function Home() {
         .catch(() => {});
       loadPosition()
         .then(setPosition)
+        .catch(() => {});
+      // Plano de leitura em andamento (o mais recente)
+      devotionalApi
+        .enrollments()
+        .then((r) => setPlan(r.enrollments.find((e) => e.status === 'active') ?? null))
         .catch(() => {});
     }, []),
   );
@@ -124,6 +138,48 @@ export default function Home() {
           <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
         </Card>
       </Pressable>
+
+      {/* Plano de leitura: continuar o que está em andamento ou escolher um */}
+      {plan ? (
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push({ pathname: '/devotionals/plan/[code]', params: { code: plan.plan.code, enrollment: plan.id } })}>
+          <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <Ionicons name="calendar" size={26} color={colors.gold} />
+            <View style={{ flex: 1 }}>
+              <Text variant="small">{t('home.myPlan')}</Text>
+              <RNText style={{ color: colors.text, fontFamily: fonts.bodyBold, fontSize: 17 }} numberOfLines={1}>
+                {plan.plan.title}
+              </RNText>
+              <Text variant="small">
+                {t('devotional.dayOf', { day: plan.today.day, total: plan.plan.days })} · {Math.round(plan.progress * 100)}%
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
+          </Card>
+        </Pressable>
+      ) : null}
+      <Button kind="secondary" icon="calendar-outline" title={t('devotional.explorePlans')} onPress={() => router.push('/devotionals/plans')} />
+
+      {/* Aprender de várias maneiras */}
+      <Text variant="label">{t('home.learn')}</Text>
+      <Card style={{ paddingVertical: 4 }}>
+        {LEARN.map((l, i) => (
+          <View key={l.title}>
+            {i > 0 ? <Divider /> : null}
+            <ListItem
+              icon={l.icon}
+              title={t(l.title)}
+              subtitle={t(l.hint)}
+              onPress={() =>
+                l.href === 'visual'
+                  ? router.push({ pathname: '/bible/visual', params: { book: position?.book ?? 'JHN', chapter: String(position?.chapter ?? 3) } })
+                  : router.push(l.href as never)
+              }
+            />
+          </View>
+        ))}
+      </Card>
 
       {/* Atalhos */}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>

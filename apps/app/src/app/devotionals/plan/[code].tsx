@@ -1,18 +1,15 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Redirect, router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, Text as RNText, View } from 'react-native';
 
 import { Button, Card, Divider, Screen, Text } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { devotionalApi, type Enrollment, type PlanSummary, type Reading } from '@/lib/devotional';
-import { useSession } from '@/lib/session';
 import { useTheme } from '@/theme';
 import { fonts } from '@/theme/tokens';
 
 export default function PlanDetail() {
-  // Planos de leitura: só o administrador
-  const isAdmin = !!useSession().user?.roles.includes('admin');
   const { code, enrollment } = useLocalSearchParams<{ code: string; enrollment?: string }>();
   const { t } = useI18n();
   const { colors } = useTheme();
@@ -27,7 +24,6 @@ export default function PlanDetail() {
       .catch(() => {});
   }, [code, enrollment]);
 
-  if (!isAdmin) return <Redirect href="/devotional" />;
   if (!plan) return <Screen center><ActivityIndicator color={colors.gold} /></Screen>;
 
   async function toggle(day: number) {

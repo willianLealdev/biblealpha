@@ -379,6 +379,13 @@ const en: Dictionary = {
     donateBonus: 'Every one-time gift (from {min}) gives you {n} extra AI questions as a thank-you.',
   },
   devotional: {
+    plansIntro: '{n} plans to know the Bible in many ways: cover to cover, book by book or by theme. Pick one and read a little each day.',
+    planCat: {
+      whole: 'The whole Bible',
+      testament: 'By section of the Bible',
+      book: 'Book by book',
+      topical: 'By theme',
+    },
     title: 'My Devotional',
     todayLabel: "Today's devotional",
     streak: '{n} day streak',
@@ -703,6 +710,12 @@ const en: Dictionary = {
     terms: 'You need to accept the Terms and the Privacy Policy.',
   },
   home: {
+    myPlan: 'My reading plan',
+    learn: 'Learn',
+    quizHint: 'Test what you understood from a passage',
+    visualHint: 'Maps, timeline and illustrations of the chapter',
+    askHint: 'Get answers with explanations and sources',
+    devotionalHint: 'A new text every day to meditate on',
     morning: 'Good morning, {name}',
     afternoon: 'Good afternoon, {name}',
     evening: 'Good evening, {name}',

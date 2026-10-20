@@ -377,6 +377,13 @@ const ptBR = {
     donateBonus: 'Cada oferta avulsa (a partir de {min}) dá {n} perguntas extras à IA, como agradecimento.',
   },
   devotional: {
+    plansIntro: '{n} planos para conhecer a Bíblia de várias maneiras: do começo ao fim, por livro ou por tema. Escolha um e leia um pouco a cada dia.',
+    planCat: {
+      whole: 'Toda a Bíblia',
+      testament: 'Por seção da Bíblia',
+      book: 'Livro por livro',
+      topical: 'Por tema',
+    },
     title: 'Meu Devocional',
     todayLabel: 'Devocional de hoje',
     streak: '{n} dia(s) seguidos',
@@ -701,6 +708,12 @@ const ptBR = {
     terms: 'É preciso aceitar os Termos e a Política de Privacidade.',
   },
   home: {
+    myPlan: 'Meu plano de leitura',
+    learn: 'Aprender',
+    quizHint: 'Teste o que você entendeu de uma passagem',
+    visualHint: 'Mapas, linha do tempo e ilustrações do capítulo',
+    askHint: 'Tire dúvidas com explicações e fontes',
+    devotionalHint: 'Um texto novo por dia, para meditar',
     morning: 'Bom dia, {name}',
     afternoon: 'Boa tarde, {name}',
     evening: 'Boa noite, {name}',

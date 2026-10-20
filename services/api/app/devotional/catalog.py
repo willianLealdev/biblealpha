@@ -736,6 +736,120 @@ ISRAEL = [
 ]
 
 
+PRAYERS = [
+    "GEN 18:22-33",
+    "EXO 32:11-14",
+    "1SA 2:1-10",
+    "1KI 3:5-14",
+    "1KI 8:22-30",
+    "2CH 20:5-12",
+    "NEH 1:4-11",
+    "PSA 51:1-12",
+    "DAN 9:3-19",
+    "JON 2:1-10",
+    "LUK 1:46-55",
+    "LUK 11:1-13",
+    "LUK 18:9-14",
+    "MAT 6:9-13",
+    "MAT 26:36-46",
+    "JHN 17:1-26",
+    "ACT 4:23-31",
+    "EPH 1:15-23",
+    "EPH 3:14-21",
+    "PHP 1:3-11",
+    "COL 1:9-14",
+]
+LOVE = [
+    "1CO 13:1-13",
+    "JHN 3:16-21",
+    "JHN 15:9-17",
+    "ROM 5:6-11",
+    "ROM 8:31-39",
+    "ROM 12:9-21",
+    "1JN 4:7-21",
+    "MAT 22:34-40",
+    "LUK 10:25-37",
+    "COL 3:12-17",
+    "1PE 4:7-11",
+    "DEU 6:4-9",
+    "PSA 136:1-9",
+]
+NEW_BELIEVER = [
+    "JHN 3:1-21",
+    "ROM 3:21-26",
+    "EPH 2:1-10",
+    "ROM 10:8-13",
+    "1JN 1:5-10",
+    "JHN 10:1-18",
+    "MAT 28:16-20",
+    "ROM 12:1-2",
+    "PSA 1:1-6",
+    "2TI 3:14-17",
+    "HEB 10:19-25",
+    "ACT 2:37-47",
+    "GAL 5:16-26",
+    "JHN 15:1-17",
+    "PHP 4:4-9",
+]
+PEACE = [
+    "PHP 4:4-9",
+    "MAT 6:25-34",
+    "1PE 5:6-11",
+    "PSA 46:1-11",
+    "ISA 26:3-4",
+    "JHN 14:25-31",
+    "PSA 23:1-6",
+    "PSA 121:1-8",
+    "MAT 11:28-30",
+    "PSA 4:1-8",
+    "PSA 91:1-16",
+    "ISA 41:8-13",
+]
+HOLY_WEEK = [
+    "MAT 21:1-11",
+    "MAT 21:12-17",
+    "MAT 26:6-13",
+    "MAT 26:17-30",
+    "JHN 13:1-17",
+    "MAT 26:36-46",
+    "MAT 26:47-56",
+    "MAT 26:57-75",
+    "MAT 27:11-31",
+    "MAT 27:32-56",
+    "MAT 27:57-66",
+    "MAT 28:1-10",
+    "LUK 24:13-35",
+    "JHN 20:19-31",
+]
+CHRISTMAS = [
+    "ISA 7:10-14",
+    "ISA 9:1-7",
+    "MIC 5:2-5",
+    "LUK 1:5-25",
+    "LUK 1:26-38",
+    "LUK 1:39-56",
+    "LUK 1:57-80",
+    "MAT 1:18-25",
+    "LUK 2:1-20",
+    "LUK 2:21-38",
+    "MAT 2:1-12",
+    "JHN 1:1-18",
+]
+SERMON_ON_THE_MOUNT = [
+    "MAT 5:1-16",
+    "MAT 5:17-32",
+    "MAT 5:33-48",
+    "MAT 6:1-18",
+    "MAT 6:19-34",
+    "MAT 7:1-12",
+    "MAT 7:13-29",
+]
+
+
+def _t(pt: str, en: str, es: str) -> dict[str, str]:
+    return {"pt-BR": pt, "en": en, "es": es}
+
+
 @cache
 def plans() -> dict[str, Plan]:
     items = [
@@ -863,6 +977,221 @@ def plans() -> dict[str, Plan]:
                 "es": "De Abraham al regreso del exilio, en 60 capítulos clave.",
             },
             [[r] for r in ISRAEL],
+        ),
+        Plan(
+            "bible-180",
+            "whole",
+            _t("Bíblia em seis meses", "Bible in six months", "La Biblia en seis meses"),
+            _t(
+                "Toda a Bíblia em 180 dias, cerca de sete capítulos por dia.",
+                "The whole Bible in 180 days, about seven chapters a day.",
+                "Toda la Biblia en 180 días, unos siete capítulos por día.",
+            ),
+            _spread(_chapters([b.code for b in all_books()]), 180),
+        ),
+        Plan(
+            "ot-270",
+            "testament",
+            _t(
+                "Antigo Testamento em 270 dias", "Old Testament in 270 days", "Antiguo Testamento en 270 días"
+            ),
+            _t(
+                "De Gênesis a Malaquias, cerca de três capítulos por dia.",
+                "Genesis to Malachi, about three chapters a day.",
+                "De Génesis a Malaquías, unos tres capítulos por día.",
+            ),
+            _spread(_chapters(_codes("GEN", "MAL")), 270),
+        ),
+        Plan(
+            "pentateuch-40",
+            "testament",
+            _t("Os cinco livros da Lei", "The five books of the Law", "Los cinco libros de la Ley"),
+            _t(
+                "Gênesis a Deuteronômio em 40 dias: a criação, a aliança e a Lei.",
+                "Genesis to Deuteronomy in 40 days: creation, covenant and Law.",
+                "Génesis a Deuteronomio en 40 días: la creación, el pacto y la Ley.",
+            ),
+            _spread(_chapters(_codes("GEN", "DEU")), 40),
+        ),
+        Plan(
+            "wisdom-poetry-60",
+            "testament",
+            _t("Sabedoria e poesia", "Wisdom and poetry", "Sabiduría y poesía"),
+            _t(
+                "Jó, Salmos, Provérbios, Eclesiastes e Cantares em 60 dias.",
+                "Job, Psalms, Proverbs, Ecclesiastes and Song of Songs in 60 days.",
+                "Job, Salmos, Proverbios, Eclesiastés y Cantares en 60 días.",
+            ),
+            _spread(_chapters(_codes("JOB", "SNG")), 60),
+        ),
+        Plan(
+            "prophets-60",
+            "testament",
+            _t("Os profetas", "The prophets", "Los profetas"),
+            _t(
+                "De Isaías a Malaquias em 60 dias: a voz de Deus ao seu povo.",
+                "Isaiah to Malachi in 60 days: God's voice to his people.",
+                "De Isaías a Malaquías en 60 días: la voz de Dios a su pueblo.",
+            ),
+            _spread(_chapters(_codes("ISA", "MAL")), 60),
+        ),
+        Plan(
+            "general-letters-21",
+            "testament",
+            _t("Cartas gerais", "The general letters", "Las cartas generales"),
+            _t(
+                "Hebreus, Tiago, Pedro, João e Judas em 21 dias.",
+                "Hebrews, James, Peter, John and Jude in 21 days.",
+                "Hebreos, Santiago, Pedro, Juan y Judas en 21 días.",
+            ),
+            _spread(_chapters(_codes("HEB", "JUD")), 21),
+        ),
+        Plan(
+            "genesis-50",
+            "book",
+            _t("Gênesis em 50 dias", "Genesis in 50 days", "Génesis en 50 días"),
+            _t(
+                "Um capítulo por dia: os começos de tudo.",
+                "One chapter a day: the beginnings.",
+                "Un capítulo por día: los comienzos de todo.",
+            ),
+            _spread(_chapters(["GEN"]), 50),
+        ),
+        Plan(
+            "mark-16",
+            "book",
+            _t("Marcos em 16 dias", "Mark in 16 days", "Marcos en 16 días"),
+            _t(
+                "O Evangelho mais curto, um capítulo por dia.",
+                "The shortest Gospel, one chapter a day.",
+                "El Evangelio más corto, un capítulo por día.",
+            ),
+            _spread(_chapters(["MRK"]), 16),
+        ),
+        Plan(
+            "john-21",
+            "book",
+            _t("João em 21 dias", "John in 21 days", "Juan en 21 días"),
+            _t(
+                "Para conhecer Jesus e crer nele, um capítulo por dia.",
+                "To know Jesus and believe in him, one chapter a day.",
+                "Para conocer a Jesús y creer en él, un capítulo por día.",
+            ),
+            _spread(_chapters(["JHN"]), 21),
+        ),
+        Plan(
+            "acts-28",
+            "book",
+            _t("Atos em 28 dias", "Acts in 28 days", "Hechos en 28 días"),
+            _t(
+                "O nascimento e o crescimento da Igreja.",
+                "The birth and growth of the Church.",
+                "El nacimiento y el crecimiento de la Iglesia.",
+            ),
+            _spread(_chapters(["ACT"]), 28),
+        ),
+        Plan(
+            "romans-16",
+            "book",
+            _t("Romanos em 16 dias", "Romans in 16 days", "Romanos en 16 días"),
+            _t(
+                "O evangelho explicado, um capítulo por dia.",
+                "The gospel explained, one chapter a day.",
+                "El evangelio explicado, un capítulo por día.",
+            ),
+            _spread(_chapters(["ROM"]), 16),
+        ),
+        Plan(
+            "revelation-22",
+            "book",
+            _t("Apocalipse em 22 dias", "Revelation in 22 days", "Apocalipsis en 22 días"),
+            _t(
+                "A vitória de Cristo, um capítulo por dia.",
+                "The victory of Christ, one chapter a day.",
+                "La victoria de Cristo, un capítulo por día.",
+            ),
+            _spread(_chapters(["REV"]), 22),
+        ),
+        Plan(
+            "new-believer-15",
+            "topical",
+            _t("Primeiros passos na fé", "First steps in faith", "Primeros pasos en la fe"),
+            _t(
+                "Para quem está começando: salvação, oração, Igreja e vida nova, em 15 leituras.",
+                "For those just starting: salvation, prayer, the Church and new life, in 15 readings.",
+                "Para quien está empezando: salvación, oración, Iglesia y vida nueva, en 15 lecturas.",
+            ),
+            [[r] for r in NEW_BELIEVER],
+        ),
+        Plan(
+            "prayers-21",
+            "topical",
+            _t("Orações da Bíblia", "Prayers of the Bible", "Oraciones de la Biblia"),
+            _t(
+                "21 orações para aprender a orar com quem orou nas Escrituras.",
+                "21 prayers to learn to pray with those who prayed in Scripture.",
+                "21 oraciones para aprender a orar con quienes oraron en las Escrituras.",
+            ),
+            [[r] for r in PRAYERS],
+        ),
+        Plan(
+            "love-13",
+            "topical",
+            _t("O amor segundo a Bíblia", "Love in the Bible", "El amor según la Biblia"),
+            _t(
+                "O amor de Deus por nós e o nosso amor por ele e pelo próximo.",
+                "God's love for us and our love for him and for others.",
+                "El amor de Dios por nosotros y nuestro amor por él y por el prójimo.",
+            ),
+            [[r] for r in LOVE],
+        ),
+        Plan(
+            "peace-12",
+            "topical",
+            _t("Paz para o coração", "Peace for the heart", "Paz para el corazón"),
+            _t(
+                "Textos para os dias de ansiedade e medo.",
+                "Passages for days of anxiety and fear.",
+                "Textos para los días de ansiedad y miedo.",
+            ),
+            [[r] for r in PEACE],
+        ),
+        Plan(
+            "sermon-mount-7",
+            "topical",
+            _t("Sermão do Monte", "Sermon on the Mount", "Sermón del Monte"),
+            _t(
+                "O ensino de Jesus sobre o Reino, em sete dias.",
+                "Jesus' teaching on the Kingdom, in seven days.",
+                "La enseñanza de Jesús sobre el Reino, en siete días.",
+            ),
+            [[r] for r in SERMON_ON_THE_MOUNT],
+        ),
+        Plan(
+            "holy-week-14",
+            "topical",
+            _t("Semana Santa e Páscoa", "Holy Week and Easter", "Semana Santa y Pascua"),
+            _t(
+                "Da entrada em Jerusalém à ressurreição, em 14 dias.",
+                "From the entry into Jerusalem to the resurrection, in 14 days.",
+                "De la entrada en Jerusalén a la resurrección, en 14 días.",
+            ),
+            [[r] for r in HOLY_WEEK],
+        ),
+        Plan(
+            "christmas-12",
+            "topical",
+            _t(
+                "Natal: a vinda do Salvador",
+                "Christmas: the coming of the Savior",
+                "Navidad: la venida del Salvador",
+            ),
+            _t(
+                "As promessas e o nascimento de Jesus, em 12 dias.",
+                "The promises and the birth of Jesus, in 12 days.",
+                "Las promesas y el nacimiento de Jesús, en 12 días.",
+            ),
+            [[r] for r in CHRISTMAS],
         ),
     ]
     return {p.code: p for p in items}

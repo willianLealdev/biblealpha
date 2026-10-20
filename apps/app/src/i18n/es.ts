@@ -381,6 +381,13 @@ const es: DeepPartial<Dictionary> = {
     donateBonus: 'Cada ofrenda única (desde {min}) te da {n} preguntas extra a la IA, como agradecimiento.',
   },
   devotional: {
+    plansIntro: '{n} planes para conocer la Biblia de varias maneras: de principio a fin, por libro o por tema. Elige uno y lee un poco cada día.',
+    planCat: {
+      whole: 'Toda la Biblia',
+      testament: 'Por sección de la Biblia',
+      book: 'Libro por libro',
+      topical: 'Por tema',
+    },
     title: 'Mi Devocional',
     todayLabel: 'Devocional de hoy',
     streak: '{n} día(s) seguidos',
@@ -705,6 +712,12 @@ const es: DeepPartial<Dictionary> = {
     terms: 'Debes aceptar los Términos y la Política de Privacidad.',
   },
   home: {
+    myPlan: 'Mi plan de lectura',
+    learn: 'Aprender',
+    quizHint: 'Prueba lo que entendiste de un pasaje',
+    visualHint: 'Mapas, línea de tiempo e ilustraciones del capítulo',
+    askHint: 'Resuelve dudas con explicaciones y fuentes',
+    devotionalHint: 'Un texto nuevo cada día para meditar',
     morning: 'Buenos días, {name}',
     afternoon: 'Buenas tardes, {name}',
     evening: 'Buenas noches, {name}',

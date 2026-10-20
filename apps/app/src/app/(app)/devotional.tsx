@@ -88,10 +88,11 @@ export default function DevotionalTab() {
 
       <Button kind="ghost" icon="book-outline" title={t('devotional.history')} onPress={() => router.push('/devotionals/history')} />
 
+      <Button kind="secondary" icon="calendar-outline" title={t('devotional.explorePlans')} onPress={() => router.push('/devotionals/plans')} />
+
       {isAdmin ? (
         <>
           <Divider />
-          <Button kind="secondary" icon="calendar-outline" title={t('devotional.explorePlans')} onPress={() => router.push('/devotionals/plans')} />
           <Button kind="secondary" icon="calendar-number-outline" title={t('admin.devotionals')} onPress={() => router.push('/admin/devotionals')} />
           <Button kind="ghost" icon="sparkles-outline" title={t('devotional.createPersonal')} onPress={() => router.push('/devotionals/new')} />
         </>
