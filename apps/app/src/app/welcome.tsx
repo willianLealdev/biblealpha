@@ -4,7 +4,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { useEffect, useRef, useState, type ComponentProps, type ReactNode } from 'react';
-import { Pressable, ScrollView, Text as RNText, useWindowDimensions, View, type ScrollViewInstance } from 'react-native';
+import { Linking, Pressable, ScrollView, Text as RNText, useWindowDimensions, View, type ScrollViewInstance } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { LinearGradientBg } from '@/components/gradient-bg';
@@ -17,7 +17,14 @@ import { useTheme } from '@/theme';
 import { fonts, radius } from '@/theme/tokens';
 
 type Icon = ComponentProps<typeof Ionicons>['name'];
-type Section = 'features' | 'ministry' | 'share' | 'support' | 'faq';
+type Section = 'download' | 'features' | 'ministry' | 'share' | 'support' | 'faq';
+
+// Lojas: quando a Apple e o Google aprovarem, é só colocar o link (sem link aparece "Em breve")
+const STORES: { key: 'windows' | 'ios' | 'android'; icon: Icon; name: string; url: string | null }[] = [
+  { key: 'android', icon: 'logo-google-playstore', name: 'Google Play', url: null },
+  { key: 'ios', icon: 'logo-apple', name: 'App Store', url: null },
+  { key: 'windows', icon: 'logo-windows', name: 'Microsoft Store', url: 'https://apps.microsoft.com/detail/9N2MHL1R6ZQP' },
+];
 
 const FEATURES: { icon: Icon; title: TranslationKey; body: TranslationKey }[] = [
   { icon: 'book-outline', title: 'landing.f.bibleTitle', body: 'landing.f.bibleBody' },
@@ -88,6 +95,7 @@ export default function Landing() {
   const shareScreen = () => router.push('/screen');
 
   const MENU: { label: TranslationKey; section: Section }[] = [
+    { label: 'landing.menu.download', section: 'download' },
     { label: 'landing.menu.features', section: 'features' },
     { label: 'landing.menu.ministry', section: 'ministry' },
     { label: 'landing.menu.support', section: 'support' },
@@ -172,6 +180,20 @@ export default function Landing() {
             </View>
             <View style={{ flex: wide ? 1 : undefined, alignItems: 'center' }}>
               <Logo size={wide ? 380 : 240} />
+            </View>
+          </Container>
+        </View>
+
+        {/* Baixar o app nas lojas */}
+        <View onLayout={(e) => {
+          y.current.download = e.nativeEvent.layout.y;
+        }} style={{ paddingVertical: 56, backgroundColor: colors.surfaceAlt, borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.border }}>
+          <Container>
+            <SectionTitle wide={wide} kicker="landing.downloadKicker" title="landing.downloadTitle" subtitle="landing.downloadSubtitle" />
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 14, justifyContent: 'center' }}>
+              {STORES.map((s) => (
+                <StoreBadge key={s.key} icon={s.icon} name={s.name} url={s.url} />
+              ))}
             </View>
           </Container>
         </View>
@@ -389,6 +411,39 @@ function GoldButton({ label, icon, onPress, outline }: { label: string; icon?: I
       })}>
       {icon ? <Ionicons name={icon} size={19} color={outline ? colors.gold : colors.onGold} /> : null}
       <RNText style={{ color: outline ? colors.gold : colors.onGold, fontFamily: fonts.bodyBold, fontSize: 16 }}>{label}</RNText>
+    </Pressable>
+  );
+}
+
+function StoreBadge({ icon, name, url }: { icon: Icon; name: string; url: string | null }) {
+  const { t } = useI18n();
+  const { colors } = useTheme();
+  const ready = !!url;
+  return (
+    <Pressable
+      accessibilityRole="link"
+      accessibilityState={{ disabled: !ready }}
+      accessibilityLabel={`${t(ready ? 'landing.downloadOn' : 'landing.downloadSoon')} ${name}`}
+      disabled={!ready}
+      onPress={() => url && Linking.openURL(url)}
+      style={({ pressed }) => ({
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+        minWidth: 230,
+        paddingHorizontal: 20,
+        paddingVertical: 12,
+        borderRadius: radius.md,
+        borderWidth: 1.5,
+        borderColor: ready ? colors.gold : colors.border,
+        backgroundColor: ready ? colors.surface : 'transparent',
+        opacity: pressed ? 0.8 : ready ? 1 : 0.6,
+      })}>
+      <Ionicons name={icon} size={30} color={ready ? colors.gold : colors.textMuted} />
+      <View>
+        <RNText style={{ color: colors.textMuted, fontFamily: fonts.body, fontSize: 12 }}>{t(ready ? 'landing.downloadOn' : 'landing.downloadSoon')}</RNText>
+        <RNText style={{ color: colors.text, fontFamily: fonts.bodyBold, fontSize: 18 }}>{name}</RNText>
+      </View>
     </Pressable>
   );
 }
