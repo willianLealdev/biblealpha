@@ -75,6 +75,7 @@ export default function AdminHome() {
   return (
     <Screen>
       <Button kind="secondary" icon="settings-outline" title={t('admin.settings')} onPress={() => router.push('/admin/settings')} />
+      <Button kind="secondary" icon="heart-outline" title={t('admin.offers.title')} onPress={() => router.push('/admin/offers')} />
       <Button kind="secondary" icon="speedometer-outline" title={t('admin.limits.title')} onPress={() => router.push('/admin/limits')} />
       <Button kind="secondary" icon="key-outline" title={t('admin.integrations')} onPress={() => router.push('/admin/integrations')} />
       <Button kind="secondary" icon="calendar-number-outline" title={t('admin.devotionals')} onPress={() => router.push('/admin/devotionals')} />

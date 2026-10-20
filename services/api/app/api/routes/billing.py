@@ -139,6 +139,7 @@ async def admin_new_price(
         audit.RequestMeta(None, None),
         cu.user.id,
         interval=body.interval,
+        currency=body.currency,
         amount=str(body.amount),
     )
     await db.commit()

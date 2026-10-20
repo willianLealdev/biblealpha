@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, Switch, Text as RNText, View } from 'react-native';
 
 import { Button, Card, Notice, Screen, Text, TextField } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { adminApi, type AdminSettings, type ModelConfig } from '@/lib/admin';
-import { api } from '@/lib/api';
 import { useTheme } from '@/theme';
 import { fonts, radius } from '@/theme/tokens';
 
@@ -44,33 +43,6 @@ export default function AdminSettingsScreen() {
   const [s, setS] = useState<AdminSettings | null>(null);
   const [message, setMessage] = useState<{ kind: 'success' | 'error'; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
-  const [prices, setPrices] = useState<{ interval: string; amount: number; valid_from: string; is_current: boolean }[]>([]);
-  const [monthly, setMonthly] = useState('');
-  const [yearly, setYearly] = useState('');
-
-  const loadPrices = useCallback(() => {
-    api<{ prices: { interval: string; amount: number; valid_from: string; is_current: boolean }[] }>('/admin/billing/prices')
-      .then((r) => setPrices(r.prices))
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    loadPrices();
-  }, [loadPrices]);
-
-  async function applyPrices() {
-    for (const [interval, value] of [
-      ['month', monthly],
-      ['year', yearly],
-    ] as const) {
-      const amount = value.replace(',', '.').trim();
-      if (amount) await api('/admin/billing/prices', { method: 'POST', body: { interval, amount } }).catch(() => {});
-    }
-    setMonthly('');
-    setYearly('');
-    loadPrices();
-  }
-
   useEffect(() => {
     adminApi
       .settings()
@@ -158,20 +130,6 @@ export default function AdminSettingsScreen() {
       </Card>
 
       <Button title={t('common.save')} onPress={save} loading={saving} />
-
-      <Text variant="heading">{t('admin.pricing')}</Text>
-      <Card>
-        <Text variant="small">{t('admin.pricingHint')}</Text>
-        <TextField label={t('admin.newMonthly')} value={monthly} onChangeText={setMonthly} keyboardType="decimal-pad" />
-        <TextField label={t('admin.newYearly')} value={yearly} onChangeText={setYearly} keyboardType="decimal-pad" />
-        <Button kind="secondary" title={t('admin.applyPrice')} onPress={applyPrices} />
-        <Text variant="label">{t('admin.priceHistory')}</Text>
-        {prices.map((p, i) => (
-          <Text key={i} variant="small">
-            {p.interval} · R$ {p.amount.toFixed(2)} · {p.valid_from} {p.is_current ? '✓' : ''}
-          </Text>
-        ))}
-      </Card>
 
       <Text variant="heading">{t('admin.prices')}</Text>
       <Card>

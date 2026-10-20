@@ -1,5 +1,4 @@
-// Painel → Limites e ofertas: quantos estudos visuais e fundos do telão cada pessoa pode criar por mês
-// e os valores da oferta avulsa. Vale na hora para todos os aparelhos (o app lê do servidor).
+// Painel → Limites: quantos estudos visuais e fundos do telão cada pessoa pode criar por mês. Vale na hora para todos os aparelhos (o app lê do servidor).
 
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
@@ -76,9 +75,6 @@ export default function AdminLimits() {
     </View>
   );
 
-  const d = s.donation;
-  const setD = (k: keyof Limits['donation'], v: string) => setS({ ...s, donation: { ...d, [k]: k === 'bonus_questions' ? Math.round(num(v)) : num(v) } });
-
   return (
     <Screen>
       <Text variant="title">{t('admin.limits.title')}</Text>
@@ -94,28 +90,6 @@ export default function AdminLimits() {
         <Text variant="heading">{t('admin.limits.slides')}</Text>
         <Text variant="small">{t('admin.limits.slidesHint')}</Text>
         {quota('slides')}
-      </Card>
-
-      <Card>
-        <Text variant="heading">{t('admin.limits.donation')}</Text>
-        <Text variant="small">{t('admin.limits.donationHint')}</Text>
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <View style={{ flex: 1 }}>
-            <TextField label={t('admin.limits.minBrl')} value={String(d.min_brl)} onChangeText={(v) => setD('min_brl', v)} keyboardType="decimal-pad" />
-          </View>
-          <View style={{ flex: 1 }}>
-            <TextField label={t('admin.limits.maxBrl')} value={String(d.max_brl)} onChangeText={(v) => setD('max_brl', v)} keyboardType="decimal-pad" />
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <View style={{ flex: 1 }}>
-            <TextField label={t('admin.limits.minUsd')} value={String(d.min_usd)} onChangeText={(v) => setD('min_usd', v)} keyboardType="decimal-pad" />
-          </View>
-          <View style={{ flex: 1 }}>
-            <TextField label={t('admin.limits.maxUsd')} value={String(d.max_usd)} onChangeText={(v) => setD('max_usd', v)} keyboardType="decimal-pad" />
-          </View>
-        </View>
-        <TextField label={t('admin.limits.bonus')} value={String(d.bonus_questions)} onChangeText={(v) => setD('bonus_questions', v)} keyboardType="number-pad" />
       </Card>
 
       <Text variant="small">{t('admin.limits.otherCosts')}</Text>

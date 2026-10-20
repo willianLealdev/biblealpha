@@ -184,3 +184,20 @@ async def test_admin_sets_monthly_limits_and_donation_values(client):
     assert plans["donation_limits"]["BRL"] == [10, 5000] and plans["donation_bonus_questions"] == 5
     bad = {**body, "donation": {**body["donation"], "max_usd": 2}}
     assert (await client.put("/api/v1/admin/limits", headers=admin, json=bad)).status_code == 422
+
+
+async def test_monthly_price_in_reais_and_dollars(client):
+    await register(client, email="admin@example.com", name="Admin")
+    await make_admin("admin@example.com")
+    admin = await login(client, email="admin@example.com")
+    url = "/api/v1/admin/billing/prices"
+    for currency, amount in (("BRL", "15"), ("USD", "5")):
+        body = {"interval": "month", "currency": currency, "amount": amount}
+        assert (await client.post(url, headers=bearer(admin), json=body)).status_code == 200
+
+    # Definir o valor em dólar não aposenta o valor em reais
+    prices = (await client.get("/api/v1/billing/plans")).json()["pro"]["prices"]
+    assert sorted((p["currency"], p["amount"]) for p in prices) == [("BRL", 15.0), ("USD", 5.0)]
+    async with get_sessionmaker()() as db:
+        assert (await current_price(db, "month", "USD")).amount == 5
+        assert (await current_price(db, "month", "BRL")).amount == 15
