@@ -126,7 +126,7 @@ export function BackgroundLibrary({
                       <Pressable accessibilityRole="button" accessibilityLabel={t('screen.library.use')} onPress={() => use(b.id)} disabled={busy !== null} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 }}>
                         <View style={{ width: 96, height: 54, borderRadius: 8, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
                           {b.image ? (
-                            <Image source={{ uri: backgroundUrl(b.id) }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                            <Image source={{ uri: backgroundUrl(b.id) }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} resizeMode="cover" />
                           ) : (
                             <LinearGradientBg colors={b.style.gradient} />
                           )}
