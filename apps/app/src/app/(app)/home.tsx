@@ -18,8 +18,6 @@ type IconName = ComponentProps<typeof Ionicons>['name'];
 
 const SHORTCUTS: { label: TranslationKey; icon: IconName; href: string }[] = [
   { label: 'home.bible', icon: 'book-outline', href: '/' },
-  { label: 'home.askAI', icon: 'sparkles-outline', href: '/study' },
-  { label: 'home.devotional', icon: 'sunny-outline', href: '/devotional' },
   { label: 'home.sermons', icon: 'mic-outline', href: '/sermons' },
   { label: 'home.library', icon: 'library-outline', href: '/library' },
   { label: 'home.search', icon: 'search-outline', href: '/bible/search' },
@@ -200,7 +198,7 @@ export default function Home() {
         ))}
       </Card>
 
-      {/* Atalhos */}
+      {/* Atalhos (Perguntar à IA e Devocional já estão em Aprender) */}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
         {SHORTCUTS.map((s) => (
           <Pressable
