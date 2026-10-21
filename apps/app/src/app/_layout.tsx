@@ -84,8 +84,9 @@ function RootNavigator({ fontsLoaded }: { fontsLoaded: boolean }) {
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <StatusBar style={name === 'dark' ? 'light' : 'dark'} />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
-        {/* No site, quem não entrou vê a página de apresentação */}
-        <Stack.Protected guard={status === 'signedIn'} redirectTo={Platform.OS === 'web' ? '/welcome' : undefined}>
+        {/* Quem não entrou: no site vê a página de apresentação; no app vai direto para o login (sem destino,
+            o app abria numa tela qualquer, como a do telão) */}
+        <Stack.Protected guard={status === 'signedIn'} redirectTo={Platform.OS === 'web' ? '/welcome' : '/sign-in'}>
           <Stack.Screen name="(app)" />
           <Stack.Screen name="bible" />
           <Stack.Screen name="admin" />
