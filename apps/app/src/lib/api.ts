@@ -75,19 +75,33 @@ export function getAccessToken() {
   return accessToken;
 }
 
-type RequestOptions = { method?: string; body?: unknown; auth?: boolean; headers?: Record<string, string> };
+type RequestOptions = {
+  method?: string;
+  body?: unknown;
+  auth?: boolean;
+  headers?: Record<string, string>;
+  /** Desiste da chamada depois deste tempo (sem isso, uma resposta que nunca chega prende a tela) */
+  timeoutMs?: number;
+};
 
-async function send(path: string, { method = 'GET', body, auth = true, headers = {} }: RequestOptions) {
+async function send(path: string, { method = 'GET', body, auth = true, headers = {}, timeoutMs }: RequestOptions) {
   const finalHeaders: Record<string, string> = { Accept: 'application/json', ...headers };
   if (body !== undefined) finalHeaders['Content-Type'] = 'application/json';
   if (auth && accessToken) finalHeaders.Authorization = `Bearer ${accessToken}`;
   if (IS_WEB) finalHeaders['X-BA-Client'] = 'web';
-  return fetch(`${API_BASE}${path}`, {
-    method,
-    headers: finalHeaders,
-    body: body === undefined ? undefined : JSON.stringify(body),
-    credentials: 'include',
-  });
+  const controller = timeoutMs ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+  try {
+    return await fetch(`${API_BASE}${path}`, {
+      method,
+      headers: finalHeaders,
+      body: body === undefined ? undefined : JSON.stringify(body),
+      credentials: 'include',
+      signal: controller?.signal,
+    });
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 }
 
 async function parse<T>(response: Response): Promise<T> {
@@ -151,6 +165,8 @@ export function refreshSession(): Promise<boolean> {
         const response = await send('/auth/refresh', {
           method: 'POST',
           auth: false,
+          // Ao abrir o app: não deixa a tela de abertura presa se o servidor não responder
+          timeoutMs: 10_000,
           body: IS_WEB ? undefined : { refresh_token: stored },
         });
         if (!response.ok) {

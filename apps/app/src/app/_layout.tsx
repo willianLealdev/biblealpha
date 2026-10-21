@@ -1,6 +1,6 @@
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -24,7 +24,7 @@ if (Platform.OS === 'web' && typeof document !== 'undefined') {
 
 export default function RootLayout() {
   // Só os pesos usados (importar o pacote inteiro coloca todas as variações no build)
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     CormorantGaramond_600SemiBold: require('@expo-google-fonts/cormorant-garamond/600SemiBold/CormorantGaramond_600SemiBold.ttf'),
     CormorantGaramond_700Bold: require('@expo-google-fonts/cormorant-garamond/700Bold/CormorantGaramond_700Bold.ttf'),
     Inter_400Regular: require('@expo-google-fonts/inter/400Regular/Inter_400Regular.ttf'),
@@ -40,7 +40,7 @@ export default function RootLayout() {
         <I18nProvider>
           <SessionProvider>
             <StudyProvider>
-              <RootNavigator fontsLoaded={fontsLoaded} />
+              <RootNavigator fontsLoaded={fontsLoaded || !!fontError} />
             </StudyProvider>
           </SessionProvider>
         </I18nProvider>
@@ -52,7 +52,14 @@ export default function RootLayout() {
 function RootNavigator({ fontsLoaded }: { fontsLoaded: boolean }) {
   const { status } = useSession();
   const { colors, name } = useTheme();
-  const ready = fontsLoaded && status !== 'loading';
+  // Se as fontes demorarem ou falharem (acontece no Safari), o app abre assim mesmo com a fonte do sistema:
+  // a tela de abertura nunca fica presa para sempre
+  const [fontsWaited, setFontsWaited] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setFontsWaited(true), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+  const ready = (fontsLoaded || fontsWaited) && status !== 'loading';
   const stackOptions = useStackOptions();
   const { user } = useSession();
   // App do administrador: envia os textos em inglês desta versão (base das traduções automáticas)

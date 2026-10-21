@@ -46,7 +46,7 @@ export const APP_URL = (
 export const backgroundUrl = (id: string) => `${API_BASE}/screens/backgrounds/${id}`;
 
 export const screenApi = {
-  open: () => api<ScreenState & { token: string; pair_url: string }>('/screens', { method: 'POST', auth: false }),
+  open: () => api<ScreenState & { token: string; pair_url: string }>('/screens', { method: 'POST', auth: false, timeoutMs: 15_000 }),
   state: (id: string, token: string) =>
     api<ScreenState>(`/screens/${id}/state`, { auth: false, headers: { 'X-Screen-Token': token } }),
   check: (code: string) => api<{ code: string }>('/screens/check', { method: 'POST', body: { code } }),
