@@ -2,7 +2,7 @@
   "expo": {
     "name": "BibleAlpha",
     "slug": "biblealpha",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "biblealpha",
@@ -101,7 +101,7 @@
     "updates": {
       "enabled": true,
       "checkAutomatically": "ON_LOAD",
-      "fallbackToCacheTimeout": 0,
+      "fallbackToCacheTimeout": 3000,
       "url": "https://u.expo.dev/74d42c9d-dffe-4976-80b8-4c8d83aff033"
     },
     "locales": {

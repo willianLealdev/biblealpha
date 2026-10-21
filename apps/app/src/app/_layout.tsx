@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { BottomNav, useShowBottomNav, useStackOptions } from '@/components/navigation';
 import { Seal } from '@/components/ui';
+import { UpdateReload } from '@/components/update-reload';
 import { I18nProvider, syncSourceTexts } from '@/i18n';
 import { SessionProvider, useSession } from '@/lib/session';
 import { StudyProvider } from '@/study/store';
@@ -36,6 +37,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
+      <UpdateReload />
       <ThemeProvider>
         <I18nProvider>
           <SessionProvider>
