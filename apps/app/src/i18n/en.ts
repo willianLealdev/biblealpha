@@ -899,7 +899,7 @@ const en: Dictionary = {
     openScreen: 'Open the shared screen',
     downloadKicker: 'Get the app',
     downloadTitle: 'Use it on your phone and computer',
-    downloadSubtitle: 'Install BibleAlpha on Windows from the Microsoft Store. iPhone and Android are coming soon; meanwhile, open the website in your browser and choose "Add to Home Screen".',
+    downloadSubtitle: 'Install BibleAlpha on iPhone from the App Store, on Android from Google Play or on Windows from the Microsoft Store. It also works right in the browser.',
     downloadOn: 'Get it on',
     downloadSoon: 'Coming soon to',
     menu: {
@@ -1000,7 +1000,7 @@ const en: Dictionary = {
       offlineQ: 'Does it work offline?',
       offlineA: 'Pulpit mode works offline with the copy saved on your device, and the chapters you have read are available offline.',
       installQ: 'How do I install it on my phone?',
-      installA: 'BibleAlpha for Windows is already on the Microsoft Store. The iPhone and Android apps are coming soon; until then, open the website in your phone\'s browser and choose "Add to Home Screen".',
+      installA: 'Get the app on the App Store (iPhone and iPad), Google Play (Android) or the Microsoft Store (Windows). You can also use it in the browser and choose "Add to Home Screen".',
       privacyQ: 'Are my notes private?',
       privacyA: 'Yes. Your notes, highlights and messages are yours alone, protected with an encrypted connection and a securely stored password.',
     },

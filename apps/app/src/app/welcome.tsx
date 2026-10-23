@@ -19,10 +19,10 @@ import { fonts, radius } from '@/theme/tokens';
 type Icon = ComponentProps<typeof Ionicons>['name'];
 type Section = 'download' | 'features' | 'ministry' | 'share' | 'support' | 'faq';
 
-// Lojas: quando a Apple e o Google aprovarem, é só colocar o link (sem link aparece "Em breve")
+// Lojas (sem link aparece "Em breve"). O link da App Store não leva o país: cada pessoa cai na loja do seu país
 const STORES: { key: 'windows' | 'ios' | 'android'; icon: Icon; name: string; url: string | null }[] = [
-  { key: 'android', icon: 'logo-google-playstore', name: 'Google Play', url: null },
-  { key: 'ios', icon: 'logo-apple', name: 'App Store', url: null },
+  { key: 'android', icon: 'logo-google-playstore', name: 'Google Play', url: 'https://play.google.com/store/apps/details?id=com.biblealpha.app' },
+  { key: 'ios', icon: 'logo-apple', name: 'App Store', url: 'https://apps.apple.com/app/id6824735409' },
   { key: 'windows', icon: 'logo-windows', name: 'Microsoft Store', url: 'https://apps.microsoft.com/detail/9N2MHL1R6ZQP' },
 ];
 

@@ -901,7 +901,7 @@ const es: DeepPartial<Dictionary> = {
     openScreen: 'Abrir la pantalla compartida',
     downloadKicker: 'Descarga la app',
     downloadTitle: 'Úsala en el celular y en la computadora',
-    downloadSubtitle: 'Instala BibleAlpha en Windows desde Microsoft Store. En iPhone y Android llega pronto; mientras tanto, abre el sitio en el navegador y elige "Agregar a la pantalla de inicio".',
+    downloadSubtitle: 'Instala BibleAlpha en iPhone desde la App Store, en Android desde Google Play o en Windows desde Microsoft Store. También funciona directo en el navegador.',
     downloadOn: 'Disponible en',
     downloadSoon: 'Pronto en',
     menu: {
@@ -1002,7 +1002,7 @@ const es: DeepPartial<Dictionary> = {
       offlineQ: '¿Funciona sin internet?',
       offlineA: 'El modo púlpito funciona sin internet con la copia guardada en el dispositivo, y los capítulos que ya leíste quedan disponibles sin conexión.',
       installQ: '¿Cómo la instalo en el celular?',
-      installA: 'BibleAlpha para Windows ya está en Microsoft Store. Las apps para iPhone y Android llegan pronto; hasta entonces, abre el sitio en el navegador del celular y elige "Agregar a la pantalla de inicio".',
+      installA: 'Descarga la app en la App Store (iPhone y iPad), Google Play (Android) o Microsoft Store (Windows). También puedes usarla en el navegador y elegir "Agregar a la pantalla de inicio".',
       privacyQ: '¿Mis notas son privadas?',
       privacyA: 'Sí. Tus notas, resaltados y predicaciones son solo tuyos, protegidos con conexión cifrada y contraseña guardada de forma segura.',
     },

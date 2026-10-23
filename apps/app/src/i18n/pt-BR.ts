@@ -897,7 +897,7 @@ const ptBR = {
     openScreen: 'Abrir a tela compartilhada',
     downloadKicker: 'Baixe o app',
     downloadTitle: 'Use no celular e no computador',
-    downloadSubtitle: 'Instale o BibleAlpha no Windows pela Microsoft Store. No iPhone e no Android ele chega em breve; enquanto isso, abra o site no navegador e escolha "Adicionar à tela inicial".',
+    downloadSubtitle: 'Instale o BibleAlpha no iPhone pela App Store, no Android pelo Google Play ou no Windows pela Microsoft Store. Também funciona direto no navegador.',
     downloadOn: 'Disponível na',
     downloadSoon: 'Em breve na',
     menu: {
@@ -998,7 +998,7 @@ const ptBR = {
       offlineQ: 'Funciona sem internet?',
       offlineA: 'O modo púlpito funciona sem internet com a cópia guardada no aparelho, e os capítulos que você já leu ficam disponíveis offline.',
       installQ: 'Como instalo no celular?',
-      installA: 'O BibleAlpha para Windows já está na Microsoft Store. Os apps para iPhone e Android chegam em breve; até lá, abra o site no navegador do celular e escolha "Adicionar à tela inicial".',
+      installA: 'Baixe o app na App Store (iPhone e iPad), no Google Play (Android) ou na Microsoft Store (Windows). Também dá para usar no navegador e escolher "Adicionar à tela inicial".',
       privacyQ: 'Minhas anotações ficam privadas?',
       privacyA: 'Sim. Suas anotações, destaques e ministrações são só seus, protegidos com criptografia na conexão e senha guardada com segurança.',
     },
