@@ -176,6 +176,10 @@ async def login(
         audit.record(db, "auth.login_failed", meta, user.id if user else None)
         await db.commit()
         raise AppError(401, "invalid_credentials", "Invalid email or password")
+    if user.blocked_at is not None:
+        audit.record(db, "auth.login_blocked", meta, user.id)
+        await db.commit()
+        raise AppError(403, "account_blocked", "This account is blocked")
     if user.email_verified_at is None:
         raise AppError(403, "email_not_verified", "Confirm your email before signing in")
 
@@ -238,7 +242,7 @@ async def refresh(db: AsyncSession, raw_token: str, meta: RequestMeta) -> tuple[
     if session.revoked_at is not None or session.expires_at <= _now():
         raise AppError(401, "invalid_refresh_token", "Session expired, sign in again")
     user = await db.get(User, session.user_id)
-    if user is None or user.deleted_at is not None:
+    if user is None or user.deleted_at is not None or user.blocked_at is not None:
         raise AppError(401, "invalid_refresh_token", "Session expired, sign in again")
 
     new_raw = security.new_opaque_token()

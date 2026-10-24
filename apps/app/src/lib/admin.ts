@@ -91,3 +91,119 @@ export const adminApi = {
   grantPro: (id: string, days: number) => api(`/admin/users/${id}/pro`, { method: 'POST', body: { days } }),
   revokePro: (id: string) => api(`/admin/users/${id}/pro`, { method: 'DELETE' }),
 };
+
+export type AccountFilter = 'all' | 'online' | 'blocked' | 'locked' | 'unverified' | 'admin' | 'inactive';
+export type AccountSort = 'seen' | 'created' | 'name';
+
+export type AccountSummary = {
+  total: number;
+  verified: number;
+  blocked: number;
+  locked: number;
+  online_now: number;
+  online_devices: number;
+  active_24h: number;
+  active_7d: number;
+  active_30d: number;
+  new_7d: number;
+  online_minutes: number;
+};
+
+export type AccountRow = {
+  id: string;
+  name: string | null;
+  email: string;
+  country: string | null;
+  plan: 'free' | 'pro';
+  roles: string[];
+  verified: boolean;
+  blocked: boolean;
+  locked: boolean;
+  online: boolean;
+  sessions: number;
+  created_at: string;
+  last_login_at: string | null;
+  last_seen_at: string | null;
+};
+
+export type AccountReport = {
+  user: {
+    id: string;
+    name: string | null;
+    email: string;
+    country: string | null;
+    locale: string;
+    roles: string[];
+    created_at: string;
+    email_verified_at: string | null;
+    last_login_at: string | null;
+    last_seen_at: string | null;
+    has_password: boolean;
+    blocked_at: string | null;
+    blocked_reason: string | null;
+  };
+  status: {
+    online: boolean;
+    blocked: boolean;
+    locked: boolean;
+    attempts: number;
+    attempt_limit: number;
+    window_minutes: number;
+  };
+  plan: 'free' | 'pro';
+  subscription: { source: string; status: string; current_period_end: string | null; note: string | null } | null;
+  security: {
+    logins: number;
+    failed_logins: number;
+    failed_logins_recent: number;
+    password_resets: number;
+    last_failed_at: string | null;
+    terms: { document: string; version: string; at: string | null }[];
+  };
+  usage: {
+    sermons: number;
+    annotations: number;
+    highlights: number;
+    bookmarks: number;
+    ai_conversations: number;
+    reading_plans: number;
+    ai_requests: number;
+    ai_requests_month: number;
+    ai_cost_brl: number;
+    ai_last_at: string | null;
+    ai_bonus: number;
+  };
+  sessions: {
+    id: string;
+    client: string;
+    device: string | null;
+    user_agent: string | null;
+    ip: string | null;
+    trusted: boolean;
+    created_at: string | null;
+    last_used_at: string | null;
+    expires_at: string | null;
+    open: boolean;
+    revoked_reason: string | null;
+  }[];
+  events: { action: string; ip: string | null; at: string | null }[];
+};
+
+export const accountsApi = {
+  summary: () => api<AccountSummary>('/admin/accounts/summary'),
+  list: (p: { q: string; filter: AccountFilter; sort: AccountSort; offset: number }) =>
+    api<{ total: number; users: AccountRow[] }>(
+      `/admin/accounts?q=${encodeURIComponent(p.q)}&filter=${p.filter}&sort=${p.sort}&offset=${p.offset}&limit=30`,
+    ),
+  report: (id: string) => api<AccountReport>(`/admin/accounts/${id}`),
+  block: (id: string, reason: string) => api(`/admin/accounts/${id}/block`, { method: 'POST', body: { reason } }),
+  unblock: (id: string) => api(`/admin/accounts/${id}/unblock`, { method: 'POST' }),
+  unlock: (id: string) => api(`/admin/accounts/${id}/unlock`, { method: 'POST' }),
+  password: (id: string, mode: 'email' | 'temporary') =>
+    api<{ mode: string; password?: string; sent_to?: string }>(`/admin/accounts/${id}/password`, {
+      method: 'POST',
+      body: { mode },
+    }),
+  revokeAll: (id: string) => api(`/admin/accounts/${id}/sessions/revoke`, { method: 'POST' }),
+  revokeSession: (id: string, sid: string) => api(`/admin/accounts/${id}/sessions/${sid}/revoke`, { method: 'POST' }),
+};

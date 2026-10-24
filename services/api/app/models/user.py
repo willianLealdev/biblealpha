@@ -56,6 +56,9 @@ class User(UUIDPk, Timestamps, Base):
     stripe_customer_id: Mapped[str | None] = mapped_column(String(80), unique=True, index=True)
     # Exclusão de conta: dados pessoais são anonimizados e a linha permanece para integridade/auditoria
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Acesso suspenso pelo administrador: não entra, e as sessões abertas são encerradas
+    blocked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    blocked_reason: Mapped[str | None] = mapped_column(String(300))
 
     preferences: Mapped["UserPreferences"] = relationship(
         back_populates="user", uselist=False, cascade="all, delete-orphan", lazy="selectin"

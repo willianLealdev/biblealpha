@@ -2,15 +2,17 @@ import ipaddress
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 
 import jwt
 from fastapi import Depends, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core import security
 from app.core.errors import AppError
-from app.db.session import get_db
+from app.db.session import get_db, get_sessionmaker
 from app.models import AuthSession, User
 from app.services import auth as auth_service
 from app.services.audit import RequestMeta
@@ -51,9 +53,24 @@ async def current_user(
     if session is None:
         raise unauthorized
     user = await db.get(User, user_id)
-    if user is None or user.deleted_at is not None:
+    if user is None or user.deleted_at is not None or user.blocked_at is not None:
         raise unauthorized
+    await _touch(session)
     return CurrentUser(user=user, session=session)
+
+
+_TOUCH_EVERY = timedelta(seconds=60)
+
+
+async def _touch(session: AuthSession) -> None:
+    """Marca a última atividade da sessão (no máximo 1 gravação por minuto)."""
+    now = datetime.now(UTC)
+    if now - session.last_used_at < _TOUCH_EVERY:
+        return
+    async with get_sessionmaker()() as db:
+        await db.execute(update(AuthSession).where(AuthSession.id == session.id).values(last_used_at=now))
+        await db.commit()
+    session.last_used_at = now
 
 
 def require_role(*roles: str) -> Callable:

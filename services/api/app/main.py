@@ -10,6 +10,7 @@ from app.api.routes import (
     admin,
     admin_bible,
     admin_devotional,
+    admin_users,
     agenda,
     ai,
     auth,
@@ -91,6 +92,7 @@ def create_app() -> FastAPI:
     v1.include_router(admin.router)
     v1.include_router(admin_bible.router)
     v1.include_router(admin_devotional.router)
+    v1.include_router(admin_users.router)
     v1.include_router(languages.router)
     v1.include_router(integrations.router)
     v1.include_router(billing.router)
