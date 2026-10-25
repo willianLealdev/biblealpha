@@ -21,7 +21,7 @@ export default function KidsHome() {
 
   const tiles: { emoji: string; label: KidsKey; color: string; onPress?: () => void; onlyBig?: boolean }[] = [
     { emoji: '📖', label: 'stories', color: kidsColors.orange, onPress: () => router.push('/kids/stories') },
-    { emoji: '🧩', label: 'games', color: kidsColors.blue, onPress: () => router.push('/kids/memory') },
+    { emoji: '🧩', label: 'games', color: kidsColors.blue, onPress: () => router.push('/kids/games') },
     { emoji: '❓', label: 'quiz', color: kidsColors.purple, onPress: () => router.push('/kids/quiz') },
     { emoji: '⭐', label: 'verse', color: kidsColors.green, onPress: () => router.push('/kids/verses') },
     { emoji: '📜', label: 'bible', color: kidsColors.pink, onlyBig: true, onPress: () => router.push('/kids/bible') },

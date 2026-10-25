@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { gameName, GAMES, levelOf } from '@/kids/journey';
 import { LanguagePicker } from '@/kids/language-picker';
 import { useKidsProgress } from '@/kids/progress';
 import { useKidsText } from '@/kids/strings';
@@ -12,7 +13,7 @@ const question = () => ({ a: 6 + Math.floor(Math.random() * 4), b: 6 + Math.floo
 /** Área dos pais, atrás de uma conta simples que criança pequena não resolve. */
 export default function KidsParents() {
   const { t } = useKidsText();
-  const { reset, language, setLanguage } = useKidsProgress();
+  const { reset, language, setLanguage, xp, stars, seen, played } = useKidsProgress();
   const [q, setQ] = useState(question);
   const [answer, setAnswer] = useState('');
   const [open, setOpen] = useState(false);
@@ -71,6 +72,24 @@ export default function KidsParents() {
             ✅ {t(rule)}
           </Text>
         ))}
+        <View style={styles.report}>
+          <Text style={styles.reportTitle}>📊 {t('parents_progress')}</Text>
+          <Text style={styles.body}>
+            🗺️ {t('journey_level', { n: levelOf(xp).level })} · ⭐ {t('journey_stars', { n: stars })}
+          </Text>
+          <Text style={styles.body}>📖 {t('parents_stories', { n: seen.length })}</Text>
+          <Text style={styles.body}>🎮 {t('parents_games')}</Text>
+          {Object.keys(played).length ? (
+            GAMES.filter((g) => played[g.id]).map((g) => (
+              <Text key={g.id} style={styles.body}>
+                {'   '}
+                {g.emoji} {t(gameName(g.id))}: {played[g.id]}×
+              </Text>
+            ))
+          ) : (
+            <Text style={styles.body}>{'   '}{t('parents_none')}</Text>
+          )}
+        </View>
         <Text style={styles.body}>{t('languageLabel')}</Text>
         <LanguagePicker value={language} onChange={setLanguage} />
         <PillButton
@@ -115,5 +134,7 @@ const styles = StyleSheet.create({
   },
   hint: { fontFamily: kidsFonts.regular, fontSize: 15, color: kidsColors.textMuted, textAlign: 'center' },
   languages: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  report: { backgroundColor: kidsColors.bg, borderRadius: kidsRadius.md, padding: 14, gap: 4 },
+  reportTitle: { fontFamily: kidsFonts.bold, fontSize: 18, color: kidsColors.purple },
   body: { fontFamily: kidsFonts.regular, fontSize: 17, lineHeight: 25, color: kidsColors.text },
 });

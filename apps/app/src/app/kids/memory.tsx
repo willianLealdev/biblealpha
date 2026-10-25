@@ -16,7 +16,7 @@ type Size = keyof typeof SIZES;
 /** Jogo da memória: achar os pares (6, 8 ou 12 cartas). */
 export default function KidsMemory() {
   const { t, language } = useKidsText();
-  const { level, addStars } = useKidsProgress();
+  const { level, finishGame } = useKidsProgress();
   const { speak } = useSpeaker(language);
   const { width } = useWindowDimensions();
   const [size, setSize] = useState<Size>(level === 'big' ? 'medium' : 'easy');
@@ -58,7 +58,8 @@ export default function KidsMemory() {
       setOpen([]);
       setMessage(t('pairFound', { name: cards[a].name }));
       speak(cards[a].name);
-      if (total === cards.length / 2) addStars(SIZES[size]);
+      // Conta na Jornada: estrelas pelo tamanho do jogo (fácil 1, médio 2, difícil 3)
+      if (total === cards.length / 2) finishGame('memory', size === 'hard' ? 3 : size === 'medium' ? 2 : 1);
     } else {
       // Mostra as duas por um instante e vira de volta
       timer.current = setTimeout(() => setOpen([]), 900);
@@ -70,7 +71,7 @@ export default function KidsMemory() {
 
   return (
     <KidsScreen>
-      <BackButton />
+      <BackButton to="/kids/games" />
       <Text style={styles.title} accessibilityRole="header">
         🧩 {t('memoryTitle')}
       </Text>

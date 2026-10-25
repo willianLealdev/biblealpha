@@ -11,8 +11,17 @@ const KEY = 'bakids.progress';
 
 // stars: estrelas ganhas no quiz e nos jogos (só para comemorar; nada é cobrado nem comparado)
 // language: idioma escolhido na área dos pais (null = o do aparelho)
-type Progress = { level: KidsLevel; seen: string[]; stars: number; language: KidsLanguage | null };
-const EMPTY: Progress = { level: 'small', seen: [], stars: 0, language: null };
+// xp e played: Jornada Bíblica (nível e conquistas), também só no aparelho
+type Progress = {
+  level: KidsLevel;
+  seen: string[];
+  stars: number;
+  language: KidsLanguage | null;
+  xp: number;
+  played: Record<string, number>;
+};
+const EMPTY: Progress = { level: 'small', seen: [], stars: 0, language: null, xp: 0, played: {} };
+const count = (v: unknown) => (Number.isFinite(v) ? Math.max(0, Math.min(999999, Math.floor(v as number))) : 0);
 const LANGUAGE = /^[a-z]{2,3}(-[A-Z]{2})?$/;
 
 async function load(): Promise<Progress> {
@@ -22,7 +31,12 @@ async function load(): Promise<Progress> {
     return {
       level: data?.level === 'big' ? 'big' : 'small',
       seen: Array.isArray(data?.seen) ? data.seen.filter((s: unknown) => typeof s === 'string').slice(-300) : [],
-      stars: Number.isFinite(data?.stars) ? Math.max(0, Math.min(99999, Math.floor(data.stars))) : 0,
+      stars: count(data?.stars),
+      xp: count(data?.xp),
+      played:
+        data?.played && typeof data.played === 'object'
+          ? Object.fromEntries(Object.entries(data.played as Record<string, unknown>).slice(0, 100).map(([k, v]) => [k, count(v)]))
+          : {},
       language: typeof data?.language === 'string' && LANGUAGE.test(data.language) ? data.language : null,
     };
   } catch {
@@ -47,6 +61,8 @@ type Ctx = Progress & {
   setLevel: (level: KidsLevel) => void;
   markSeen: (slug: string) => void;
   addStars: (n: number) => void;
+  /** Terminou um jogo: estrelas (0 a 3) e pontos da jornada. */
+  finishGame: (game: string, stars: number) => void;
   setLanguage: (language: KidsLanguage | null) => void;
   reset: () => void;
 };
@@ -77,8 +93,19 @@ export function KidsProgressProvider({ children }: { children: ReactNode }) {
       ...progress,
       ready,
       setLevel: (level) => update((p) => ({ ...p, level })),
-      markSeen: (slug) => update((p) => (p.seen.includes(slug) ? p : { ...p, seen: [...p.seen, slug] })),
-      addStars: (n) => update((p) => ({ ...p, stars: p.stars + Math.max(0, n) })),
+      // Ler uma história até o fim pela primeira vez vale 20 pontos da jornada
+      markSeen: (slug) => update((p) => (p.seen.includes(slug) ? p : { ...p, seen: [...p.seen, slug], xp: p.xp + 20 })),
+      addStars: (n) => update((p) => ({ ...p, stars: p.stars + Math.max(0, n), xp: p.xp + Math.max(0, n) * 10 })),
+      finishGame: (game, stars) =>
+        update((p) => {
+          const won = Math.max(0, Math.min(3, Math.round(stars)));
+          return {
+            ...p,
+            stars: p.stars + won,
+            xp: p.xp + 10 + won * 10,
+            played: { ...p.played, [game]: (p.played[game] ?? 0) + 1 },
+          };
+        }),
       setLanguage: (language) => update((p) => ({ ...p, language })),
       reset: () => {
         store(null);
