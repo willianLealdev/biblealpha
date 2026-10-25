@@ -48,8 +48,28 @@ TRANSLATE_SYSTEM = (
     "speaker would see it in a mobile app. Keep placeholders like {name} or {pct} exactly as they are, "
     "keep markdown, emojis and line breaks. Use the usual Christian terminology of that language "
     "(for example the common names of Bible books in the most used Protestant Bible of that language). "
+    "Never translate brand names: BibleAlpha, BibleAlpha Kids and the word Kids stay exactly as written "
+    "in every language (for example, never turn Kids into children). "
     "Return every key you received, with the same key."
 )
+
+# Marca "Kids": nunca é traduzida. Textos que são só o nome ficam idênticos ao inglês; frases que citam o nome
+# precisam manter a palavra "Kids".
+BRAND_ONLY = {"Kids", "BibleAlpha Kids"}
+
+
+def _protect_brand(source: dict[str, str], texts: dict[str, str]) -> dict[str, str]:
+    """Conserta traduções que mexeram na marca Kids (também as já salvas)."""
+    fixed = dict(texts)
+    for key, en in source.items():
+        if key not in fixed:
+            continue
+        if en.strip() in BRAND_ONLY:
+            fixed[key] = en
+        elif "Kids" in en and "Kids" not in fixed[key]:
+            del fixed[key]  # frase sem a marca: volta a ser traduzida na próxima rodada
+    return fixed
+
 
 _SCHEMA = {
     "type": "object",
@@ -135,7 +155,7 @@ async def _translate(db: AsyncSession, user_id, code: str, flat: dict[str, str])
             if key in part and isinstance(text, str) and text.strip():
                 if sorted(_PLACEHOLDER.findall(text)) == sorted(_PLACEHOLDER.findall(part[key])):
                     out[key] = text
-    return out
+    return _protect_brand(flat, out)
 
 
 SOURCE_KEY = "ui.source"
@@ -263,12 +283,15 @@ async def get_language(code: str, response: Response, db: AsyncSession = Depends
         raise AppError(404, "language_not_found", "Language not found")
     data = await get_setting(db, _DICT_KEY.format(code=code))
     response.headers["Cache-Control"] = "no-cache"
+    # Idiomas traduzidos antes da regra da marca Kids: conserta na entrega
+    source = _flatten((await get_setting(db, SOURCE_KEY)).get("dictionary") or {})
+    texts = _protect_brand(source, _flatten(data.get("dictionary", {})))
     return {
         "code": code,
         "name": meta["name"],
         "version": data.get("version", 0),
         "direction": meta.get("direction", "ltr"),
-        "dictionary": data.get("dictionary", {}),
+        "dictionary": _unflatten(texts),
         "books": data.get("books", {}),
     }
 

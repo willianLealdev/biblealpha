@@ -141,3 +141,24 @@ async def test_country_is_saved_on_sign_up_and_profile(client):
     assert (
         await client.patch("/api/v1/me", headers=bearer(tokens), json={"country": "brasil"})
     ).status_code == 422
+
+
+def test_kids_brand_is_never_translated():
+    from app.api.routes.languages import _protect_brand
+
+    source = {
+        "menu.kids": "Kids",
+        "kidsUi.appName": "BibleAlpha Kids",
+        "kidsUi.intro": "BibleAlpha Kids is safe",
+        "a": "Hi",
+    }
+    translated = {
+        "menu.kids": "Crianças",
+        "kidsUi.appName": "BibleAlpha Crianças",
+        "kidsUi.intro": "É seguro",
+        "a": "Oi",
+    }
+    fixed = _protect_brand(source, translated)
+    assert fixed["menu.kids"] == "Kids" and fixed["kidsUi.appName"] == "BibleAlpha Kids"
+    assert "kidsUi.intro" not in fixed  # frase sem a marca volta para tradução
+    assert fixed["a"] == "Oi"
