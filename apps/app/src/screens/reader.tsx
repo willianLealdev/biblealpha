@@ -530,7 +530,7 @@ function Action({ icon, label, onPress }: { icon: any; label: string; onPress: (
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={onPress} style={styles.action}>
       <Ionicons name={icon} size={22} color={colors.gold} />
-      <RNText style={{ color: colors.text, fontFamily: fonts.body, fontSize: 12 }} numberOfLines={1}>
+      <RNText style={{ color: colors.text, fontFamily: fonts.body, fontSize: 12, textAlign: 'center' }} numberOfLines={2}>
         {label}
       </RNText>
     </Pressable>
@@ -612,6 +612,7 @@ const styles = StyleSheet.create({
   swatch: { width: 34, height: 34, borderRadius: 17 },
   swatchClear: { borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   swatchLabel: { fontFamily: fonts.body, fontSize: 11, textAlign: 'center' },
-  actions: { flexDirection: 'row', justifyContent: 'space-around' },
-  action: { alignItems: 'center', gap: 4, minWidth: 64, paddingVertical: 4 },
+  // Os botões quebram em linhas (4 por linha): no celular, 7 botões lado a lado não cabem e ficavam cortados
+  actions: { flexDirection: 'row', flexWrap: 'wrap', rowGap: 6 },
+  action: { alignItems: 'center', gap: 4, width: '25%', paddingVertical: 6 },
 });
