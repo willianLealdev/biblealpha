@@ -1308,6 +1308,8 @@ const es: DeepPartial<Dictionary> = {
     megabytes: '{mb} MB',
     changePoster: 'Cambiar portada',
     removeVideo: 'Borrar video',
+    publishAllStories: 'Publicar todas las historias ({n})',
+    publishedAllStories: '{n} historias publicadas. Ya aparecen en /kids.',
     webOnly: 'Sube videos desde el navegador de la computadora (biblealpha.com/admin/kids/videos).',
   },
   errors: {

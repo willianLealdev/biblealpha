@@ -312,6 +312,31 @@ async def set_status(
     return await _detail(db, row)
 
 
+@router.post("/stories/publish-all")
+async def publish_all_stories(
+    language: Language | None = None,
+    cu: CurrentUser = Depends(admin_only),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Publica de uma vez as histórias em rascunho ou em revisão (que tenham título e páginas)."""
+    query = select(KidsStory).where(KidsStory.status != "published")
+    if language:
+        query = query.where(KidsStory.language == language)
+    published = 0
+    for row in list(await db.scalars(query)):
+        if not row.title.strip() or not await service.pages_of(db, row.id):
+            continue
+        row.status, row.published_at, row.updated_at = "published", datetime.now(UTC), datetime.now(UTC)
+        _log(db, cu, "kids.story_published", row)
+        published += 1
+    await db.commit()
+    if published:
+        # Os idiomas que já têm leitores começam a ser traduzidos em segundo plano
+        for lang in await translate.languages_in_use(db):
+            translate.start(lang)
+    return {"published": published}
+
+
 @router.delete("/stories/{story_id}", status_code=204)
 async def delete_story(
     story_id: uuid.UUID, cu: CurrentUser = Depends(admin_only), db: AsyncSession = Depends(get_db)

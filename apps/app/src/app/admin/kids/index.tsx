@@ -56,6 +56,23 @@ export default function AdminKids() {
     }
   }
 
+  async function publishAll() {
+    setImporting(true);
+    setError(null);
+    setNotice(null);
+    try {
+      const { published } = await kidsAdminApi.publishAll();
+      setNotice(t('adminKids.publishedAllStories', { n: published }));
+      const r = await kidsAdminApi.list(filter === 'all' ? undefined : filter);
+      setStories(r.stories);
+      setTotals(r.totals);
+    } catch (e) {
+      setError(errorMessage(e));
+    } finally {
+      setImporting(false);
+    }
+  }
+
   async function importStarter() {
     setImporting(true);
     setError(null);
@@ -90,6 +107,14 @@ export default function AdminKids() {
       <Card>
         <Text variant="small">{t('adminKids.importHint')}</Text>
         <Button kind="secondary" icon="download-outline" title={t('adminKids.importStarter')} onPress={importStarter} loading={importing} />
+        {totals && totals.draft + totals.review > 0 ? (
+          <Button
+            icon="megaphone-outline"
+            title={t('adminKids.publishAllStories', { n: totals.draft + totals.review })}
+            onPress={publishAll}
+            loading={importing}
+          />
+        ) : null}
       </Card>
       {notice ? <Notice kind="success">{notice}</Notice> : null}
       {error ? <Notice kind="error">{error}</Notice> : null}

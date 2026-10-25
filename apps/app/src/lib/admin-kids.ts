@@ -66,6 +66,7 @@ export const kidsAdminApi = {
   setStatus: (id: string, status: KidsStatus) =>
     api<KidsStoryDetail>(`/admin/kids/stories/${id}/status`, { method: 'POST', body: { status } }),
   remove: (id: string) => api(`/admin/kids/stories/${id}`, { method: 'DELETE' }),
+  publishAll: () => api<{ published: number }>('/admin/kids/stories/publish-all', { method: 'POST' }),
   importStarter: (language: KidsLanguage = 'pt-BR') =>
     api<{ created: number }>(`/admin/kids/stories/import?language=${language}`, { method: 'POST' }),
   verses: (language: KidsLanguage) => api<{ verses: KidsVerse[] }>(`/admin/kids/verses?language=${language}`),

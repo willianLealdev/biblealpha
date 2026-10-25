@@ -1306,6 +1306,8 @@ const en: Dictionary = {
     megabytes: '{mb} MB',
     changePoster: 'Change cover',
     removeVideo: 'Delete video',
+    publishAllStories: 'Publish all stories ({n})',
+    publishedAllStories: '{n} stories published. They now show on /kids.',
     webOnly: 'Upload videos from the computer browser (biblealpha.com/admin/kids/videos).',
   },
   errors: {

@@ -1304,6 +1304,8 @@ const ptBR = {
     megabytes: '{mb} MB',
     changePoster: 'Trocar capa',
     removeVideo: 'Apagar vídeo',
+    publishAllStories: 'Publicar todas as histórias ({n})',
+    publishedAllStories: '{n} histórias publicadas. Já aparecem em /kids.',
     webOnly: 'Envie vídeos pelo navegador do computador (biblealpha.com/admin/kids/videos).',
   },
   errors: {

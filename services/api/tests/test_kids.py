@@ -376,3 +376,35 @@ async def test_video_rejects_other_files(client):
         "/api/v1/admin/kids/videos", headers=h, json={"title": "x", "mime": "application/zip", "size": 5}
     )
     assert r.status_code == 422
+
+
+async def test_publish_all_stories_at_once(client, monkeypatch):
+    from app.kids import catalog
+
+    def seed(n):
+        return {
+            "seed": f"s{n}",
+            "verse_key_start": 1006013,
+            "verse_key_end": 1006022,
+            "level": "small",
+            "title": f"História {n}",
+            "summary": "x",
+            "pages": [{"text": "Texto.", "image_prompt": ""}],
+            "lesson": "Lição.",
+            "family_question": "Pergunta?",
+            "quiz": [{"question": "Q?", "options": ["a", "b"], "answer": 0, "explanation": ""}],
+        }
+
+    monkeypatch.setattr(catalog, "starter_stories", lambda language: [seed(1), seed(2), seed(3)])
+    h = await _admin(client)
+    assert (await client.post(f"{ADMIN}/import", headers=h)).json() == {"created": 3}
+    assert (await client.get(PUBLIC)).json()["stories"] == []
+    assert (await client.post(f"{ADMIN}/publish-all", headers=h)).json() == {"published": 3}
+    assert (await client.post(f"{ADMIN}/publish-all", headers=h)).json() == {"published": 0}
+    listed = (await client.get(PUBLIC)).json()["stories"]
+    assert sorted(s["title"] for s in listed) == ["História 1", "História 2", "História 3"]
+    assert all(s["quiz"] == 1 for s in listed)
+
+    await register(client, "bia@example.com", "Bia")
+    bia = bearer(await login(client, "bia@example.com"))
+    assert (await client.post(f"{ADMIN}/publish-all", headers=bia)).status_code == 403
