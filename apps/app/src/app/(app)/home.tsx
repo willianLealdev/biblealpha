@@ -28,6 +28,7 @@ const SHORTCUTS: { label: TranslationKey; icon: IconName; href: string }[] = [
 // Formas de aprender além da leitura simples
 const LEARN: { title: TranslationKey; hint: TranslationKey; icon: IconName; href: string }[] = [
   { title: 'quiz.title', hint: 'home.quizHint', icon: 'school-outline', href: '/bible/quiz' },
+  { title: 'hymns.harp', hint: 'hymns.count', icon: 'musical-notes-outline', href: '/bible/hymns' },
   { title: 'visual.title', hint: 'home.visualHint', icon: 'map-outline', href: 'visual' },
   { title: 'home.askAI', hint: 'home.askHint', icon: 'sparkles-outline', href: '/study' },
   { title: 'home.devotional', hint: 'home.devotionalHint', icon: 'sunny-outline', href: '/devotional' },
@@ -151,15 +152,15 @@ export default function Home() {
                 {plan.plan.title}
               </RNText>
               <Text variant="small">
-                {t('devotional.dayOf', { day: plan.today.day, total: plan.plan.days })} · {Math.round(plan.progress * 100)}%
+                {t('devotional.dayOf', { day: plan.next_unread ?? plan.plan.days, total: plan.plan.days })} · {Math.round(plan.progress)}%
               </Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
           </Card>
         </Pressable>
       ) : null}
-      {/* Chamada em destaque para os planos de leitura */}
-      <Pressable accessibilityRole="button" onPress={() => router.push('/devotionals/plans')}>
+      {/* Chamada em destaque: abre a página Aprender (livros e planos em pôsteres) */}
+      <Pressable accessibilityRole="button" onPress={() => router.push('/bible/learn')}>
         <View style={{ borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1.5, borderColor: colors.gold, padding: 18, flexDirection: 'row', alignItems: 'center', gap: 14 }}>
           <LinearGradientBg colors={['#3a2a10', '#120d06']} />
           <View style={{ width: 52, height: 52, borderRadius: 26, backgroundColor: colors.gold, alignItems: 'center', justifyContent: 'center' }}>

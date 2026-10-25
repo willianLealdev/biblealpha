@@ -17,6 +17,10 @@ export default function BibleStack() {
       <Stack.Screen name="verse" options={{ title: t('bible.deepen') }} />
       <Stack.Screen name="quiz" options={{ title: t('quiz.title') }} />
       <Stack.Screen name="visual" options={{ title: t('visual.title') }} />
+      <Stack.Screen name="learn" options={{ title: t('learn.title') }} />
+      <Stack.Screen name="hymns" options={{ title: t('hymns.harp') }} />
+      <Stack.Screen name="hymns/[n]" options={{ title: t('hymns.harp') }} />
+      <Stack.Screen name="share-image" options={{ title: t('shareImage.title') }} />
       <Stack.Screen name="word/[strong]" options={{ title: t('bible.tabOriginal') }} />
     </Stack>
   );

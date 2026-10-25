@@ -2,12 +2,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Linking, Pressable, Text as RNText, View } from 'react-native';
-import Svg, { Circle, Rect, Text as SvgText } from 'react-native-svg';
+import { ActivityIndicator, Linking, Modal, Pressable, Text as RNText, useWindowDimensions, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { bookName } from '@/bible/reference';
 import { Button, Card, Notice, Screen, Text } from '@/components/ui';
+import { MindMap, type MindMapData } from '@/components/mind-map';
 import { PassagePicker } from '@/components/passage-picker';
+import { LayerSwitch, type MapLayer, type MapMarker, TileMap } from '@/components/tile-map';
 import { useI18n, type TranslationKey } from '@/i18n';
 import { API_BASE, api, ApiError } from '@/lib/api';
 import { useTheme } from '@/theme';
@@ -26,6 +28,7 @@ type Study = {
   images: string[];
   places: Place[];
   credits: string[];
+  mind_map?: MindMapData;
 };
 const LINK_TYPES: Record<string, TranslationKey> = {
   quotation: 'visual.linkQuotation',
@@ -45,6 +48,7 @@ export default function VisualStudy() {
   const { colors } = useTheme();
   const [data, setData] = useState<Response | null>(null);
   const [busy, setBusy] = useState(false);
+  const [mapBusy, setMapBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -69,6 +73,18 @@ export default function VisualStudy() {
       setError(e instanceof ApiError ? e.code : 'generic');
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function makeMindMap() {
+    setMapBusy(true);
+    setError(null);
+    try {
+      setData(await api<Response>(`/visual/${book}/${chapter}/mind-map`, { method: 'POST', timeoutMs: 180_000 }));
+    } catch (e) {
+      setError(e instanceof ApiError ? e.code : 'generic');
+    } finally {
+      setMapBusy(false);
     }
   }
 
@@ -135,6 +151,23 @@ export default function VisualStudy() {
             {s.key_verse ? (
               <RNText style={{ color: colors.gold, fontFamily: 'Literata_400Regular', fontStyle: 'italic', fontSize: 16, lineHeight: 24 }}>{s.key_verse}</RNText>
             ) : null}
+          </Card>
+
+          <Card>
+            <Text variant="heading">{t('visual.mindMap')}</Text>
+            {s.mind_map ? (
+              <MindMap data={s.mind_map} />
+            ) : mapBusy ? (
+              <View style={{ alignItems: 'center', gap: 6 }}>
+                <ActivityIndicator color={colors.gold} />
+                <Text variant="small">{t('visual.mindMapMaking')}</Text>
+              </View>
+            ) : (
+              <>
+                <Text variant="small">{t('visual.mindMapIntro')}</Text>
+                <Button kind="secondary" icon="git-network-outline" title={t('visual.mindMapMake')} onPress={makeMindMap} />
+              </>
+            )}
           </Card>
 
           {s.places.length ? <PlacesMap places={s.places} /> : null}
@@ -220,42 +253,26 @@ export default function VisualStudy() {
   );
 }
 
-/** Mapa simples dos lugares do capítulo (coordenadas do OpenBible.info), com link para o mapa completo. */
+/** Lugares do capítulo (coordenadas do OpenBible.info) num mapa de verdade; tocar num lugar abre o mapa da área. */
 function PlacesMap({ places }: { places: Place[] }) {
   const { t } = useI18n();
   const { colors } = useTheme();
-  const lons = places.map((p) => p.lon);
-  const lats = places.map((p) => p.lat);
-  // Margem à direita para os nomes caberem
-  const pad = 0.35;
-  const minLon = Math.min(...lons) - pad;
-  const maxLon = Math.max(...lons) + pad * 3;
-  const minLat = Math.min(...lats) - pad;
-  const maxLat = Math.max(...lats) + pad;
-  const W = 600;
-  const H = Math.max(220, Math.min(420, (W * (maxLat - minLat)) / Math.max(0.5, maxLon - minLon)));
-  const x = (lon: number) => ((lon - minLon) / (maxLon - minLon)) * W;
-  const y = (lat: number) => H - ((lat - minLat) / (maxLat - minLat)) * H;
+  const [layer, setLayer] = useState<MapLayer>('satellite');
+  const [open, setOpen] = useState<Place | null>(null);
+  const markers: MapMarker[] = places.map((p) => ({ id: p.id, lat: p.lat, lon: p.lon, label: p.label ?? p.name }));
+  const pick = (m: MapMarker) => setOpen(places.find((p) => p.id === m.id) ?? null);
   return (
     <Card>
       <Text variant="heading">{t('visual.map')}</Text>
-      <Svg width="100%" height={H * 0.6} viewBox={`0 0 ${W} ${H}`}>
-        <Rect x={0} y={0} width={W} height={H} rx={12} fill={colors.surfaceAlt} />
-        {places.map((p) => (
-          <Circle key={p.id} cx={x(p.lon)} cy={y(p.lat)} r={10} fill={colors.gold} />
-        ))}
-        {places.map((p) => (
-          <SvgText key={`${p.id}-t`} x={x(p.lon) + 14} y={y(p.lat) + 8} fill={colors.text} fontSize={26} fontWeight="600">
-            {p.label ?? p.name}
-          </SvgText>
-        ))}
-      </Svg>
+      <LayerSwitch value={layer} onChange={setLayer} />
+      <TileMap markers={markers} height={280} layer={layer} onMarkerPress={pick} />
+      <Text variant="small">{t('visual.mapHint')}</Text>
       {places.map((p) => (
         <Pressable
           key={p.id}
-          accessibilityRole="link"
-          onPress={() => Linking.openURL(`https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}#map=11/${p.lat}/${p.lon}`)}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          accessibilityRole="button"
+          onPress={() => setOpen(p)}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 4 }}>
           <Ionicons name="location-outline" size={16} color={colors.gold} />
           <RNText style={{ flex: 1, color: colors.text, fontFamily: fonts.body }}>
             {p.label ?? p.name} · v. {p.verse}
@@ -263,6 +280,65 @@ function PlacesMap({ places }: { places: Place[] }) {
           <RNText style={{ color: colors.gold, fontFamily: fonts.bodyMedium, fontSize: 13 }}>{t('visual.openMap')}</RNText>
         </Pressable>
       ))}
+      {open ? <AreaMap place={open} markers={markers} onClose={() => setOpen(null)} onPick={pick} /> : null}
     </Card>
+  );
+}
+
+/** Mapa da área de um lugar, em tela cheia: arrastar, aproximar e trocar a camada. */
+function AreaMap({
+  place,
+  markers,
+  onClose,
+  onPick,
+}: {
+  place: Place;
+  markers: MapMarker[];
+  onClose: () => void;
+  onPick: (m: MapMarker) => void;
+}) {
+  const { t } = useI18n();
+  const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const [layer, setLayer] = useState<MapLayer>('satellite');
+  const mapHeight = Math.max(280, height - insets.top - insets.bottom - 170);
+  return (
+    <Modal visible animationType="slide" onRequestClose={onClose}>
+      <View style={{ flex: 1, backgroundColor: colors.bg, paddingTop: insets.top + 8, paddingBottom: insets.bottom + 8, gap: 10 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 16 }}>
+          <Ionicons name="location" size={22} color={colors.gold} />
+          <View style={{ flex: 1 }}>
+            <Text variant="heading" numberOfLines={1}>
+              {place.label ?? place.name}
+            </Text>
+            <Text variant="small">v. {place.verse}</Text>
+          </View>
+          <Pressable accessibilityRole="button" accessibilityLabel={t('bible.close')} onPress={onClose} hitSlop={12}>
+            <Ionicons name="close" size={26} color={colors.text} />
+          </Pressable>
+        </View>
+        <View style={{ paddingHorizontal: 16 }}>
+          <LayerSwitch value={layer} onChange={setLayer} />
+        </View>
+        <TileMap
+          key={place.id}
+          markers={markers}
+          height={mapHeight}
+          layer={layer}
+          draggable
+          rounded={false}
+          highlight={place.id}
+          initial={{ center: { lat: place.lat, lon: place.lon }, zoom: 11 }}
+          onMarkerPress={onPick}
+        />
+        <Pressable
+          accessibilityRole="link"
+          onPress={() => Linking.openURL(`https://www.openstreetmap.org/?mlat=${place.lat}&mlon=${place.lon}#map=12/${place.lat}/${place.lon}`)}
+          style={{ alignSelf: 'center', padding: 6 }}>
+          <RNText style={{ color: colors.gold, fontFamily: fonts.bodyMedium }}>{t('visual.fullMap')}</RNText>
+        </Pressable>
+      </View>
+    </Modal>
   );
 }

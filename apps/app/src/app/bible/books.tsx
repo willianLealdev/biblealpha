@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text as RNText, View } from 'react-native';
@@ -66,6 +67,17 @@ export default function BookPicker() {
 
   return (
     <Screen>
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => router.push('/bible/hymns')}
+        style={({ pressed }) => [styles.harp, { borderColor: colors.gold, backgroundColor: pressed ? colors.surfaceAlt : colors.surface }]}>
+        <Ionicons name="musical-notes" size={26} color={colors.gold} />
+        <View style={{ flex: 1 }}>
+          <RNText style={{ color: colors.text, fontFamily: fonts.bodyBold, fontSize: 16 }}>{t('hymns.harp')}</RNText>
+          <RNText style={{ color: colors.textMuted, fontFamily: fonts.body, fontSize: 13 }}>{t('hymns.count')}</RNText>
+        </View>
+        <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+      </Pressable>
       <Segmented
         value={testament}
         onChange={setTestament}
@@ -102,6 +114,7 @@ export default function BookPicker() {
 }
 
 const styles = StyleSheet.create({
+  harp: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 14, borderRadius: radius.md, borderWidth: 1.5 },
   books: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   book: {
     width: '48%',

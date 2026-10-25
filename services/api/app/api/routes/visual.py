@@ -62,6 +62,22 @@ async def create_study(
     return {"status": "ready", **(await service.allowance(db, cu.user)), "study": _out(row)}
 
 
+@router.post("/{book}/{chapter}/mind-map")
+async def create_mind_map(
+    book: str, chapter: int, cu: CurrentUser = Depends(current_user), db: AsyncSession = Depends(get_db)
+) -> dict:
+    """Mapa mental para um estudo que já existe (feito uma vez por idioma; depois fica para todos)."""
+    if "admin" not in cu.user.role_names:
+        await ratelimit.hit(f"mindmap:{cu.user.id}", limit=5, window_seconds=600)
+    b = bible_service.resolve_book_param(book)
+    locale = await devotional_locale(db, cu.user.locale)
+    row = await service.find(db, b, chapter, locale) or await service.find(db, b, chapter, BASE_LOCALE)
+    if row is None:
+        raise AppError(404, "study_not_found", "Generate the visual study first")
+    row = await service.add_mind_map(db, cu.user, row)
+    return {"status": "ready", **(await service.allowance(db, cu.user)), "study": _out(row)}
+
+
 @router.delete("/{book}/{chapter}")
 async def reset_study(
     book: str,

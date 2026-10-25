@@ -13,6 +13,8 @@ export default function DevotionalsStack() {
       <Stack.Screen name="history" options={{ title: t('devotional.history') }} />
       <Stack.Screen name="plans" options={{ title: t('devotional.explorePlans') }} />
       <Stack.Screen name="plan/[code]" options={{ title: t('devotional.schedule') }} />
+      <Stack.Screen name="read" options={{ title: t('journey.reading') }} />
+      <Stack.Screen name="done" options={{ title: t('journey.congratsTitle') }} />
     </Stack>
   );
 }

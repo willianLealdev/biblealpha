@@ -1,4 +1,4 @@
-from sqlalchemy import delete, insert
+from sqlalchemy import delete, insert, select
 
 from app.bible import original
 from app.db.session import get_sessionmaker
@@ -72,5 +72,31 @@ async def test_visual_study_generate_cache_and_quota(client):
         async with get_sessionmaker()() as db:
             for model in (VisualStudy, PlaceMention, BiblePlace):
                 await db.execute(delete(model))
+            await db.execute(delete(AIUsage))
+            await db.commit()
+
+
+async def test_mind_map(client):
+    try:
+        await register(client)
+        h = bearer(await login(client))
+        # Sem estudo, não há o que mapear
+        assert (await client.post("/api/v1/visual/LUK/4/mind-map", headers=h)).status_code == 404
+        # Estudo novo já vem com o mapa mental
+        study = (await client.post("/api/v1/visual/LUK/4", headers=h)).json()["study"]["content"]
+        assert study["mind_map"]["center"] and len(study["mind_map"]["branches"]) == 3
+        # Estudo antigo (sem mapa): gera só o mapa e guarda no estudo
+        async with get_sessionmaker()() as db:
+            row = await db.scalar(select(VisualStudy).where(VisualStudy.chapter == 4))
+            row.content = {k: v for k, v in row.content.items() if k != "mind_map"}
+            await db.commit()
+        r = await client.post("/api/v1/visual/LUK/4/mind-map", headers=h)
+        assert r.status_code == 200, r.text
+        assert r.json()["study"]["content"]["mind_map"]["branches"][0]["children"][0]["reference"]
+        again = (await client.get("/api/v1/visual/LUK/4", headers=h)).json()["study"]["content"]
+        assert again["mind_map"] and again["summary"] == study["summary"]
+    finally:
+        async with get_sessionmaker()() as db:
+            await db.execute(delete(VisualStudy))
             await db.execute(delete(AIUsage))
             await db.commit()

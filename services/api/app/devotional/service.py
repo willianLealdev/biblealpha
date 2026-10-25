@@ -17,7 +17,15 @@ from app.core.errors import AppError
 from app.core.locales import LOCALE_PATTERN, content_lang, language_name
 from app.devotional.catalog import PASSAGES, THEMES, item_for_day, reference
 from app.devotional.prompts import SCHEMA, SYSTEM
-from app.models import BibleTranslation, BibleVerse, DailyDevotional, User, UserDevotional
+from app.models import (
+    BibleTranslation,
+    BibleVerse,
+    DailyDevotional,
+    PlanDayDone,
+    PlanEnrollment,
+    User,
+    UserDevotional,
+)
 from app.services.settings import get_setting
 
 log = logging.getLogger("biblealpha.devotional")
@@ -428,6 +436,13 @@ async def streak(db: AsyncSession, user_id: uuid.UUID, today: date | None = None
             )
         )
     )
+    # Dia de plano de leitura concluído também conta na sequência (no mesmo fuso de "hoje")
+    done_at = await db.scalars(
+        select(PlanDayDone.done_at)
+        .join(PlanEnrollment, PlanEnrollment.id == PlanDayDone.enrollment_id)
+        .where(PlanEnrollment.user_id == user_id)
+    )
+    days |= {d.astimezone().date() for d in done_at}
     current = 0
     cursor = today if today in days else today - timedelta(days=1)
     while cursor in days:

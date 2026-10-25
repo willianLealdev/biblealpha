@@ -20,7 +20,16 @@ PUBLIC = {
     "/api/v1/billing/webhook",
     "/api/v1/billing/plans",
 }
-PUBLIC_PREFIXES = ("/api/v1/bible", "/api/v1/languages", "/api/v1/visual/images", "/api/v1/legal")
+PUBLIC_PREFIXES = (
+    "/api/v1/bible",
+    "/api/v1/languages",
+    "/api/v1/visual/images",
+    "/api/v1/legal",
+    # Conteúdo aberto, só leitura: Harpa Cristã, fundos prontos da imagem do versículo e capas do Aprender
+    "/api/v1/hymns",
+    "/api/v1/share/presets",
+    "/api/v1/learn/covers",
+)
 # Telão: abre sem login; a tela lê o estado com o token dela, não com login
 PUBLIC_SCREEN = (
     "/api/v1/screens",

@@ -119,6 +119,21 @@ async function parse<T>(response: Response): Promise<T> {
   return data as T;
 }
 
+/** Como `api`, mas devolve a resposta crua (para baixar arquivos, ex.: imagens). Lança ApiError se falhar. */
+export async function apiRaw(path: string, options: RequestOptions = {}): Promise<Response> {
+  let response: Response;
+  try {
+    response = await send(path, options);
+    if (response.status === 401 && options.auth !== false && accessToken && (await refreshSession())) {
+      response = await send(path, options);
+    }
+  } catch {
+    throw new ApiError(0, 'network_error', 'Network request failed');
+  }
+  if (!response.ok) await parse(response);
+  return response;
+}
+
 /** Chamada à API. Renova o access token uma vez, automaticamente, quando ele expira. */
 export async function api<T>(path: string, options: RequestOptions = {}): Promise<T> {
   let response: Response;

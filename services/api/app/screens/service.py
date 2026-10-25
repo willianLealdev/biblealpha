@@ -351,7 +351,8 @@ async def _image(db: AsyncSession, user: User, plan: str, prompt: str) -> tuple[
         "model": cfg["model"],
         "prompt": IMAGE_STYLE + prompt,
         "size": cfg["size"],
-        "quality": cfg["quality"],
+        # Regra do sistema: toda imagem gerada é em qualidade média
+        "quality": "medium",
         "n": 1,
         "output_format": "webp",
         "output_compression": 80,

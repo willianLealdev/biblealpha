@@ -87,7 +87,15 @@
           "speechRecognitionPermission": "BibleAlpha turns your voice into text when you dictate messages and questions."
         }
       ],
-      "expo-image"
+      "expo-image",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "BibleAlpha uses the photo you choose as the background of your verse image.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

@@ -347,3 +347,15 @@ async def test_daily_made_without_ai_is_redone_when_ai_returns(client):
         await db.commit()
         full = await service.daily(db, "pt-BR")
         assert full.id == short.id and not service.incomplete(full) and full.model != "none"
+
+
+async def test_plan_day_counts_in_streak(client):
+    from tests.conftest import bearer, login, register
+
+    await register(client)
+    h = bearer(await login(client))
+    e = (await client.post("/api/v1/me/reading-plans", json={"code": "miracles-30"}, headers=h)).json()
+    assert (await client.get("/api/v1/me/devotionals/stats", headers=h)).json()["current_streak"] == 0
+    await client.post(f"/api/v1/me/reading-plans/{e['id']}/days/1", json={"done": True}, headers=h)
+    stats = (await client.get("/api/v1/me/devotionals/stats", headers=h)).json()
+    assert stats["current_streak"] == 1 and stats["calendar"][-1]["done"]

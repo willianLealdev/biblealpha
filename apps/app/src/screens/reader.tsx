@@ -435,6 +435,15 @@ export default function Reader() {
             />
             <Action icon={copied ? 'checkmark' : 'copy-outline'} label={copied ? t('bible.copied') : t('bible.copy')} onPress={copy} />
             <Action icon="share-outline" label={t('bible.share')} onPress={share} />
+            <Action
+              icon="image-outline"
+              label={t('shareImage.action')}
+              onPress={() => {
+                const body = selText.map((v) => (selText.length > 1 ? `${v.verse} ${v.text}` : v.text)).join(' ');
+                setSelected([]);
+                router.push({ pathname: '/bible/share-image', params: { text: body, reference: `${selLabel} (${abbr})` } });
+              }}
+            />
           </View>
         </View>
       ) : null}

@@ -17,11 +17,14 @@ from app.api.routes import (
     bible,
     billing,
     devotional,
+    hymns,
     integrations,
     languages,
+    learn,
     me,
     screens,
     sermons,
+    share,
     study,
     system,
     visual,
@@ -100,6 +103,9 @@ def create_app() -> FastAPI:
     v1.include_router(sermons.router)
     v1.include_router(visual.router)
     v1.include_router(screens.router)
+    v1.include_router(share.router)
+    v1.include_router(hymns.router)
+    v1.include_router(learn.router)
     v1.include_router(agenda.router)
     app.include_router(v1)
     return app
