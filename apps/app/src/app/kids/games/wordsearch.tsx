@@ -7,7 +7,7 @@ import { type KidsKey, useKidsText } from '@/kids/strings';
 import { kidsColors, kidsFonts, kidsRadius, tileColors } from '@/kids/theme';
 import { PillButton } from '@/kids/ui';
 
-const THEMES = ['creation', 'noah', 'jesus', 'david'] as const;
+const THEMES = ['creation', 'noah', 'jesus', 'david', 'people', 'books', 'cities', 'virtues'] as const;
 type Theme = (typeof THEMES)[number];
 
 // Letras sem acento e sem símbolos: o caça-palavras usa só letras simples
@@ -20,20 +20,22 @@ const plain = (w: string) =>
 
 type Placed = { word: string; label: string; cells: number[] };
 
-function build(words: string[], size: number, diagonal: boolean): { grid: string[]; placed: Placed[] } {
+function build(words: string[], size: number, diagonal: boolean, reverse: boolean): { grid: string[]; placed: Placed[] } {
   const dirs = diagonal ? [[0, 1], [1, 0], [1, 1]] : [[0, 1], [1, 0]];
   const grid: (string | null)[] = Array(size * size).fill(null);
   const placed: Placed[] = [];
   for (const label of words) {
     const word = plain(label);
     if (word.length < 2 || word.length > size) continue;
+    // No difícil, algumas palavras ficam de trás para frente
+    const written = reverse && Math.random() < 0.4 ? [...word].reverse().join('') : word;
     for (let tries = 0; tries < 300; tries++) {
       const [dr, dc] = dirs[Math.floor(Math.random() * dirs.length)];
       const r0 = Math.floor(Math.random() * (size - dr * (word.length - 1)));
       const c0 = Math.floor(Math.random() * (size - dc * (word.length - 1)));
-      const cells = [...word].map((_, i) => (r0 + dr * i) * size + (c0 + dc * i));
-      if (cells.every((cell, i) => grid[cell] === null || grid[cell] === word[i])) {
-        cells.forEach((cell, i) => (grid[cell] = word[i]));
+      const cells = [...written].map((_, i) => (r0 + dr * i) * size + (c0 + dc * i));
+      if (cells.every((cell, i) => grid[cell] === null || grid[cell] === written[i])) {
+        cells.forEach((cell, i) => (grid[cell] = written[i]));
         placed.push({ word, label, cells });
         break;
       }
@@ -54,7 +56,9 @@ export default function WordSearch() {
   const [start, setStart] = useState<number | null>(null);
   const [found, setFound] = useState<string[]>([]);
   const [misses, setMisses] = useState(0);
-  const size = level === 'big' ? 10 : 8;
+  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>(level === 'big' ? 'medium' : 'easy');
+  const size = { easy: 6, medium: 8, hard: 10 }[difficulty];
+  const wordCount = { easy: 4, medium: 6, hard: 8 }[difficulty];
 
   // A lista de palavras (texto) é o que importa: a grade só muda com o tema, o nível ou "jogar de novo"
   const wordList = theme ? t(`ws_words_${theme}` as KidsKey) : '';
@@ -64,11 +68,11 @@ export default function WordSearch() {
       .split(/[,،、，]/)
       .map((w) => w.trim())
       .filter(Boolean);
-    const pick = shuffled(all.filter((w) => plain(w).length <= size)).slice(0, level === 'big' ? 7 : 5);
-    return build(pick, size, level === 'big');
+    const pick = shuffled(all.filter((w) => plain(w).length <= size)).slice(0, wordCount);
+    return build(pick, size, difficulty !== 'easy', difficulty === 'hard');
     // round: "jogar de novo" monta outra grade com as mesmas palavras
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wordList, size, level, round]);
+  }, [wordList, size, wordCount, difficulty, round]);
 
   const foundCells = new Set(puzzle?.placed.filter((p) => found.includes(p.word)).flatMap((p) => p.cells));
   const done = !!puzzle && puzzle.placed.length > 0 && found.length === puzzle.placed.length;
@@ -104,10 +108,16 @@ export default function WordSearch() {
   if (!theme || !puzzle) {
     return (
       <GameShell game="wordsearch">
+        <Text style={styles.pick}>{t('ws_level')}</Text>
+        <View style={styles.themes}>
+          {(['easy', 'medium', 'hard'] as const).map((d) => (
+            <PillButton key={d} label={t(d)} active={difficulty === d} color={kidsColors.purple} onPress={() => setDifficulty(d)} style={{ flexGrow: 1 }} textSize={17} />
+          ))}
+        </View>
         <Text style={styles.pick}>{t('ws_pick')}</Text>
         <View style={styles.themes}>
           {THEMES.map((th, i) => (
-            <PillButton key={th} label={t(`ws_theme_${th}` as KidsKey)} color={tileColors[i]} onPress={() => setTheme(th)} style={{ flexGrow: 1 }} />
+            <PillButton key={th} label={t(`ws_theme_${th}` as KidsKey)} color={tileColors[i % tileColors.length]} onPress={() => setTheme(th)} style={{ flexGrow: 1 }} />
           ))}
         </View>
       </GameShell>

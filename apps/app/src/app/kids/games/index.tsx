@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { BADGES, categoryKey, gameName, GAMES, levelOf } from '@/kids/journey';
+import { HEROES, unlockedHeroes } from '@/kids/heroes';
+import { BADGES, categoryKey, gameName, GAMES, levelOf, SECTIONS, sectionKey } from '@/kids/journey';
 import { useKidsProgress } from '@/kids/progress';
 import { useKidsText } from '@/kids/strings';
 import { kidsColors, kidsFonts, kidsRadius } from '@/kids/theme';
@@ -49,26 +50,51 @@ export default function KidsGames() {
         </View>
       </View>
 
-      <View style={styles.grid}>
-        {GAMES.map((g) => {
-          const times = progress.played[g.id] ?? 0;
-          return (
-            <Pressable
-              key={g.id}
-              accessibilityRole="button"
-              accessibilityLabel={t(gameName(g.id))}
-              onPress={() => router.push(g.route)}
-              style={({ pressed }) => [styles.tile, { backgroundColor: g.color, opacity: pressed ? 0.85 : 1 }]}>
-              <Text style={styles.tileEmoji}>{g.emoji}</Text>
-              <Text style={styles.tileName}>{t(gameName(g.id))}</Text>
-              <Text style={styles.tileMeta}>
-                {t(categoryKey(g.category))} · {t('ages', { a: g.ages[0], b: g.ages[1] })}
-              </Text>
-              {times ? <Text style={styles.done}>✓ {times}</Text> : null}
-            </Pressable>
-          );
-        })}
+      <View style={styles.featured}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('world_title')}
+          onPress={() => router.push('/kids/games/world')}
+          style={({ pressed }) => [styles.feature, { backgroundColor: kidsColors.blue, opacity: pressed ? 0.85 : 1 }]}>
+          <Text style={styles.featureEmoji}>🗺️</Text>
+          <Text style={styles.tileName}>{t('world_title')}</Text>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('g_heroes_name')}
+          onPress={() => router.push('/kids/games/heroes')}
+          style={({ pressed }) => [styles.feature, { backgroundColor: kidsColors.yellow, opacity: pressed ? 0.85 : 1 }]}>
+          <Text style={styles.featureEmoji}>🏅</Text>
+          <Text style={styles.tileName}>{t('g_heroes_name')}</Text>
+          <Text style={styles.tileMeta}>{t('heroes_count', { n: unlockedHeroes(progress.played).length, total: HEROES.length })}</Text>
+        </Pressable>
       </View>
+
+      {SECTIONS.map((section) => (
+        <View key={section} style={{ gap: 10 }}>
+          <Text style={styles.section}>{t(sectionKey(section))}</Text>
+          <View style={styles.grid}>
+            {GAMES.filter((g) => g.section === section && g.id !== 'heroes').map((g) => {
+              const times = progress.played[g.id] ?? 0;
+              return (
+                <Pressable
+                  key={g.id}
+                  accessibilityRole="button"
+                  accessibilityLabel={t(gameName(g.id))}
+                  onPress={() => router.push(g.route)}
+                  style={({ pressed }) => [styles.tile, { backgroundColor: g.color, opacity: pressed ? 0.85 : 1 }]}>
+                  <Text style={styles.tileEmoji}>{g.emoji}</Text>
+                  <Text style={styles.tileName}>{t(gameName(g.id))}</Text>
+                  <Text style={styles.tileMeta}>
+                    {t(categoryKey(g.category))} · {t('ages', { a: g.ages[0], b: g.ages[1] })}
+                  </Text>
+                  {times ? <Text style={styles.done}>✓ {times}</Text> : null}
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+      ))}
     </KidsScreen>
   );
 }
@@ -87,6 +113,10 @@ const styles = StyleSheet.create({
   badgeEmoji: { fontSize: 30 },
   badgeText: { fontFamily: kidsFonts.regular, fontSize: 12, color: kidsColors.text, textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+  section: { fontFamily: kidsFonts.bold, fontSize: 22, color: kidsColors.text, marginTop: 6 },
+  featured: { flexDirection: 'row', gap: 12, flexWrap: 'wrap' },
+  feature: { flexBasis: '46%', flexGrow: 1, minWidth: 150, minHeight: 130, borderRadius: kidsRadius.lg, padding: 14, alignItems: 'center', justifyContent: 'center', gap: 4, borderWidth: 4, borderColor: kidsColors.card },
+  featureEmoji: { fontSize: 50, lineHeight: 60 },
   tile: { flexBasis: '46%', flexGrow: 1, minWidth: 150, minHeight: 150, borderRadius: kidsRadius.lg, padding: 14, alignItems: 'center', justifyContent: 'center', gap: 4 },
   tileEmoji: { fontSize: 44, lineHeight: 54 },
   tileName: { fontFamily: kidsFonts.bold, fontSize: 18, lineHeight: 23, color: kidsColors.onColor, textAlign: 'center' },

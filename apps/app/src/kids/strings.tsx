@@ -6,6 +6,7 @@ import { Platform } from 'react-native';
 
 import { kidsFetch, kidsPost } from './api';
 import { GAME_EN, GAME_ES, GAME_PT } from './game-content';
+import { GAME2_EN, GAME2_ES, GAME2_PT } from './game-content-2';
 import { useChosenLanguage } from './progress';
 
 /** Qualquer idioma do BibleAlpha (pt-BR, en e es vêm prontos; os outros a DeepSeek traduz). */
@@ -14,6 +15,7 @@ type Builtin = 'pt-BR' | 'en' | 'es';
 
 const pt = {
   ...GAME_PT,
+  ...GAME2_PT,
   appName: 'BibleAlpha Kids',
   hello: 'Olá! Vamos aprender a Palavra de Deus?',
   hello2: 'Deus ama você!',
@@ -128,6 +130,7 @@ type Dict = typeof pt;
 
 const en: Dict = {
   ...GAME_EN,
+  ...GAME2_EN,
   appName: 'BibleAlpha Kids',
   hello: "Hi! Let's learn God's Word?",
   hello2: 'God loves you!',
@@ -239,6 +242,7 @@ const en: Dict = {
 
 const es: Dict = {
   ...GAME_ES,
+  ...GAME2_ES,
   appName: 'BibleAlpha Kids',
   hello: '¡Hola! ¿Aprendemos la Palabra de Dios?',
   hello2: '¡Dios te ama!',

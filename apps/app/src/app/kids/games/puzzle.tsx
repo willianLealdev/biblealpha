@@ -3,7 +3,8 @@ import { Image, type ImageSourcePropType, Pressable, StyleSheet, Text, useWindow
 
 import { GameEnd, GameShell, shuffled } from '@/kids/game-ui';
 import { useKidsProgress } from '@/kids/progress';
-import { useKidsText } from '@/kids/strings';
+import { useSpeaker } from '@/kids/speak';
+import { type KidsKey, useKidsText } from '@/kids/strings';
 import { kidsColors, kidsFonts, kidsRadius } from '@/kids/theme';
 import { PillButton } from '@/kids/ui';
 
@@ -24,10 +25,13 @@ function scramble(n: number): number[] {
 
 /** Quebra-cabeça: trocar peças de lugar até montar a figura (3×3 Pequenos, 4×4 Grandes). */
 export default function Puzzle() {
-  const { t } = useKidsText();
+  const { t, language } = useKidsText();
   const { level } = useKidsProgress();
   const { width } = useWindowDimensions();
-  const n = level === 'big' ? 4 : 3;
+  // Tamanhos: 2×2 até 6×6 no celular; em tela grande, até 10×10 (100 peças)
+  const sizes = width >= 900 ? [2, 3, 4, 5, 6, 8, 10] : width >= 600 ? [2, 3, 4, 5, 6, 8] : [2, 3, 4, 5, 6];
+  const [n, setN] = useState(level === 'big' ? 4 : 3);
+  const { speak } = useSpeaker(language);
   const [picture, setPicture] = useState<number | null>(null);
   const [order, setOrder] = useState<number[]>(() => scramble(n));
   const [selected, setSelected] = useState<number | null>(null);
@@ -37,9 +41,9 @@ export default function Puzzle() {
   const piece = board / n;
   const solved = order.length === n * n && order.every((v, i) => v === i);
 
-  function start(p: number) {
+  function start(p: number, size = n) {
     setPicture(p);
-    setOrder(scramble(n));
+    setOrder(scramble(size));
     setMoves(0);
     setSelected(null);
   }
@@ -58,6 +62,12 @@ export default function Puzzle() {
   if (picture === null) {
     return (
       <GameShell game="puzzle">
+        <Text style={styles.pick}>{t('puzzle_size')}</Text>
+        <View style={styles.sizes}>
+          {sizes.map((s) => (
+            <PillButton key={s} label={t('puzzle_pieces', { n: s * s })} active={n === s} color={kidsColors.pink} onPress={() => setN(s)} textSize={16} />
+          ))}
+        </View>
         <Text style={styles.pick}>{t('puzzle_pick')}</Text>
         <View style={styles.thumbs}>
           {PICTURES.map((src, i) => (
@@ -74,6 +84,10 @@ export default function Puzzle() {
     return (
       <GameShell game="puzzle">
         <Image source={PICTURES[picture]} style={[styles.full, { width: board, height: board }]} />
+        {/* Depois de montar, a história daquela figura é contada (Lucas 15:3–7) */}
+        <Text style={styles.story} onPress={() => speak(t(`puzzle_story_${picture + 1}` as KidsKey))}>
+          🔊 {t(`puzzle_story_${picture + 1}` as KidsKey)}
+        </Text>
         <GameEnd game="puzzle" stars={moves <= n * n ? 3 : moves <= n * n * 2 ? 2 : 1} onAgain={() => start((picture + 1) % PICTURES.length)} />
       </GameShell>
     );
@@ -112,10 +126,12 @@ export default function Puzzle() {
 
 const styles = StyleSheet.create({
   pick: { fontFamily: kidsFonts.bold, fontSize: 20, color: kidsColors.textMuted },
+  sizes: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  story: { fontFamily: kidsFonts.bold, fontSize: 20, lineHeight: 28, color: kidsColors.text, textAlign: 'center' },
   thumbs: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'center' },
   thumb: { width: 140, height: 140, borderRadius: kidsRadius.md, overflow: 'hidden', borderWidth: 4, borderColor: kidsColors.pink },
   board: { flexDirection: 'row', flexWrap: 'wrap', alignSelf: 'center', borderRadius: kidsRadius.md, overflow: 'hidden', borderWidth: 4, borderColor: kidsColors.pink, backgroundColor: kidsColors.card },
-  piece: { overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.7)' },
+  piece: { overflow: 'hidden', borderWidth: 0.5, borderColor: 'rgba(255,255,255,0.7)' },
   selected: { borderWidth: 5, borderColor: kidsColors.yellow, opacity: 0.85 },
   full: { alignSelf: 'center', borderRadius: kidsRadius.md },
 });
