@@ -1121,6 +1121,7 @@ const en: Dictionary = {
       ministry: 'Ministry',
       support: 'Give',
       faq: 'FAQ',
+      kids: 'Kids',
       shareScreen: 'Share screen',
       open: 'Open menu',
     },

@@ -1123,6 +1123,7 @@ const es: DeepPartial<Dictionary> = {
       ministry: 'Ministerio',
       support: 'Ofrendar',
       faq: 'Preguntas',
+      kids: 'Kids',
       shareScreen: 'Compartir pantalla',
       open: 'Abrir menú',
     },

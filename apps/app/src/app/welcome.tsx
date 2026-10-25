@@ -94,12 +94,14 @@ export default function Landing() {
   const start = () => router.push(signedIn ? '/home' : '/sign-up');
   const shareScreen = () => router.push('/screen');
 
-  const MENU: { label: TranslationKey; section: Section }[] = [
+  const MENU: { label: TranslationKey; section?: Section; href?: '/kids' }[] = [
     { label: 'landing.menu.download', section: 'download' },
     { label: 'landing.menu.features', section: 'features' },
     { label: 'landing.menu.ministry', section: 'ministry' },
     { label: 'landing.menu.support', section: 'support' },
     { label: 'landing.menu.faq', section: 'faq' },
+    // Área das crianças (abre a página do BibleAlpha Kids, sem login)
+    { label: 'landing.menu.kids', href: '/kids' },
   ];
 
   return (
@@ -116,8 +118,8 @@ export default function Landing() {
           <View style={{ flex: 1 }} />
           {fullMenu
             ? MENU.map((m) => (
-                <Pressable key={m.section} accessibilityRole="link" onPress={() => go(m.section)} style={{ paddingHorizontal: 6, paddingVertical: 6 }}>
-                  <RNText style={{ color: colors.text, fontFamily: fonts.bodyMedium, fontSize: 15 }}>{t(m.label)}</RNText>
+                <Pressable key={m.label} accessibilityRole="link" onPress={() => (m.href ? router.push(m.href) : go(m.section!))} style={{ paddingHorizontal: 6, paddingVertical: 6 }}>
+                  <RNText style={{ color: m.href ? colors.gold : colors.text, fontFamily: m.href ? fonts.bodyBold : fonts.bodyMedium, fontSize: 15 }}>{t(m.label)}</RNText>
                 </Pressable>
               ))
             : null}
@@ -136,8 +138,8 @@ export default function Landing() {
         {!fullMenu && menuOpen ? (
           <Container style={{ paddingBottom: 16, gap: 6 }}>
             {MENU.map((m) => (
-              <Pressable key={m.section} accessibilityRole="link" onPress={() => go(m.section)} style={{ paddingVertical: 10 }}>
-                <RNText style={{ color: colors.text, fontFamily: fonts.bodyMedium, fontSize: 17 }}>{t(m.label)}</RNText>
+              <Pressable key={m.label} accessibilityRole="link" onPress={() => (m.href ? router.push(m.href) : go(m.section!))} style={{ paddingVertical: 10 }}>
+                <RNText style={{ color: m.href ? colors.gold : colors.text, fontFamily: m.href ? fonts.bodyBold : fonts.bodyMedium, fontSize: 17 }}>{t(m.label)}</RNText>
               </Pressable>
             ))}
             <GoldButton label={t('landing.menu.shareScreen')} icon="qr-code-outline" onPress={shareScreen} outline />
@@ -331,6 +333,7 @@ export default function Landing() {
             <View style={{ flexDirection: 'row', gap: 18, flexWrap: 'wrap', justifyContent: 'center' }}>
               <FooterLink label={t('auth.terms')} onPress={() => router.push('/legal/terms')} />
               <FooterLink label={t('auth.privacy')} onPress={() => router.push('/legal/privacy')} />
+              <FooterLink label={t('landing.menu.kids')} onPress={() => router.push('/kids')} />
               <FooterLink label={t('landing.menu.shareScreen')} onPress={shareScreen} />
               <FooterLink label={signedIn ? t('landing.openApp') : t('landing.signIn')} onPress={openApp} />
             </View>

@@ -1119,6 +1119,7 @@ const ptBR = {
       ministry: 'Ministração',
       support: 'Ofertar',
       faq: 'Dúvidas',
+      kids: 'Kids',
       shareScreen: 'Compartilhar tela',
       open: 'Abrir menu',
     },
