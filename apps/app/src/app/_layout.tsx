@@ -111,6 +111,8 @@ function RootNavigator({ fontsLoaded }: { fontsLoaded: boolean }) {
         <Stack.Screen name="welcome" />
         {/* Telão da igreja: computador/TV, sem login */}
         <Stack.Screen name="screen" />
+        {/* BibleAlpha Kids: área das crianças, pública e sem login */}
+        <Stack.Screen name="kids" />
       </Stack>
       {/* Menu de baixo também nas telas fora das abas */}
       {showNav ? <BottomNav /> : null}

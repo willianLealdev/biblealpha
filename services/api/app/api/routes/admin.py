@@ -299,6 +299,8 @@ Feature = Literal[
     "quiz",
     "visual_study",
     "slide_design",
+    "kids_story",
+    "kids_translate",
 ]
 
 

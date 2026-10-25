@@ -20,11 +20,13 @@ PUBLIC = {
     "/api/v1/billing/webhook",
     "/api/v1/billing/plans",
 }
+# BibleAlpha Kids: só leitura do conteúdo publicado, sem login (as rotas de admin ficam em /admin/kids)
 PUBLIC_PREFIXES = (
     "/api/v1/bible",
     "/api/v1/languages",
     "/api/v1/visual/images",
     "/api/v1/legal",
+    "/api/v1/kids/",
     # Conteúdo aberto, só leitura: Harpa Cristã, fundos prontos da imagem do versículo e capas do Aprender
     "/api/v1/hymns",
     "/api/v1/share/presets",

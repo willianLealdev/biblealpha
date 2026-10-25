@@ -19,6 +19,14 @@ from app.models.devotional import (
     PlanEnrollment,
     UserDevotional,
 )
+from app.models.kids import (
+    KidsStory,
+    KidsStoryPage,
+    KidsStoryTranslation,
+    KidsVerse,
+    KidsVideo,
+    KidsVideoChunk,
+)
 from app.models.screen import PreachingEvent, ScreenSession, SlideBackground
 from app.models.sermon import Sermon, SermonVersion
 from app.models.study import (
@@ -44,6 +52,12 @@ from app.models.user import (
 )
 
 __all__ = [
+    "KidsStory",
+    "KidsStoryPage",
+    "KidsVerse",
+    "KidsStoryTranslation",
+    "KidsVideo",
+    "KidsVideoChunk",
     "PreachingEvent",
     "ScreenSession",
     "SlideBackground",

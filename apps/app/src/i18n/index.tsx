@@ -2,6 +2,7 @@ import { getLocales } from 'expo-localization';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 import { registerBookNames } from '@/bible/reference';
+import { kidsEnglish } from '@/kids/strings';
 import { ApiError, api, type Locale } from '@/lib/api';
 import { kvGet, kvSet } from '@/lib/kv';
 import { getItem, setItem } from '@/lib/storage';
@@ -84,10 +85,12 @@ function hashOf(text: string) {
 
 /** App do administrador: envia os textos em inglês desta versão (base das traduções automáticas). */
 export async function syncSourceTexts() {
-  const json = JSON.stringify(en);
+  // Os textos do BibleAlpha Kids vão juntos (bloco kidsUi): a DeepSeek traduz tudo de uma vez
+  const source = { ...en, kidsUi: kidsEnglish };
+  const json = JSON.stringify(source);
   const hash = hashOf(json);
   if ((await kvGet<string>('i18n:source-hash')) === hash) return;
-  await api('/admin/languages/source', { method: 'PUT', body: { hash, source: en } });
+  await api('/admin/languages/source', { method: 'PUT', body: { hash, source } });
   await kvSet('i18n:source-hash', hash);
 }
 

@@ -25,6 +25,11 @@ DEFAULTS: dict[str, dict] = {
         "visual_study": {"model": "claude-sonnet-5-5", "effort": "medium", "max_tokens": 16000},
         # Visual dos slides do telão (cores e descrição do fundo): DeepSeek
         "slide_design": {"model": "deepseek-flash", "effort": "low", "max_tokens": 4000},
+        # BibleAlpha Kids: histórias para crianças (rascunho que o administrador revisa): Claude Sonnet,
+        # mais barato (mesma regra do estudo visual); as ilustrações usarão "visual.images"
+        "kids_story": {"model": "claude-sonnet-5-5", "effort": "medium", "max_tokens": 16000},
+        # Kids: tradução das histórias para os outros idiomas (uma vez por idioma): DeepSeek
+        "kids_translate": {"model": "deepseek-flash", "effort": "low", "max_tokens": 16000},
     },
     # Estudo visual: Free gera poucos por mês, Pro tem teto diário de segurança; ver um pronto não conta
     # Fundos dos slides do telão criados pela IA (imagem); trocar de fundo conta como um novo

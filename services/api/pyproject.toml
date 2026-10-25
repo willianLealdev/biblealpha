@@ -63,6 +63,7 @@ ignore = ["S101", "B008"]
 "app/sermon/ai.py" = ["E501"]
 "app/sermon/schema.py" = ["E501"]
 "app/ai/quiz.py" = ["E501"]
+"app/kids/ai.py" = ["E501"]
 "app/visual/service.py" = ["E501"]
 "app/screens/service.py" = ["E501"]
 # Caminhos dos arquivos do STEPBible e tabela de livros

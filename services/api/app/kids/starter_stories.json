@@ -1,0 +1,1561 @@
+{
+ "pt-BR": [
+  {
+   "seed": "genesis-1-1-31",
+   "verse_key_start": 1001001,
+   "verse_key_end": 1001031,
+   "level": "small",
+   "title": "Deus Criou Tudo!",
+   "summary": "Uma história alegre sobre como Deus criou o céu, a terra, os animais e as pessoas em seis dias, e tudo era muito bom.",
+   "pages": [
+    {
+     "text": "No princípio, Deus criou os céus e a terra. Tudo estava escuro e vazio. E o Espírito de Deus se movia sobre as águas.",
+     "image_prompt": "A calm, dark, deep blue ocean under a dark sky, with a soft gentle glow and a light breeze moving over the water surface, peaceful and mysterious but not scary, children's book style, no people, no text"
+    },
+    {
+     "text": "Então Deus disse: \"Haja luz!\" E a luz apareceu! Deus viu que a luz era boa. Ele chamou a luz de Dia e o escuro de Noite. Esse foi o primeiro dia.",
+     "image_prompt": "Bright warm golden light bursting joyfully across a dark ocean, splitting the scene into a glowing bright side and a soft starless dark-blue side, colorful cheerful children's book illustration, no people, no text"
+    },
+    {
+     "text": "No segundo dia, Deus separou as águas e fez um céu bem grande lá em cima. Deus chamou esse espaço de Céus.",
+     "image_prompt": "A wide open bright blue sky appearing above a sparkling ocean, with soft clouds forming high above, cheerful and airy children's book illustration, no people, no text"
+    },
+    {
+     "text": "No terceiro dia, Deus juntou as águas nos mares, e a terra seca apareceu. Depois, Deus fez nascer grama verde, plantas e árvores cheias de frutas! E Deus viu que era bom.",
+     "image_prompt": "Green hills rising from blue seas, covered with fresh grass, colorful flowers and trees full of red apples, oranges and other fruits, sunny happy children's book illustration, no people, no text"
+    },
+    {
+     "text": "No quarto dia, Deus colocou luzes no céu. Ele fez o sol para brilhar de dia e a lua para brilhar de noite. E fez também as estrelas! E Deus viu que era bom.",
+     "image_prompt": "A split sky scene: on one side a big smiling-looking bright yellow sun over green hills, on the other side a glowing silver moon and many twinkling stars over a calm sea, colorful children's book illustration, no people, no text"
+    },
+    {
+     "text": "No quinto dia, Deus encheu o mar de peixes e de grandes criaturas marinhas. E encheu o céu de passarinhos que voam! Deus os abençoou. E Deus viu que era bom.",
+     "image_prompt": "A lively ocean full of colorful fish, a big friendly whale and dolphins jumping, with flocks of bright colorful birds flying in a blue sky above, joyful children's book illustration, no people, no text"
+    },
+    {
+     "text": "No sexto dia, Deus fez os animais da terra: grandes, pequenos, e os que se arrastam no chão. Depois, Deus criou o ser humano, um homem e uma mulher, parecidos com Ele. Deus os abençoou e deu frutas e plantas para comerem.",
+     "image_prompt": "A happy man and woman standing in a lush green garden, modestly framed by large leaves and flowers, surrounded by friendly animals like a lion, an elephant, a giraffe, rabbits, sheep and a small turtle, trees full of fruit around them, warm colorful children's book illustration, no text"
+    },
+    {
+     "text": "Então Deus olhou para tudo o que tinha feito. E tudo era muito, muito bom! Esse foi o sexto dia.",
+     "image_prompt": "A wide beautiful panorama of the whole creation: shining sun, blue sea with fish and a whale, birds in the sky, fruit trees, many animals, and the man and woman smiling among the plants, glowing golden warm light over everything, joyful children's book illustration, no text"
+    }
+   ],
+   "lesson": "Deus criou todas as coisas, e tudo o que Ele fez é muito bom.",
+   "family_question": "Qual é a coisa que Deus criou de que você mais gosta, e como podemos agradecer a Deus por ela?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Os peixes",
+      "As árvores",
+      "A luz"
+     ],
+     "question": "O que Deus fez no primeiro dia?",
+     "explanation": "Deus disse \"Haja luz!\" e a luz apareceu no primeiro dia."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Os passarinhos",
+      "A lua e as estrelas",
+      "O sol"
+     ],
+     "question": "O que Deus colocou no céu para brilhar de noite?",
+     "explanation": "Deus fez a lua e as estrelas para brilharem de noite."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "No céu",
+      "No mar",
+      "Nas árvores"
+     ],
+     "question": "Onde Deus colocou os peixes?",
+     "explanation": "Deus encheu o mar de peixes e de grandes criaturas marinhas."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Escuro",
+      "Feio",
+      "Muito bom"
+     ],
+     "question": "Quando Deus olhou para tudo o que tinha feito, como estava tudo?",
+     "explanation": "Deus viu que tudo o que Ele fez era muito, muito bom!"
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Homem",
+      "description": "A kind young man with warm brown skin, short dark curly hair and a big friendly smile, modestly covered by leaves and plants in every scene."
+     },
+     {
+      "name": "Mulher",
+      "description": "A kind young woman with warm brown skin, long dark wavy hair and a gentle joyful smile, modestly covered by leaves and plants in every scene."
+     },
+     {
+      "name": "Animais",
+      "description": "Friendly cartoon animals: a golden lion, a gray elephant, a tall spotted giraffe, white rabbits, fluffy sheep, a green turtle, colorful fish, a big blue whale and bright colorful birds."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "genesis-6-9-9-17",
+   "verse_key_start": 1006009,
+   "verse_key_end": 1009017,
+   "level": "small",
+   "title": "Noé, a Grande Arca e o Arco-Íris",
+   "summary": "Noé obedece a Deus, constrói uma arca enorme, navega com sua família e os animais, e vê o arco-íris da promessa de Deus.",
+   "pages": [
+    {
+     "text": "Noé era um homem bom que andava com Deus. Ele tinha três filhos: Sem, Cam e Jafé. Mas as outras pessoas da terra faziam muitas coisas más.",
+     "image_prompt": "A kind bearded man, Noah, smiling and looking up at a bright sky with warm sunlight, standing in a green field with his three young adult sons beside him; soft, friendly children's-book style, colorful and cheerful."
+    },
+    {
+     "text": "Deus disse: “Noé, construa uma arca bem grande de madeira! Vou mandar muita água sobre a terra.” E Noé fez tudo o que Deus mandou.",
+     "image_prompt": "Noah and his three sons happily building a huge wooden boat (the ark) with hammers and planks, the ark with three levels, a window near the top and a door on the side, sunny hills around, colorful children's-book illustration."
+    },
+    {
+     "text": "Os animais vieram de dois em dois: pássaros, leões, elefantes e muitos outros! Noé, sua esposa, seus filhos e as esposas deles entraram na arca. E o próprio Deus fechou a porta!",
+     "image_prompt": "A joyful line of animals walking two by two up a ramp into the big wooden ark: elephants, giraffes, lions, sheep, birds flying above; Noah, his wife, three sons and their three wives waving at the door; bright, cheerful colors."
+    },
+    {
+     "text": "Choveu quarenta dias e quarenta noites! A água subiu, subiu, e a arca boiou. A água cobriu até os montes altos, mas Noé e quem estava na arca ficaram seguros.",
+     "image_prompt": "The big wooden ark floating calmly on wide blue water under gentle rain and soft gray clouds, warm light glowing from the window, a giraffe peeking out; peaceful and safe feeling, children's-book style."
+    },
+    {
+     "text": "Deus se lembrou de Noé e de todos os animais. Ele fez soprar um vento, e a água foi baixando. A arca parou em cima dos montes de Ararate.",
+     "image_prompt": "The ark resting on top of green mountain peaks as the water goes down, a gentle breeze shown by swirling soft lines, clouds parting with sunshine, cheerful colors."
+    },
+    {
+     "text": "Noé abriu a janela e soltou um corvo e uma pomba. Um dia, a pomba voltou com uma folhinha de oliveira no bico! Que alegria: a terra estava secando!",
+     "image_prompt": "Noah smiling at the ark's window holding out his hand as a white dove arrives with a green olive leaf in its beak, a black raven flying in the distance, blue sky; friendly children's-book illustration."
+    },
+    {
+     "text": "Deus disse: “Saiam da arca!” Todos saíram felizes, e os animais correram pela terra. Noé fez um altar e adorou ao Senhor.",
+     "image_prompt": "Noah's family and many animals happily coming out of the ark onto green grass with flowers; Noah kneeling by a simple stone altar with hands raised in worship, his family beside him; bright joyful colors."
+    },
+    {
+     "text": "Deus fez uma promessa: “Nunca mais vai ter um dilúvio para destruir a terra.” E colocou o arco-íris nas nuvens como sinal. Deus sempre cumpre o que promete!",
+     "image_prompt": "A big beautiful rainbow across the sky over green hills, Noah, his wife, three sons and their wives smiling and pointing up, animals around them, the ark on the mountain in the background; cheerful children's-book style."
+    }
+   ],
+   "lesson": "Deus cuida de quem anda com Ele e sempre cumpre as suas promessas.",
+   "family_question": "Quando vocês virem um arco-íris, do que vão se lembrar sobre Deus?",
+   "quiz": [
+    {
+     "answer": 0,
+     "options": [
+      "Uma arca",
+      "Uma torre",
+      "Uma casa"
+     ],
+     "question": "O que Deus mandou Noé construir?",
+     "explanation": "Isso mesmo! Deus mandou Noé construir uma arca grande de madeira."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "O vento",
+      "Um elefante",
+      "Deus"
+     ],
+     "question": "Quem fechou a porta da arca?",
+     "explanation": "Foi o próprio Deus que fechou a porta, cuidando de todos lá dentro."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Uma pedrinha",
+      "Uma folha de oliveira",
+      "Uma flor"
+     ],
+     "question": "O que a pomba trouxe no bico?",
+     "explanation": "A pomba trouxe uma folhinha de oliveira, e Noé soube que a terra estava secando."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "O arco-íris",
+      "A lua",
+      "Uma estrela"
+     ],
+     "question": "Qual foi o sinal da promessa de Deus?",
+     "explanation": "Deus colocou o arco-íris nas nuvens para lembrar da sua promessa."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Noé",
+      "description": "Kind older man with a long white beard, warm smile, wearing a simple brown robe with a tan sash."
+     },
+     {
+      "name": "Esposa de Noé",
+      "description": "Gentle older woman with gray hair under a soft blue head covering, wearing a light blue robe."
+     },
+     {
+      "name": "Sem",
+      "description": "Young man with short dark beard, wearing a green robe."
+     },
+     {
+      "name": "Cam",
+      "description": "Young man with curly black hair and short beard, wearing an orange robe."
+     },
+     {
+      "name": "Jafé",
+      "description": "Young man with light brown hair and short beard, wearing a red robe."
+     },
+     {
+      "name": "Esposas dos filhos",
+      "description": "Three young women in simple robes of yellow, purple and pink with matching head coverings."
+     },
+     {
+      "name": "Pomba",
+      "description": "Small pure white dove with soft round shape and bright friendly eyes."
+     },
+     {
+      "name": "Corvo",
+      "description": "Shiny black raven with a friendly look, flying with wide wings."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "exodo-2-1-10",
+   "verse_key_start": 2002001,
+   "verse_key_end": 2002010,
+   "level": "small",
+   "title": "O Bebê na Cestinha",
+   "summary": "A história de um bebê que foi colocado numa cestinha à beira do rio, foi encontrado pela filha do Faraó e recebeu o nome de Moisés.",
+   "pages": [
+    {
+     "text": "Um homem e uma mulher da família de Levi se casaram. Logo nasceu um filhinho, um bebê muito bonito. A mamãe o escondeu e cuidou dele com carinho por três meses.",
+     "image_prompt": "A gentle mother in a simple Hebrew home holding and rocking her beautiful newborn baby boy wrapped in a soft cream blanket, warm lamplight, cozy and peaceful atmosphere, soft pastel colors, children's book illustration"
+    },
+    {
+     "text": "Quando não dava mais para esconder o bebê, a mamãe fez uma cestinha de juncos. Ela passou piche para a água não entrar. Colocou o bebê dentro e deixou a cestinha entre as plantas, na beira do rio. A irmã do bebê ficou olhando de longe.",
+     "image_prompt": "The mother gently placing a small woven reed basket with the sleeping baby among tall green reeds at the calm edge of a river, while the baby's young sister watches quietly from a little distance behind some plants, soft evening light, peaceful, children's book illustration"
+    },
+    {
+     "text": "A filha do Faraó desceu ao rio para se lavar. Ela viu a cestinha entre as plantas e mandou uma criada buscá-la. Quando abriu, o bebê estava chorando. Ela sentiu muito carinho por ele e disse: “É um bebê dos hebreus.”",
+     "image_prompt": "A kind Egyptian princess at the riverbank opening the reed basket brought by her maid, looking tenderly at the crying baby inside, her attendants walking along the river in the background, calm water and green reeds, warm soft colors, children's book illustration"
+    },
+    {
+     "text": "Então a irmã do bebê chegou perto e perguntou: “Quer que eu chame uma mulher hebreia para cuidar dele?” A filha do Faraó respondeu: “Vai.” E a menina correu e chamou… a mamãe do bebê!",
+     "image_prompt": "The baby's young sister standing politely and speaking to the kind Egyptian princess who holds the baby by the river, then a happy scene hint of the girl running joyfully along a path, bright gentle colors, children's book illustration"
+    },
+    {
+     "text": "A filha do Faraó disse à mamãe: “Leve este menino e cuide dele para mim, e eu vou te pagar.” A mamãe abraçou seu filhinho e cuidou dele. Quando o menino cresceu, ela o levou à filha do Faraó, que o adotou e lhe deu o nome de Moisés, dizendo: “Porque eu o tirei das águas.”",
+     "image_prompt": "The mother happily hugging her baby close while the kind Egyptian princess smiles at them; in a soft second part of the scene, a young boy standing beside the princess in a beautiful Egyptian palace garden, warm golden evening light, tender and peaceful, children's book illustration"
+    }
+   ],
+   "lesson": "Uma família que ama cuida com carinho, e a coragem da irmã ajudou o bebê a voltar para os braços da mamãe.",
+   "family_question": "Como nós podemos cuidar uns dos outros com carinho, como a mamãe e a irmã cuidaram do bebê?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Numa caixa de madeira",
+      "Numa cama grande",
+      "Numa cestinha"
+     ],
+     "question": "Onde a mamãe colocou o bebê?",
+     "explanation": "Isso mesmo! A mamãe fez uma cestinha de juncos e colocou o bebê dentro dela."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "A irmã dele",
+      "Um soldado",
+      "O papai"
+     ],
+     "question": "Quem ficou olhando o bebê de longe?",
+     "explanation": "Muito bem! A irmã do bebê ficou olhando de longe para ver o que ia acontecer."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "A mamãe do bebê",
+      "Uma vizinha",
+      "Uma princesa"
+     ],
+     "question": "Quem a irmã chamou para cuidar do bebê?",
+     "explanation": "Que lindo! A irmã chamou a própria mamãe do bebê para cuidar dele."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Moisés",
+      "Davi",
+      "José"
+     ],
+     "question": "Que nome a filha do Faraó deu ao menino?",
+     "explanation": "Isso! Ela o chamou de Moisés, porque o tirou das águas."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Mamãe do bebê",
+      "description": "A gentle Hebrew woman with long dark brown hair covered by a light beige headscarf, wearing a simple soft blue robe, warm loving eyes."
+     },
+     {
+      "name": "Bebê Moisés",
+      "description": "A beautiful chubby baby boy with a little dark hair and rosy cheeks, wrapped in a soft cream blanket; later a young boy with short dark curly hair in a simple white tunic."
+     },
+     {
+      "name": "Irmã do bebê",
+      "description": "A young Hebrew girl around ten years old with long dark braided hair, wearing a simple light green dress and sandals, curious and brave expression."
+     },
+     {
+      "name": "Filha do Faraó",
+      "description": "A kind young Egyptian princess with black straight hair cut at the shoulders, a thin golden headband, a flowing white linen dress and golden bracelets, gentle smile."
+     },
+     {
+      "name": "Criada",
+      "description": "A young Egyptian maid with black hair tied back, wearing a simple pale yellow linen dress."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "exodo-14-10-31",
+   "verse_key_start": 2014010,
+   "verse_key_end": 2014031,
+   "level": "both",
+   "title": "O Caminho no Meio do Mar",
+   "summary": "Quando o exército de Faraó persegue o povo de Israel, Deus abre um caminho seco no meio do mar e salva o seu povo!",
+   "pages": [
+    {
+     "text": "O povo de Israel estava acampado perto do mar. De repente, eles olharam para trás e viram Faraó chegando com seus soldados e carros! O povo ficou com muito medo e clamou ao SENHOR.",
+     "image_prompt": "A large crowd of Israelite families with tents and animals by a wide blue sea, looking back with worried faces toward a distant cloud of dust where Egyptian chariots appear far away on the horizon, desert setting, bright colorful children's book style, nothing scary"
+    },
+    {
+     "text": "O povo disse a Moisés: \"Por que você nos tirou do Egito?\" Mas Moisés respondeu: \"Não tenham medo! Fiquem quietos e vejam a salvação do SENHOR. O SENHOR vai lutar por vocês!\"",
+     "image_prompt": "Moses with his wooden staff standing on a small rock, speaking calmly and kindly with an open hand to a crowd of worried Israelite men, women and children, sea in the background, warm sunset colors, friendly children's book illustration"
+    },
+    {
+     "text": "Deus disse a Moisés: \"Diga ao povo que marche! Levante a sua vara e estenda a mão sobre o mar.\" Então o anjo de Deus e a coluna de nuvem foram para trás do povo. A nuvem ficou entre os dois acampamentos: escura para os egípcios e cheia de luz para Israel durante a noite.",
+     "image_prompt": "Night scene: a tall glowing pillar of cloud standing between two camps, its side facing the Israelite tents shining with soft warm light, the other side dark toward faraway Egyptian camp, Moses holding his staff looking up, magical and peaceful children's book style"
+    },
+    {
+     "text": "Moisés estendeu a mão sobre o mar. O SENHOR mandou um vento forte do oriente a noite toda. E o mar se abriu, e o chão ficou sequinho!",
+     "image_prompt": "Moses with arm and staff stretched out over the sea at night, a strong wind blowing his robe and beard, the sea splitting in two and revealing a dry path, swirling wind lines, awe-inspiring but joyful colorful children's book illustration"
+    },
+    {
+     "text": "Os filhos de Israel entraram no meio do mar em chão seco. As águas ficaram como um muro, à direita e à esquerda. Que caminho incrível Deus fez!",
+     "image_prompt": "Happy Israelite families, children holding parents' hands, carrying bundles and leading sheep and goats, walking on a dry sandy path between two tall shimmering blue walls of water with fish visible inside, Moses leading with his staff, bright and amazing children's book style"
+    },
+    {
+     "text": "Os egípcios entraram no mar atrás deles. Mas de manhã cedinho, o SENHOR olhou da coluna de fogo e nuvem e atrapalhou o exército. As rodas dos carros saíram! Os egípcios disseram: \"Vamos fugir! O SENHOR luta por Israel!\"",
+     "image_prompt": "Early morning, a pillar of fire and cloud glowing above the sea path, Egyptian chariots far away stuck in the sand with wheels coming off, soldiers looking confused and turning back, no harm shown, gentle cartoon-like children's book style"
+    },
+    {
+     "text": "Deus mandou Moisés estender a mão outra vez. O mar voltou para o seu lugar e cobriu todo o exército de Faraó. Assim o SENHOR salvou Israel naquele dia!",
+     "image_prompt": "Sunrise over the sea, Moses standing safely on the far shore with his staff stretched out over calm waves returning together, Israelite people safe on the beach behind him, no soldiers visible, peaceful golden morning light, children's book illustration"
+    },
+    {
+     "text": "O povo viu a grande obra que o SENHOR fez. Eles temeram ao SENHOR e creram no SENHOR e em Moisés, seu servo. Deus é poderoso e cuida do seu povo!",
+     "image_prompt": "Joyful Israelite families on the sunny shore looking at the calm sea with wonder and gratitude, some raising hands toward the sky, children smiling, Moses with his staff among them, bright happy colors, children's book style"
+    }
+   ],
+   "lesson": "Quando sentimos medo, podemos confiar em Deus, porque o SENHOR luta por nós e nos salva.",
+   "family_question": "Quando vocês sentiram medo, como podem lembrar que Deus cuida da nossa família?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Um rebanho de camelos",
+      "Uma grande cidade",
+      "Faraó e seus soldados chegando"
+     ],
+     "question": "O que o povo de Israel viu quando olhou para trás?",
+     "explanation": "Isso mesmo! Faraó e seus soldados vinham atrás deles, e o povo ficou com medo."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Não tenham medo, o SENHOR vai lutar por vocês!",
+      "Voltem para o Egito!",
+      "Corram para o deserto!"
+     ],
+     "question": "O que Moisés disse ao povo?",
+     "explanation": "Moisés disse para não terem medo, porque o SENHOR lutaria por eles."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Uma chuva forte",
+      "Um terremoto",
+      "Um vento forte do oriente"
+     ],
+     "question": "O que Deus mandou para abrir o mar?",
+     "explanation": "Muito bem! Deus mandou um vento forte a noite toda, e o mar se abriu."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Cheio de lama",
+      "Cheio de pedras grandes",
+      "Seco"
+     ],
+     "question": "Como era o chão por onde o povo passou no meio do mar?",
+     "explanation": "O povo passou em chão seco, com as águas como um muro dos dois lados!"
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Moisés",
+      "description": "An older man with a long gray beard, kind eyes, wearing a brown robe and a beige head covering, always holding a long wooden staff"
+     },
+     {
+      "name": "Povo de Israel",
+      "description": "A large crowd of men, women and children in simple colorful robes and head scarves, carrying bundles and leading sheep and goats"
+     },
+     {
+      "name": "Faraó",
+      "description": "An Egyptian king wearing a blue and gold striped headdress and white clothes, riding a golden chariot, shown only from far away"
+     },
+     {
+      "name": "Soldados egípcios",
+      "description": "Egyptian soldiers in white kilts and simple helmets driving horse-drawn chariots, shown from a distance and never scary"
+     }
+    ]
+   }
+  },
+  {
+   "seed": "1-samuel-17-32-50",
+   "verse_key_start": 9017032,
+   "verse_key_end": 9017050,
+   "level": "both",
+   "title": "Davi e o Filisteu: A Batalha é do Senhor!",
+   "summary": "O jovem pastor Davi enfrenta um forte guerreiro filisteu confiando no nome do Senhor, e Deus lhe dá a vitória com apenas uma funda e uma pedra.",
+   "pages": [
+    {
+     "text": "O exército de Israel estava com medo de um guerreiro filisteu. Mas o jovem Davi disse ao rei Saul: \"Ninguém precisa ter medo! Eu vou lutar com ele.\" O rei Saul respondeu: \"Você é muito jovem, e ele é um guerreiro desde a juventude.\"",
+     "image_prompt": "Inside a royal tent in an army camp, young David with red hair and a simple shepherd tunic stands confidently before King Saul, who sits on a wooden seat looking worried. Soldiers peek in from the tent entrance. Warm, friendly colors, children's book style."
+    },
+    {
+     "text": "Davi contou: \"Eu cuidava das ovelhas do meu pai. Quando um leão ou um urso pegava um cordeirinho, eu corria atrás e salvava o cordeirinho!\" E disse: \"O Senhor me livrou do leão e do urso, e Ele vai me livrar também deste filisteu!\" Então Saul disse: \"Vai, e o Senhor seja com você.\"",
+     "image_prompt": "A dreamy memory scene: young red-haired David in a green hillside pasture holding a small lamb safely in his arms, with a flock of fluffy sheep around him and a lion and a bear walking away in the distance. Soft, gentle, colorful children's book illustration, nothing scary."
+    },
+    {
+     "text": "O rei Saul vestiu Davi com suas roupas de guerra. Colocou nele um capacete de bronze, uma armadura e uma espada. Davi tentou andar, mas não conseguiu! \"Não consigo andar com isto, nunca usei\", disse ele, e tirou tudo.",
+     "image_prompt": "Young red-haired David wearing a big shiny bronze helmet that slips over his eyes and heavy armor that is too large for him, trying to take a step with a funny wobbly pose, while King Saul watches. Light, playful, colorful children's book style."
+    },
+    {
+     "text": "Davi pegou seu cajado de pastor. Foi até o riacho e escolheu cinco pedras lisinhas. Guardou as pedras na sua bolsa de pastor e, com a funda na mão, foi ao encontro do filisteu.",
+     "image_prompt": "Young red-haired David kneeling by a sparkling clear stream, picking up smooth round stones, holding a shepherd's staff and a sling, with a small leather shepherd's bag at his side. Sunny valley, green grass, bright cheerful colors."
+    },
+    {
+     "text": "O filisteu veio andando, com seu ajudante carregando o escudo na frente dele. Quando viu Davi, achou que ele era só um menino e não deu valor a ele. O filisteu falou palavras muito feias contra Davi.",
+     "image_prompt": "In a wide valley, a large strong Philistine warrior in bronze armor with a spear walks forward, frowning, while his shield-bearer carries a big round shield ahead of him. Far across the valley stands small young David with his staff and sling, calm and brave. Not scary, bright daylight, children's book style."
+    },
+    {
+     "text": "Davi respondeu com coragem: \"Você vem com espada, lança e escudo. Mas eu venho em nome do Senhor dos exércitos, o Deus de Israel!\" E disse: \"Todos vão saber que há Deus em Israel, porque o Senhor não salva com espada nem com lança. A batalha é do Senhor!\"",
+     "image_prompt": "Young red-haired David standing tall and confident in the valley, one hand raised toward the sky, with golden sunlight shining on him, the Philistine warrior and his shield-bearer in the distance, Israelite soldiers watching hopefully from a hill. Inspiring, bright, colorful children's book illustration."
+    },
+    {
+     "text": "O filisteu foi na direção de Davi, e Davi correu depressa para a batalha! Ele pegou uma pedra da bolsa, girou a funda e atirou. A pedra acertou a testa do filisteu, e ele caiu no chão.",
+     "image_prompt": "Young red-haired David running across the valley, swinging his sling over his head with determination, a small stone flying through the air. Dynamic action pose, bright sunny sky, gentle and exciting children's book style, no injury shown."
+    },
+    {
+     "text": "Assim Davi venceu o filisteu só com uma funda e uma pedra, sem espada na mão! Deus estava com Davi, como ele tinha dito. O Senhor é grande e poderoso!",
+     "image_prompt": "Young red-haired David smiling and looking up to the bright sky with joy, holding his sling, while the Israelite soldiers cheer happily on the hillside behind him, raising their arms. Joyful celebration, warm golden light, colorful children's book style."
+    }
+   ],
+   "lesson": "Quando confiamos no Senhor, podemos ser corajosos, porque a batalha é do Senhor.",
+   "family_question": "Davi lembrou como Deus o ajudou antes; em que momento Deus já ajudou a nossa família e nos deu coragem?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Os cavalos do rei",
+      "Os camelos do deserto",
+      "As ovelhas do seu pai"
+     ],
+     "question": "O que Davi cuidava antes de enfrentar o filisteu?",
+     "explanation": "Davi era pastor e cuidava das ovelhas do seu pai, e até salvou cordeirinhos do leão e do urso."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Porque estava suja",
+      "Porque o filisteu pediu",
+      "Porque não conseguia andar com ela"
+     ],
+     "question": "Por que Davi tirou a armadura do rei Saul?",
+     "explanation": "Davi nunca tinha usado uma armadura e não conseguia andar com ela, por isso a tirou."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Dez pedras",
+      "Três pedras",
+      "Cinco pedras"
+     ],
+     "question": "Quantas pedras Davi escolheu no riacho?",
+     "explanation": "Davi escolheu cinco pedras lisinhas e as guardou na sua bolsa de pastor."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Em nome do Senhor",
+      "Em nome dos soldados",
+      "Em nome do rei Saul"
+     ],
+     "question": "Em nome de quem Davi foi enfrentar o filisteu?",
+     "explanation": "Davi disse que vinha em nome do Senhor dos exércitos, porque sabia que a batalha é do Senhor."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Davi",
+      "description": "A young shepherd boy with reddish hair and a kind, handsome face, wearing a simple light-brown tunic and sandals, carrying a wooden shepherd's staff, a sling and a small leather bag."
+     },
+     {
+      "name": "Rei Saul",
+      "description": "An older king with a dark beard, wearing a royal purple robe and a simple gold crown, with a serious but caring face."
+     },
+     {
+      "name": "O filisteu",
+      "description": "A large, strong warrior with a dark beard, wearing shiny bronze armor and a bronze helmet, holding a long spear and a sword, drawn in a friendly, non-scary cartoon style."
+     },
+     {
+      "name": "Escudeiro",
+      "description": "The Philistine's helper, a young soldier in a simple tunic and helmet carrying a big round bronze shield."
+     },
+     {
+      "name": "Ovelhas",
+      "description": "Fluffy white sheep and little lambs with soft wool and sweet faces."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "daniel-6-10-23",
+   "verse_key_start": 27006010,
+   "verse_key_end": 27006023,
+   "level": "both",
+   "title": "Daniel e os Leões: Deus Cuida de Quem Confia Nele",
+   "summary": "Daniel continua orando ao seu Deus, mesmo quando isso é proibido, e Deus envia seu anjo para fechar a boca dos leões e protegê-lo.",
+   "pages": [
+    {
+     "text": "Daniel ficou sabendo que o rei tinha assinado uma lei nova. Mas ele foi para casa, abriu as janelas do seu quarto, viradas para Jerusalém, e se ajoelhou. Ele orava ao seu Deus três vezes por dia, assim como sempre fazia!",
+     "image_prompt": "Inside a simple warm room in an ancient Persian-style house, Daniel kneels by wide open windows facing a distant sunny horizon, hands folded in prayer, peaceful smile, soft golden light streaming in."
+    },
+    {
+     "text": "Uns homens se juntaram e encontraram Daniel orando ao seu Deus. Eles correram até o rei. A lei dizia: quem pedisse alguma coisa a qualquer deus ou pessoa, que não fosse o rei, por trinta dias, iria para a cova dos leões.",
+     "image_prompt": "A small group of men in colorful ancient Persian robes peeking through an open window where Daniel kneels praying, then hurrying away toward a grand palace in the background."
+    },
+    {
+     "text": "Os homens disseram ao rei: “Daniel não obedeceu à sua lei. Ele ora três vezes por dia!” O rei ficou muito triste, porque gostava de Daniel. Até o sol se pôr, ele tentou achar um jeito de salvar Daniel.",
+     "image_prompt": "A kind king with a crown and purple robe sitting on a throne, looking worried and thoughtful with his hand on his chin, while a sunset glows orange through the palace windows; the group of men stands nearby."
+    },
+    {
+     "text": "Mas a lei não podia ser mudada. Então Daniel foi colocado na cova dos leões. O rei disse: “O seu Deus, a quem você serve sempre, vai livrar você!” Uma pedra foi colocada na entrada, e o rei a selou com o seu anel.",
+     "image_prompt": "The king gently speaking to calm Daniel at the edge of a rocky den at dusk, servants rolling a large round stone near the entrance, the king holding up his ring; atmosphere calm, not scary."
+    },
+    {
+     "text": "O rei voltou para o palácio. Naquela noite, ele não comeu nada e não quis ouvir música. Ele não conseguiu dormir!",
+     "image_prompt": "The king sitting awake on his bed in a moonlit palace room, an untouched plate of food and a quiet harp set aside, the king looking out the window at the stars."
+    },
+    {
+     "text": "Bem cedinho, o rei se levantou e foi correndo até a cova. Com a voz triste, ele chamou: “Daniel, servo do Deus vivo! O seu Deus conseguiu livrar você dos leões?”",
+     "image_prompt": "Early morning with a pink and gold sunrise, the king hurrying in his robe toward the sealed stone of the rocky den, calling out with hands cupped around his mouth."
+    },
+    {
+     "text": "E Daniel respondeu: “Ó rei, viva para sempre! O meu Deus enviou o seu anjo, que fechou a boca dos leões. Eles não me fizeram nenhum mal!”",
+     "image_prompt": "Inside the den lit by soft heavenly light, Daniel standing safe and smiling, friendly lions resting calmly around him with closed mouths, a gentle shining angel nearby."
+    },
+    {
+     "text": "O rei ficou muito, muito alegre! Ele mandou tirar Daniel da cova. Daniel saiu sem nenhum machucado, porque confiou no seu Deus!",
+     "image_prompt": "Joyful scene in bright morning light: the king smiling widely with open arms as Daniel climbs out of the den unharmed, servants helping with a rope, happy celebration."
+    }
+   ],
+   "lesson": "Quando confiamos em Deus e continuamos orando a Ele, Deus cuida de nós.",
+   "family_question": "Daniel orava todos os dias, mesmo quando era difícil; em que momentos do dia a nossa família pode orar juntos?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Uma vez",
+      "Dez vezes",
+      "Três vezes"
+     ],
+     "question": "Quantas vezes por dia Daniel orava?",
+     "explanation": "Daniel se ajoelhava e orava ao seu Deus três vezes por dia, como sempre fazia."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Nem ligou",
+      "Ficou feliz",
+      "Ficou muito triste"
+     ],
+     "question": "Como o rei se sentiu quando soube que Daniel iria para a cova?",
+     "explanation": "O rei ficou muito triste e tentou até o pôr do sol achar um jeito de salvar Daniel."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Um soldado",
+      "Um anjo",
+      "O rei"
+     ],
+     "question": "Quem Deus enviou para fechar a boca dos leões?",
+     "explanation": "Daniel contou que Deus enviou o seu anjo, que fechou a boca dos leões."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Sem nenhum machucado",
+      "Machucado",
+      "Com muito medo"
+     ],
+     "question": "Como Daniel saiu da cova?",
+     "explanation": "Daniel saiu sem nenhum machucado, porque confiou no seu Deus."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Daniel",
+      "description": "An older kind man with a short gray beard, warm brown skin, gentle eyes, wearing a simple blue and cream robe with a sash."
+     },
+     {
+      "name": "O rei",
+      "description": "A friendly-looking king with a dark curly beard, golden crown, rich purple robe with gold trim, and a large gold signet ring."
+     },
+     {
+      "name": "Os homens",
+      "description": "A small group of men in colorful ancient Persian robes and tall caps, drawn in a simple non-threatening cartoon style."
+     },
+     {
+      "name": "Os leões",
+      "description": "Big fluffy golden lions with soft round faces and calm, closed mouths, drawn friendly and gentle."
+     },
+     {
+      "name": "O anjo",
+      "description": "A gentle shining figure in a glowing white robe, surrounded by soft warm light, with a kind and peaceful face."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "jonas-1-1-2-10",
+   "verse_key_start": 32001001,
+   "verse_key_end": 32002010,
+   "level": "both",
+   "title": "Jonas e o Grande Peixe",
+   "summary": "Jonas tenta fugir de Deus em um navio, enfrenta uma grande tempestade, é engolido por um grande peixe e descobre que a salvação vem do Senhor.",
+   "pages": [
+    {
+     "text": "Um dia, Deus falou com um homem chamado Jonas. Ele disse: \"Levante-se e vá à grande cidade de Nínive. Pregue contra ela, porque a maldade deles chegou diante de mim.\"",
+     "image_prompt": "Jonah standing outdoors on a sunny hillside, looking up at a soft golden light shining from the sky, listening carefully, with a distant view of hills and a road; warm, gentle children's-book style, no text."
+    },
+    {
+     "text": "Mas Jonas não quis ir! Ele foi até a cidade de Jope e achou um navio que ia para Társis, bem longe. Jonas pagou a passagem e entrou no navio para fugir do Senhor.",
+     "image_prompt": "Jonah at a busy, colorful ancient harbor, handing coins to a sailor beside a wooden ship with a big sail, looking over his shoulder as if sneaking away; bright blue sea, seagulls, cheerful children's-book illustration, no text."
+    },
+    {
+     "text": "Então o Senhor mandou um vento muito forte, e veio uma grande tempestade no mar! Os marinheiros ficaram com medo e jogaram as coisas do navio na água para ele ficar mais leve. E Jonas? Estava lá embaixo, dormindo profundamente!",
+     "image_prompt": "Split scene: on the deck of a wooden ship, sailors tossing crates and barrels into big rolling waves under dark clouds, while below deck Jonah sleeps peacefully on a pile of ropes; dramatic but friendly and not scary, colorful children's-book style, no text."
+    },
+    {
+     "text": "O capitão acordou Jonas: \"Dorminhoco, levante-se e clame ao seu Deus!\" Os marinheiros tiraram sortes, e a sorte caiu sobre Jonas. Ele contou: \"Eu sou hebreu e temo ao Senhor, o Deus do céu, que fez o mar e a terra.\" E disse que estava fugindo do Senhor.",
+     "image_prompt": "Inside the ship, the bearded captain gently shaking a sleepy Jonah awake; then Jonah standing among the curious, worried sailors, pointing upward to explain about God; rain on the deck, lantern light, friendly children's-book illustration, no text."
+    },
+    {
+     "text": "Jonas disse: \"Joguem-me no mar, e o mar vai se acalmar.\" Os marinheiros remaram com força para voltar à terra, mas não conseguiram. Então oraram ao Senhor e colocaram Jonas no mar. Na mesma hora, o mar ficou calmo! Os marinheiros temeram ao Senhor e lhe ofereceram sacrifício.",
+     "image_prompt": "The sea suddenly calm and sparkling under breaking sunlight, the sailors on the wooden ship looking amazed with hands raised toward the sky in prayer and thanks; gentle ripples on the water, bright hopeful colors, children's-book style, no text."
+    },
+    {
+     "text": "Mas Deus já tinha preparado um grande peixe, que engoliu Jonas! Jonas ficou três dias e três noites dentro da barriga do peixe. E lá dentro, Jonas orou ao Senhor, seu Deus.",
+     "image_prompt": "A huge friendly blue-green fish swimming in a calm underwater world with seaweed and small colorful fish; a cutaway view shows Jonah safe inside the fish's belly, kneeling and praying with folded hands, soft glowing light; cozy, not scary, children's-book style, no text."
+    },
+    {
+     "text": "Jonas orou: \"Eu clamei ao Senhor, e ele me respondeu! Vou te agradecer com alegria, porque a salvação vem do Senhor!\"",
+     "image_prompt": "Close-up of Jonah inside the gentle glowing belly of the big fish, smiling with hands lifted in thankful prayer, little bubbles and soft light around him; peaceful and joyful children's-book illustration, no text."
+    },
+    {
+     "text": "Então o Senhor falou com o peixe, e o peixe colocou Jonas para fora, em terra firme. Deus ouviu a oração de Jonas e cuidou dele!",
+     "image_prompt": "The big friendly fish at the edge of a sunny sandy beach, Jonah sitting on the dry sand, wet but smiling and looking up at the bright sky in gratitude; palm trees, blue waves, cheerful colorful children's-book style, no text."
+    }
+   ],
+   "lesson": "Quando clamamos ao Senhor, ele nos ouve, porque a salvação vem do Senhor.",
+   "family_question": "Jonas orou ao Senhor mesmo dentro do peixe; em que momentos nós podemos orar a Deus?",
+   "quiz": [
+    {
+     "answer": 0,
+     "options": [
+      "Nínive",
+      "Társis",
+      "Jope"
+     ],
+     "question": "Para qual cidade Deus mandou Jonas ir?",
+     "explanation": "Deus pediu para Jonas ir à grande cidade de Nínive, mas ele tentou fugir para Társis."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Dormindo no fundo do navio",
+      "Pescando peixes",
+      "Remando com os marinheiros"
+     ],
+     "question": "O que Jonas estava fazendo durante a tempestade?",
+     "explanation": "Jonas estava dormindo profundamente lá embaixo, até o capitão vir acordá-lo."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "O navio afundou",
+      "O mar ficou calmo",
+      "A tempestade ficou mais forte"
+     ],
+     "question": "O que aconteceu quando Jonas foi colocado no mar?",
+     "explanation": "Assim que Jonas foi colocado no mar, o mar se acalmou, como ele tinha dito."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Ficou cantando para os peixes",
+      "Orou ao Senhor",
+      "Tentou sair nadando"
+     ],
+     "question": "O que Jonas fez dentro da barriga do grande peixe?",
+     "explanation": "Jonas orou ao Senhor, e Deus ouviu sua oração e o levou para a terra firme."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Jonas",
+      "description": "A Hebrew man in his thirties with short dark curly hair and a short dark beard, wearing a simple light-brown robe with a blue sash and sandals."
+     },
+     {
+      "name": "Capitão do navio",
+      "description": "A sturdy older sailor with a gray beard, tanned skin, a red headband and a sleeveless tunic."
+     },
+     {
+      "name": "Marinheiros",
+      "description": "A group of friendly sailors of different looks, with tanned skin, simple tunics in various colors and bare feet."
+     },
+     {
+      "name": "Grande peixe",
+      "description": "A huge, gentle blue-green fish with big kind eyes and a wide smooth body, never scary."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "lucas-2-1-20",
+   "verse_key_start": 42002001,
+   "verse_key_end": 42002020,
+   "level": "small",
+   "title": "O Bebê Jesus Nasceu",
+   "summary": "Uma história tranquila sobre a noite em que Jesus, o Salvador, nasceu em Belém e os anjos contaram a boa notícia aos pastores.",
+   "pages": [
+    {
+     "text": "Há muito tempo, o imperador César Augusto mandou contar todas as pessoas da terra. Por isso, cada um precisava ir para a sua cidade.",
+     "image_prompt": "A gentle, colorful children's book illustration of an ancient town street with many friendly people in simple robes walking calmly with bags, soft warm afternoon light, peaceful mood, no text."
+    },
+    {
+     "text": "José saiu da cidade de Nazaré com Maria. Eles foram até Belém, a cidade de Davi. Maria estava esperando um bebê.",
+     "image_prompt": "A tender children's book illustration of Joseph and Mary walking together on a dusty road toward a small hillside town, Mary expecting a baby, Joseph walking close beside her, soft golden light, calm and loving mood, no text."
+    },
+    {
+     "text": "Em Belém, chegou a hora do bebê nascer. Maria teve seu filhinho e o enrolou em paninhos. Ela o deitou numa manjedoura, porque não havia lugar para eles na hospedaria.",
+     "image_prompt": "A calm, cozy children's book illustration of Mary gently laying a newborn baby wrapped in soft cloths into a simple wooden manger filled with hay, Joseph kneeling beside them smiling, warm lamp light at night, peaceful mood, no text."
+    },
+    {
+     "text": "Perto dali, alguns pastores cuidavam das suas ovelhinhas no campo, de noite. De repente, um anjo do Senhor apareceu. Uma luz linda brilhou ao redor deles, e os pastores ficaram com muito medo.",
+     "image_prompt": "A gentle children's book illustration of shepherds in a quiet field at night with fluffy sheep, a kind shining angel appearing in the sky, bright soft golden light surrounding them, the shepherds looking surprised, starry night sky, not scary, no text."
+    },
+    {
+     "text": "O anjo disse com carinho: \"Não tenham medo! Eu trago uma notícia de grande alegria! Hoje nasceu o Salvador, que é Cristo, o Senhor! Vocês vão achar o bebê enrolado em paninhos, deitado numa manjedoura.\"",
+     "image_prompt": "A warm children's book illustration of a kind smiling angel with open arms speaking to shepherds in a field at night, the shepherds listening with calm, wondering faces, sheep resting nearby, soft glowing light, no text."
+    },
+    {
+     "text": "Logo apareceram muitos, muitos anjos no céu. Eles louvavam a Deus e diziam: \"Glória a Deus nas alturas, e paz na terra!\"",
+     "image_prompt": "A joyful, peaceful children's book illustration of a great crowd of shining angels filling the night sky praising God, shepherds and sheep in the field below looking up in wonder, soft golden glow, no text."
+    },
+    {
+     "text": "Os pastores disseram: \"Vamos até Belém ver o que aconteceu!\" Eles foram depressa e acharam Maria, José e o bebê deitado na manjedoura. Os pastores contaram tudo o que o anjo tinha falado, e todos ficaram admirados.",
+     "image_prompt": "A tender children's book illustration of shepherds kneeling happily near a wooden manger where a baby wrapped in cloths is sleeping, Mary and Joseph smiling beside the manger, warm soft night light, gentle mood, no text."
+    },
+    {
+     "text": "Maria guardava todas essas palavras no seu coração. E os pastores voltaram para o campo louvando a Deus por tudo o que tinham ouvido e visto. Boa noite, e que você também louve a Deus!",
+     "image_prompt": "A calm bedtime children's book illustration split into a single peaceful scene: Mary holding the sleeping baby close with a loving face in warm light, and in the distance shepherds walking back to the field under a starry sky with joyful raised hands, no text."
+    }
+   ],
+   "lesson": "Jesus nasceu para ser o nosso Salvador, e isso é uma notícia de grande alegria para todo o povo.",
+   "family_question": "Assim como os pastores, por quais coisas boas nós podemos louvar a Deus hoje?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Nazaré",
+      "Jerusalém",
+      "Belém"
+     ],
+     "question": "Para qual cidade José e Maria foram?",
+     "explanation": "Eles foram para Belém, a cidade de Davi, e foi lá que o bebê Jesus nasceu."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Numa cama grande",
+      "Numa manjedoura",
+      "Num barco"
+     ],
+     "question": "Onde Maria deitou o bebê Jesus?",
+     "explanation": "Maria deitou o bebê numa manjedoura, porque não havia lugar para eles na hospedaria."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Uma criança",
+      "Um anjo do Senhor",
+      "Um rei"
+     ],
+     "question": "Quem contou aos pastores que Jesus tinha nascido?",
+     "explanation": "Um anjo do Senhor apareceu aos pastores e contou a notícia de grande alegria."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Ficaram tristes",
+      "Foram dormir sem falar nada",
+      "Louvaram a Deus"
+     ],
+     "question": "O que os pastores fizeram quando voltaram para o campo?",
+     "explanation": "Os pastores voltaram louvando a Deus por tudo o que tinham ouvido e visto."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Maria",
+      "description": "A young, gentle woman with dark hair under a soft blue head covering, wearing a simple light robe, with a kind and loving face."
+     },
+     {
+      "name": "José",
+      "description": "A kind young man with short dark brown hair and a short beard, wearing a simple brown robe and a light head covering."
+     },
+     {
+      "name": "Bebê Jesus",
+      "description": "A peaceful newborn baby wrapped in soft white cloths, with rosy cheeks, usually sleeping in a simple wooden manger with hay."
+     },
+     {
+      "name": "Pastores",
+      "description": "A few friendly shepherds of different ages in simple earth-toned robes and head coverings, holding wooden staffs, with warm faces."
+     },
+     {
+      "name": "Anjo do Senhor",
+      "description": "A kind, shining angel in a bright white robe surrounded by soft golden light, with a gentle smile and open arms."
+     },
+     {
+      "name": "Multidão de anjos",
+      "description": "Many shining angels in bright white robes glowing with soft golden light, filling the night sky as they praise God."
+     },
+     {
+      "name": "Ovelhas",
+      "description": "Small, fluffy white sheep with soft wool and sweet faces, resting in the field."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "marcos-4-35-41",
+   "verse_key_start": 41004035,
+   "verse_key_end": 41004041,
+   "level": "small",
+   "title": "Jesus Acalma a Tempestade",
+   "summary": "Uma aventura no mar, onde Jesus mostra que até o vento e as ondas obedecem a Ele.",
+   "pages": [
+    {
+     "text": "Era fim de tarde. Jesus disse aos seus amigos: \"Vamos para o outro lado do mar!\" Eles entraram no barco, e outros barquinhos foram junto.",
+     "image_prompt": "A calm sea at sunset with orange and pink sky. Jesus and his disciples climb into a wooden fishing boat while a few other small boats float nearby. A crowd waves goodbye from the shore. Friendly, colorful children's-book style."
+    },
+    {
+     "text": "De repente, começou a soprar um vento muito forte! As ondas subiam e jogavam água para dentro do barco. E Jesus? Jesus estava dormindo na parte de trás do barco, com a cabeça numa almofada.",
+     "image_prompt": "A wooden boat on a windy sea with big rounded waves splashing water into the boat, gray clouds above. The disciples hold onto the boat with surprised faces. At the back of the boat, Jesus sleeps peacefully with his head on a small cushion. Bright, gentle, not scary, children's-book illustration."
+    },
+    {
+     "text": "Os amigos acordaram Jesus e disseram: \"Mestre, o senhor não se importa com a gente?\"",
+     "image_prompt": "Inside the boat, the disciples gently wake Jesus, who is opening his eyes on a cushion at the back of the boat. Waves and wind around them, rounded friendly shapes, soft colors, children's-book style."
+    },
+    {
+     "text": "Jesus se levantou, falou firme com o vento e disse ao mar: \"Fique quieto! Acalme-se!\" E pronto! O vento parou, e o mar ficou calminho, calminho.",
+     "image_prompt": "Jesus standing in the boat with one arm stretched out over the sea. The clouds part, the wind stops, and the water becomes smooth and shiny. The disciples look up in amazement. Warm light, colorful children's-book illustration."
+    },
+    {
+     "text": "Jesus perguntou: \"Por que vocês ficaram com tanto medo? Vocês ainda não têm fé?\" Os amigos ficaram admirados e diziam: \"Quem é este, que até o vento e o mar obedecem a Ele?\"",
+     "image_prompt": "The boat rests on a calm, glassy sea under a clear evening sky. Jesus speaks kindly to the disciples, who look at each other with wide, amazed eyes. Peaceful, colorful children's-book illustration."
+    }
+   ],
+   "lesson": "Jesus tem poder sobre o vento e o mar, e podemos confiar n'Ele.",
+   "family_question": "Quando você sente medo, como pode se lembrar de que Jesus é forte e cuida de você?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Pescando peixes",
+      "Remando o barco",
+      "Dormindo numa almofada"
+     ],
+     "question": "O que Jesus estava fazendo quando a tempestade começou?",
+     "explanation": "Isso mesmo! Jesus estava dormindo na parte de trás do barco, com a cabeça numa almofada."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Jogando água para dentro do barco",
+      "Deixando o barco parado",
+      "Levando o barco para a areia"
+     ],
+     "question": "O que as ondas estavam fazendo com o barco?",
+     "explanation": "Muito bem! As ondas eram grandes e jogavam água para dentro do barco."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Fique quieto! Acalme-se!",
+      "Fique mais forte!",
+      "Vamos voltar!"
+     ],
+     "question": "O que Jesus disse ao mar?",
+     "explanation": "Isso! Jesus mandou o mar ficar quieto, e o mar obedeceu."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "O vento parou e o mar ficou calmo",
+      "O barco foi embora sozinho",
+      "Começou a chover mais"
+     ],
+     "question": "O que aconteceu depois que Jesus falou?",
+     "explanation": "Que legal! O vento e o mar obedeceram a Jesus, e tudo ficou calminho."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Jesus",
+      "description": "A kind man with short brown hair and a short beard, wearing a simple white robe with a light blue sash and sandals, with a gentle smile."
+     },
+     {
+      "name": "Os discípulos",
+      "description": "A group of friendly men with tunics in earthy colors like brown, green and tan, some with beards, simple fishermen's clothes."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "joao-6-1-14",
+   "verse_key_start": 43006001,
+   "verse_key_end": 43006014,
+   "level": "small",
+   "title": "Jesus e os Cinco Pães e Dois Peixinhos",
+   "summary": "Uma multidão enorme estava com fome, e Jesus fez um milagre maravilhoso com apenas cinco pães e dois peixinhos!",
+   "pages": [
+    {
+     "text": "Jesus atravessou o grande mar da Galileia. Uma multidão enorme seguia Jesus, porque via Ele curar as pessoas doentes! Jesus subiu um monte e sentou-se com os seus discípulos.",
+     "image_prompt": "Jesus sitting on a green grassy hill with his disciples, a sparkling blue lake behind them, a big happy crowd of people of all ages walking up the hill toward him, sunny sky, bright colorful children's book style"
+    },
+    {
+     "text": "Jesus olhou e viu toda aquela gente chegando. Ele perguntou a Filipe: “Onde vamos comprar pão para todos comerem?” Jesus já sabia o que ia fazer! Filipe respondeu: “Nem muito dinheiro dá para comprar pão para tanta gente!”",
+     "image_prompt": "Jesus smiling kindly and talking to Philip on the hillside, Philip scratching his head with a surprised, worried face, a huge crowd in the background on the green grass, cheerful colorful children's book illustration"
+    },
+    {
+     "text": "Então André, irmão de Pedro, disse: “Aqui tem um menino com cinco pães e dois peixinhos. Mas o que é isso para tanta gente?”",
+     "image_prompt": "Andrew gently pointing to a small boy holding a simple basket with five round barley loaves and two small fish, Jesus looking at them with a warm smile, green hillside, bright friendly children's book style"
+    },
+    {
+     "text": "Jesus disse: “Mandem o povo sentar.” Todos se sentaram na grama verdinha, eram uns cinco mil homens! Jesus pegou os pães, agradeceu a Deus, e os discípulos repartiram os pães e os peixes. Todo mundo comeu o quanto quis!",
+     "image_prompt": "Jesus standing and holding bread up toward the sky, giving thanks with a joyful face, disciples happily passing bread and fish to many smiling families sitting on soft green grass, sunny day, colorful children's book illustration"
+    },
+    {
+     "text": "Todos ficaram bem satisfeitos! Jesus disse: “Juntem os pedaços que sobraram, para nada se perder.” E sobraram doze cestos cheios! O povo disse, alegre: “Este é mesmo o Profeta que havia de vir ao mundo!”",
+     "image_prompt": "Disciples smiling and carrying twelve woven baskets full of bread pieces on the green hillside, Jesus standing among them, happy crowd looking amazed and joyful, warm golden afternoon light, bright children's book style"
+    }
+   ],
+   "lesson": "Jesus cuida de nós e pode fazer coisas muito grandes com o pouco que temos.",
+   "family_question": "Como Jesus já cuidou da nossa família, assim como cuidou daquela multidão com fome?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Três bolos e uma maçã",
+      "Dez peixes grandes",
+      "Cinco pães e dois peixinhos"
+     ],
+     "question": "O que o menino tinha?",
+     "explanation": "Isso mesmo! O menino tinha cinco pães e dois peixinhos."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Agradeceu a Deus",
+      "Foi dormir",
+      "Foi pescar no mar"
+     ],
+     "question": "O que Jesus fez antes de repartir os pães?",
+     "explanation": "Muito bem! Jesus pegou os pães e agradeceu a Deus antes de repartir."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Na grama verdinha",
+      "Em cadeiras de uma casa",
+      "Dentro de um barco"
+     ],
+     "question": "Onde o povo se sentou para comer?",
+     "explanation": "Isso! Tinha muita grama naquele lugar, e o povo se sentou nela."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Um cesto",
+      "Nenhum cesto",
+      "Doze cestos"
+     ],
+     "question": "Quantos cestos sobraram cheios de pedaços de pão?",
+     "explanation": "Que maravilha! Todos comeram e ainda sobraram doze cestos cheios!"
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Jesus",
+      "description": "Kind man with warm brown skin, short dark beard and shoulder-length dark hair, wearing a simple white robe with a soft blue sash, gentle smiling eyes"
+     },
+     {
+      "name": "Filipe",
+      "description": "Young man with light brown skin, short curly black hair and a small beard, wearing a green tunic"
+     },
+     {
+      "name": "André",
+      "description": "Friendly man with tan skin, short brown hair and a short brown beard, wearing an orange-brown tunic"
+     },
+     {
+      "name": "Menino",
+      "description": "Small boy about seven years old with olive skin, messy black hair, wearing a simple beige tunic, holding a small basket with five round loaves and two small fish"
+     },
+     {
+      "name": "Multidão",
+      "description": "Many happy people of all ages, men, women and children, wearing simple colorful robes in earthy tones"
+     }
+    ]
+   }
+  },
+  {
+   "seed": "lucas-15-3-7",
+   "verse_key_start": 42015003,
+   "verse_key_end": 42015007,
+   "level": "small",
+   "title": "A Ovelhinha Perdida",
+   "summary": "Jesus conta a história de um pastor que procura a sua ovelhinha perdida até encontrá-la e fica muito feliz.",
+   "pages": [
+    {
+     "text": "Um dia, Jesus contou uma história. Era sobre um homem que tinha cem ovelhas. Mas uma ovelhinha se perdeu.",
+     "image_prompt": "Jesus sitting on a grassy hillside, gently telling a story to a small group of people, with a soft sunset sky in calm warm colors, cozy bedtime children's book style"
+    },
+    {
+     "text": "O homem deixou as noventa e nove ovelhas no deserto. E foi procurar a ovelhinha perdida. Ele procurou, procurou, até encontrar.",
+     "image_prompt": "The shepherd walking calmly across a wide quiet wilderness with gentle hills, looking around carefully, while a big flock of fluffy white sheep rests behind him, soft evening light, tender children's book illustration"
+    },
+    {
+     "text": "Ele achou a ovelhinha! Com muita alegria, ele a colocou nos ombros. Agora ela estava bem pertinho dele.",
+     "image_prompt": "The shepherd smiling happily with the small white lamb resting on his shoulders, the lamb looking calm and safe, soft golden light, gentle colorful children's book style"
+    },
+    {
+     "text": "Quando chegou em casa, ele chamou os amigos e os vizinhos. E disse: \"Fiquem alegres comigo, porque achei a minha ovelha perdida!\"",
+     "image_prompt": "The shepherd at the door of a simple house, with the lamb on his shoulders, joyfully greeting smiling friends and neighbors gathered around him, warm cozy evening colors, children's book illustration"
+    },
+    {
+     "text": "Então Jesus disse: assim também há muita alegria no céu. É quando uma pessoa se arrepende do que fez de errado. Deus ama cada um de nós, e você é muito importante para Ele.",
+     "image_prompt": "Jesus smiling tenderly under a calm starry night sky, with a soft glowing light above, peaceful and loving mood, gentle bedtime children's book style"
+    }
+   ],
+   "lesson": "Deus ama cada pessoa e fica muito alegre quando alguém se arrepende e volta para Ele.",
+   "family_question": "Como você acha que a ovelhinha se sentiu quando o pastor a encontrou e a levou nos ombros?",
+   "quiz": [
+    {
+     "answer": 1,
+     "options": [
+      "Duas ovelhas",
+      "Cem ovelhas",
+      "Dez ovelhas"
+     ],
+     "question": "Quantas ovelhas o homem tinha?",
+     "explanation": "Isso mesmo, o homem tinha cem ovelhas, e uma delas se perdeu."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Foi procurar até encontrar",
+      "Esqueceu dela",
+      "Foi dormir"
+     ],
+     "question": "O que o homem fez quando uma ovelhinha se perdeu?",
+     "explanation": "O homem procurou a ovelhinha até encontrá-la, porque ela era importante para ele."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Nos ombros",
+      "Numa cesta",
+      "Num carrinho"
+     ],
+     "question": "Onde o homem levou a ovelhinha quando a achou?",
+     "explanation": "Ele colocou a ovelhinha nos ombros, com muita alegria."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Os soldados",
+      "Ninguém",
+      "Os amigos e os vizinhos"
+     ],
+     "question": "Quem o homem chamou quando chegou em casa?",
+     "explanation": "Ele chamou os amigos e os vizinhos para ficarem alegres com ele."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Jesus",
+      "description": "A kind man with short brown hair and a short beard, wearing a simple cream robe with a light blue sash, with a warm gentle smile"
+     },
+     {
+      "name": "O pastor",
+      "description": "A friendly man with dark curly hair and a short beard, wearing a brown tunic and a simple head cloth, holding a wooden shepherd's staff"
+     },
+     {
+      "name": "A ovelhinha perdida",
+      "description": "A small fluffy white lamb with soft pink ears and big gentle dark eyes"
+     },
+     {
+      "name": "As noventa e nove ovelhas",
+      "description": "A large flock of fluffy white sheep with calm faces"
+     },
+     {
+      "name": "Os amigos e vizinhos",
+      "description": "A small group of smiling men and women in simple colorful tunics and head coverings"
+     }
+    ]
+   }
+  },
+  {
+   "seed": "lucas-19-1-10",
+   "verse_key_start": 42019001,
+   "verse_key_end": 42019010,
+   "level": "both",
+   "title": "Zaqueu e Jesus",
+   "summary": "Zaqueu era pequeno, mas subiu numa árvore para ver Jesus, e Jesus foi até a casa dele e trouxe salvação!",
+   "pages": [
+    {
+     "text": "Jesus estava passando pela cidade de Jericó. Lá morava um homem chamado Zaqueu. Ele era chefe dos cobradores de impostos e era rico.",
+     "image_prompt": "A sunny ancient Middle Eastern town street in Jericho with stone houses and palm trees; Jesus walking with a happy crowd; Zaqueu, a short man in fine colorful robes, watching from the side with curiosity. Friendly, colorful children's book style, no text."
+    },
+    {
+     "text": "Zaqueu queria muito ver Jesus! Mas tinha muita gente, e ele era baixinho. Então ele correu na frente e subiu numa árvore. Lá de cima ele ia ver Jesus passar!",
+     "image_prompt": "Zaqueu, a short man in fine colorful robes, happily climbing a big leafy sycamore-fig tree beside a dusty road, while a large crowd gathers below. Bright, cheerful children's book illustration, no text."
+    },
+    {
+     "text": "Quando Jesus chegou ali, olhou para cima e disse: \"Zaqueu, desce depressa! Hoje eu vou ficar na sua casa.\" Zaqueu desceu correndo e recebeu Jesus com muita alegria!",
+     "image_prompt": "Jesus standing under the sycamore-fig tree, smiling and looking up kindly at Zaqueu, who is joyfully climbing down from a branch; surprised crowd around them. Warm, colorful children's book style, no text."
+    },
+    {
+     "text": "O povo reclamou: \"Jesus foi para a casa de um pecador!\" Mas Zaqueu se levantou e disse: \"Senhor, vou dar metade do que tenho aos pobres. E se enganei alguém, vou devolver quatro vezes mais!\"",
+     "image_prompt": "Inside a nice ancient house, Zaqueu standing up with an open, generous gesture, speaking to Jesus who listens with a gentle smile; some people outside the doorway looking on. Cheerful children's book illustration, no text."
+    },
+    {
+     "text": "Jesus disse: \"Hoje a salvação chegou a esta casa!\" Jesus veio buscar e salvar quem estava perdido. Que alegria!",
+     "image_prompt": "Jesus and a very happy Zaqueu together in front of Zaqueu's house, bright sunshine and warm light, Zaqueu smiling with joy. Joyful, colorful children's book style, no text."
+    }
+   ],
+   "lesson": "Jesus veio buscar e salvar quem estava perdido, e quem recebe Jesus tem o coração mudado.",
+   "family_question": "O que mudou no coração de Zaqueu depois que ele recebeu Jesus na casa dele?",
+   "quiz": [
+    {
+     "answer": 0,
+     "options": [
+      "Para ver Jesus",
+      "Para se esconder da chuva",
+      "Para pegar frutas"
+     ],
+     "question": "Por que Zaqueu subiu na árvore?",
+     "explanation": "Zaqueu era baixinho e tinha muita gente, então ele subiu na árvore para conseguir ver Jesus."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Fica aí em cima da árvore",
+      "Vai embora para longe",
+      "Desce, hoje vou ficar na sua casa"
+     ],
+     "question": "O que Jesus disse para Zaqueu?",
+     "explanation": "Jesus chamou Zaqueu pelo nome e disse que ia ficar na casa dele naquele dia."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Com tristeza",
+      "Com raiva",
+      "Com alegria"
+     ],
+     "question": "Como Zaqueu recebeu Jesus?",
+     "explanation": "Zaqueu desceu depressa e recebeu Jesus com muita alegria!"
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Nada",
+      "Só uma moeda",
+      "Metade do que tinha"
+     ],
+     "question": "O que Zaqueu prometeu dar aos pobres?",
+     "explanation": "Zaqueu disse que ia dar metade do que tinha aos pobres, porque seu coração mudou."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Jesus",
+      "description": "A kind man with shoulder-length brown hair and a short beard, wearing a simple cream robe with a blue sash and sandals, with a warm, gentle smile."
+     },
+     {
+      "name": "Zaqueu",
+      "description": "A short man with dark curly hair and a small beard, wearing fine purple and gold robes and a little headband, with expressive, cheerful eyes."
+     },
+     {
+      "name": "Multidão",
+      "description": "A crowd of men, women and children of Jericho in simple earth-toned robes and head coverings."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "marcos-10-13-16",
+   "verse_key_start": 41010013,
+   "verse_key_end": 41010016,
+   "level": "small",
+   "title": "Jesus Ama as Criancinhas",
+   "summary": "Uma história tranquila sobre o dia em que Jesus abraçou e abençoou as crianças.",
+   "pages": [
+    {
+     "text": "Um dia, muitas pessoas levaram suas crianças até Jesus. Elas queriam que Jesus tocasse nas crianças.",
+     "image_prompt": "Gentle evening-toned illustration of parents and small children walking along a dusty village path in ancient Israel toward Jesus, who sits peacefully under a tree; soft warm colors, calm atmosphere."
+    },
+    {
+     "text": "Mas os discípulos de Jesus disseram para as pessoas não trazerem as crianças. Eles não deixavam as crianças chegar perto.",
+     "image_prompt": "The disciples standing in front of the families, holding up their hands to stop them, while children look on with curious faces; Jesus visible in the background; soft colors, not scary, calm mood."
+    },
+    {
+     "text": "Jesus viu e não gostou. Ele disse: \"Deixem as crianças virem a mim. Não as impeçam. O Reino de Deus é delas.\"",
+     "image_prompt": "Jesus standing up with open arms, looking kindly at the children and speaking to the disciples; the children's faces lighting up with joy; warm golden light, peaceful setting."
+    },
+    {
+     "text": "Jesus também disse que, para entrar no Reino de Deus, é preciso recebê-lo como uma criança.",
+     "image_prompt": "Jesus sitting down and speaking gently to the disciples and the families, a small child standing beside him smiling; soft sunset colors, tender atmosphere."
+    },
+    {
+     "text": "Então Jesus pegou as crianças no colo. Ele colocou as mãos sobre elas e as abençoou. Jesus ama você também. Boa noite!",
+     "image_prompt": "Jesus sitting and holding small children in his arms, gently placing his hands on their heads to bless them, children smiling and resting close to him; soft twilight colors, cozy bedtime feeling."
+    }
+   ],
+   "lesson": "Jesus ama as crianças e quer que elas venham até Ele.",
+   "family_question": "Como podemos chegar perto de Jesus hoje, antes de dormir?",
+   "quiz": [
+    {
+     "answer": 2,
+     "options": [
+      "Os animais",
+      "Os peixes",
+      "As crianças"
+     ],
+     "question": "Quem as pessoas levaram até Jesus?",
+     "explanation": "As pessoas levaram as crianças para Jesus tocar nelas."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Cantaram com as crianças",
+      "Não deixavam as crianças chegar perto",
+      "Deram comida às crianças"
+     ],
+     "question": "O que os discípulos fizeram?",
+     "explanation": "Os discípulos não deixavam as crianças chegar perto de Jesus."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "\"Deixem as crianças virem a mim\"",
+      "\"Vão embora\"",
+      "\"Voltem amanhã\""
+     ],
+     "question": "O que Jesus disse?",
+     "explanation": "Jesus disse para deixarem as crianças virem até Ele, porque Ele as ama."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Mandou embora",
+      "Pegou no colo e abençoou",
+      "Contou as crianças"
+     ],
+     "question": "O que Jesus fez com as crianças no final?",
+     "explanation": "Jesus pegou as crianças no colo, colocou as mãos sobre elas e as abençoou."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Jesus",
+      "description": "A kind man with shoulder-length brown hair and a short beard, warm brown eyes and a gentle smile, wearing a light beige robe with a blue sash and simple sandals."
+     },
+     {
+      "name": "Os discípulos",
+      "description": "A small group of grown men with beards, wearing simple robes in brown, green and gray tones, with serious faces."
+     },
+     {
+      "name": "As crianças",
+      "description": "Several small children of different ages, with brown and black hair, wearing simple colorful tunics in red, yellow and light blue, with happy faces."
+     },
+     {
+      "name": "Os pais",
+      "description": "Mothers and fathers in simple ancient robes and head coverings in soft earthy colors, holding their children's hands."
+     }
+    ]
+   }
+  },
+  {
+   "seed": "mateus-28-1-10",
+   "verse_key_start": 40028001,
+   "verse_key_end": 40028010,
+   "level": "both",
+   "title": "Jesus Está Vivo!",
+   "summary": "Duas amigas de Jesus vão bem cedinho ao túmulo e recebem a notícia mais feliz do mundo: Jesus ressuscitou!",
+   "pages": [
+    {
+     "text": "Era bem cedinho, e o sol estava começando a aparecer. Maria Madalena e a outra Maria foram ver o túmulo onde Jesus tinha sido colocado.",
+     "image_prompt": "Early morning sunrise with soft pink and golden sky, two women in simple long robes and head coverings walking along a garden path toward a rock tomb with a large round stone at the entrance, gentle and peaceful mood"
+    },
+    {
+     "text": "De repente, a terra tremeu! Um anjo do Senhor desceu do céu, rolou a pedra da entrada e sentou em cima dela. Ele brilhava como um relâmpago, e sua roupa era branca como a neve. Os guardas ficaram com tanto medo que tremeram e caíram no chão.",
+     "image_prompt": "A shining friendly angel with bright glowing light and snow-white robe sitting on a large round stone beside an open rock tomb, soldiers in the background lying on the ground looking startled, the two women watching with wide eyes, colorful garden at dawn, gentle and not scary"
+    },
+    {
+     "text": "O anjo disse às mulheres: \"Não tenham medo! Vocês procuram Jesus, mas ele não está aqui. Ele ressuscitou, como tinha dito! Venham ver o lugar onde ele estava.\"",
+     "image_prompt": "The shining angel in white robe kindly pointing toward the empty open tomb, the two women looking inside with surprised and hopeful faces, soft morning light, flowers in the garden"
+    },
+    {
+     "text": "\"Corram e contem aos discípulos que Jesus está vivo! Ele vai para a Galileia, e lá vocês vão vê-lo.\" As duas saíram correndo, com um pouco de medo, mas com muita, muita alegria!",
+     "image_prompt": "The two women running happily along a path away from the garden tomb, robes flowing, big joyful smiles, bright morning sun, birds flying in a clear sky"
+    },
+    {
+     "text": "No caminho, Jesus apareceu para elas e disse: \"Saudações!\" Elas chegaram perto, seguraram os pés dele e o adoraram. Jesus disse: \"Não tenham medo! Vão dizer aos meus irmãos que vão para a Galileia, e lá eles vão me ver.\"",
+     "image_prompt": "Jesus in a white and soft blue robe with a kind loving smile standing on a sunny path, the two women kneeling before him in worship holding his feet, warm golden light, green hills and flowers around"
+    }
+   ],
+   "lesson": "Jesus está vivo, assim como ele prometeu, e essa notícia alegre é para ser contada a todos!",
+   "family_question": "Para quem você gostaria de contar hoje a boa notícia de que Jesus está vivo?",
+   "quiz": [
+    {
+     "answer": 1,
+     "options": [
+      "Os guardas",
+      "Maria Madalena e a outra Maria",
+      "Pedro e João"
+     ],
+     "question": "Quem foi ver o túmulo de Jesus bem cedinho?",
+     "explanation": "Isso mesmo! Maria Madalena e a outra Maria foram ver o túmulo quando o dia começava a clarear."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Deixou a pedra fechada",
+      "Rolou a pedra e sentou em cima dela",
+      "Quebrou em pedacinhos"
+     ],
+     "question": "O que o anjo fez com a pedra da entrada?",
+     "explanation": "O anjo rolou a pedra da entrada e sentou em cima dela."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Que Jesus tinha viajado de barco",
+      "Que Jesus ressuscitou",
+      "Que Jesus estava dormindo"
+     ],
+     "question": "Qual foi a boa notícia que o anjo contou?",
+     "explanation": "O anjo disse que Jesus não estava ali porque tinha ressuscitado, como ele mesmo tinha dito!"
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Voltaram para casa dormir",
+      "Fugiram e se esconderam",
+      "Seguraram os pés dele e o adoraram"
+     ],
+     "question": "O que as mulheres fizeram quando encontraram Jesus no caminho?",
+     "explanation": "Elas chegaram perto de Jesus, seguraram os pés dele e o adoraram com muita alegria."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Jesus",
+      "description": "A kind man with shoulder-length brown hair and a short beard, warm brown eyes, wearing a white robe with a soft blue sash, gentle loving smile"
+     },
+     {
+      "name": "Maria Madalena",
+      "description": "A young woman with dark wavy hair under a light purple head covering, wearing a long lavender robe, kind brown eyes"
+     },
+     {
+      "name": "A outra Maria",
+      "description": "A woman with dark hair under a soft green head covering, wearing a long beige and green robe, gentle face"
+     },
+     {
+      "name": "Anjo do Senhor",
+      "description": "A shining friendly angel with a bright glowing face like light, wearing a snow-white robe, surrounded by soft radiant light"
+     },
+     {
+      "name": "Guardas",
+      "description": "Soldiers in simple red tunics and bronze helmets, shown gently and not scary"
+     }
+    ]
+   }
+  },
+  {
+   "seed": "atos-2-1-21",
+   "verse_key_start": 44002001,
+   "verse_key_end": 44002021,
+   "level": "big",
+   "title": "O Dia em que o Espírito Santo Chegou",
+   "summary": "No dia de Pentecostes, Deus derramou o Espírito Santo sobre os seguidores de Jesus, e pessoas de muitas nações ouviram falar das grandezas de Deus em sua própria língua!",
+   "pages": [
+    {
+     "text": "Era o dia de Pentecostes, uma grande festa em Jerusalém. Os seguidores de Jesus estavam todos juntos, no mesmo lugar, unidos de coração. Eles estavam sentados dentro de uma casa. Mal sabiam que algo maravilhoso estava para acontecer!",
+     "image_prompt": "A group of Jesus' followers, men and women in simple colorful robes, sitting together peacefully in a bright room of an ancient stone house in Jerusalem, morning sunlight coming through a window, friendly and calm atmosphere."
+    },
+    {
+     "text": "De repente, veio do céu um barulho, como o de um vento muito forte! O som encheu toda a casa onde eles estavam. Todos olharam ao redor, surpresos. O que seria aquilo?",
+     "image_prompt": "Inside the same stone house, the followers of Jesus looking up in wonder as swirling light wind lines fill the room, robes and hair gently blowing, joyful and amazed faces, warm golden light, no scary elements."
+    },
+    {
+     "text": "Então eles viram algo incrível: línguas que pareciam de fogo se repartiram e pousaram sobre cada um deles. E todos ficaram cheios do Espírito Santo! Eles começaram a falar em outras línguas, do jeito que o Espírito Santo os fazia falar. Que alegria!",
+     "image_prompt": "The followers of Jesus with small gentle glowing flame-like tongues of light resting above each person's head, faces full of joy, some raising hands, speaking happily, bright warm colors, peaceful and wonderful scene."
+    },
+    {
+     "text": "Naquela época, havia em Jerusalém judeus que amavam a Deus, vindos de muitas nações do mundo. Quando ouviram o barulho, uma multidão se juntou. E todos ficaram admirados, porque cada um ouvia os seguidores de Jesus falando na sua própria língua!",
+     "image_prompt": "A big crowd of people from many nations in different colorful traditional clothes gathering in a sunny street of ancient Jerusalem outside the house, looking amazed and curious, Peter and the apostles visible near the doorway speaking joyfully."
+    },
+    {
+     "text": "As pessoas diziam umas às outras: \"Esses homens não são todos da Galileia? Como podemos ouvi-los na língua em que nascemos?\" Eram pessoas do Egito, da Mesopotâmia, de Roma, de Creta, da Arábia e de muitos outros lugares. Todos ouviam eles falando das grandezas de Deus! Muitos perguntavam: \"O que será que isso quer dizer?\"",
+     "image_prompt": "Close view of diverse people in the crowd, men and women in varied colorful robes and head coverings, turning to each other with surprised and delighted expressions, pointing toward the apostles, sunny ancient city background."
+    },
+    {
+     "text": "Mas alguns zombaram e disseram que eles tinham bebido vinho demais. Então Pedro se levantou junto com os outros onze apóstolos. Ele falou bem alto: \"Escutem o que eu vou dizer! Eles não estão bêbados, pois ainda é bem cedo de manhã!\"",
+     "image_prompt": "Peter, a sturdy man with short curly gray-brown beard in a blue robe, standing confidently on a step with one hand raised, speaking to the crowd, eleven apostles standing beside him, morning light, attentive faces in the crowd."
+    },
+    {
+     "text": "Pedro explicou: \"Isto é o que Deus prometeu pelo profeta Joel!\" Deus disse que derramaria o seu Espírito sobre todas as pessoas. Filhos e filhas profetizariam, os jovens teriam visões e os mais velhos teriam sonhos. Deus também disse que daria sinais no céu e na terra antes do grande dia do Senhor.",
+     "image_prompt": "Peter speaking warmly to the crowd with open arms, an old scroll in one hand, listeners of all ages including young men, young women, and elderly people listening with hope, soft glowing sky above the city."
+    },
+    {
+     "text": "E Pedro terminou com uma notícia maravilhosa da promessa de Deus: \"Todo aquele que invocar o nome do Senhor será salvo!\" Todo mundo pode chamar pelo nome do Senhor. Que promessa linda para todos nós!",
+     "image_prompt": "Peter smiling with arms open wide toward a joyful crowd of people from many nations, all ages, faces lifted with hope, bright sunshine over ancient Jerusalem, warm and happy colors."
+    }
+   ],
+   "lesson": "Deus cumpre suas promessas: Ele derramou o Espírito Santo, e todo aquele que invocar o nome do Senhor será salvo.",
+   "family_question": "O que Deus prometeu para todo aquele que invocar o nome do Senhor, e como podemos chamar pelo nome dEle hoje?",
+   "quiz": [
+    {
+     "answer": 1,
+     "options": [
+      "Um som de chuva",
+      "Um som como de vento forte",
+      "Um som de trombetas"
+     ],
+     "question": "Que barulho os seguidores de Jesus ouviram vindo do céu?",
+     "explanation": "Isso mesmo! Veio do céu um barulho como de um vento forte, que encheu toda a casa."
+    },
+    {
+     "answer": 0,
+     "options": [
+      "Línguas que pareciam de fogo",
+      "Pombas brancas",
+      "Coroas de ouro"
+     ],
+     "question": "O que pousou sobre cada um deles?",
+     "explanation": "Muito bem! Eles viram línguas que pareciam de fogo pousando sobre cada um, e todos ficaram cheios do Espírito Santo."
+    },
+    {
+     "answer": 2,
+     "options": [
+      "Porque a casa caiu",
+      "Porque viu uma grande festa",
+      "Porque cada um ouvia falar das grandezas de Deus na sua própria língua"
+     ],
+     "question": "Por que a multidão ficou tão admirada?",
+     "explanation": "Exato! Pessoas de muitas nações ouviam os seguidores de Jesus falando na língua em que tinham nascido."
+    },
+    {
+     "answer": 1,
+     "options": [
+      "Todos ficariam ricos",
+      "Todo aquele que invocar o nome do Senhor será salvo",
+      "Ninguém mais ficaria triste"
+     ],
+     "question": "Qual promessa de Deus Pedro anunciou no final?",
+     "explanation": "Isso! Pedro disse que todo aquele que invocar o nome do Senhor será salvo, uma promessa para todos."
+    }
+   ],
+   "ai_meta": {
+    "model": "claude-opus-5-5",
+    "characters": [
+     {
+      "name": "Pedro",
+      "description": "A sturdy middle-aged man with short curly gray-brown hair and beard, kind brown eyes, wearing a blue robe with a brown sash and sandals."
+     },
+     {
+      "name": "Os onze apóstolos",
+      "description": "Eleven men of different ages with beards, wearing simple robes in earthy colors like tan, green, red and brown, with sandals."
+     },
+     {
+      "name": "Seguidores de Jesus",
+      "description": "A group of men and women in simple colorful robes and head coverings, with joyful faces."
+     },
+     {
+      "name": "A multidão de muitas nações",
+      "description": "Men and women from many lands with varied skin tones, wearing different colorful traditional robes, turbans and head coverings."
+     }
+    ]
+   }
+  }
+ ]
+}

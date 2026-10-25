@@ -220,17 +220,25 @@ class LanguageBibles:
             self.by_lang.setdefault(t.language, []).append(t)
             self.by_lang.setdefault(lang2(t.language), []).append(t)
 
-    def pick(self, code: str) -> str | None:
+    def _candidates(self, code: str) -> list[BibleTranslation]:
         from app.bible.ebible import language_of
         from app.core.world_data import ISO3
 
         iso3 = ISO3.get(code)
         wanted = [lang2(code)] + ([iso3, lang2(language_of(iso3)[0])] if iso3 else [])
-        candidates = list({t.code: t for w in wanted for t in self.by_lang.get(w, [])}.values())
+        return list({t.code: t for w in wanted for t in self.by_lang.get(w, [])}.values())
+
+    def pick(self, code: str) -> str | None:
+        candidates = self._candidates(code)
         if not candidates:
             return None
         chosen = next((t for t in candidates if t.code in self.defaults), None)
         return (chosen or max(candidates, key=lambda t: (t.license == "Public Domain", t.verse_count))).code
+
+    def options(self, code: str) -> list[BibleTranslation]:
+        """Todas as Bíblias do idioma, a padrão primeiro (usado pelo Kids)."""
+        best = self.pick(code)
+        return sorted(self._candidates(code), key=lambda t: (t.code != best, t.name))
 
 
 async def language_bibles(db: AsyncSession) -> LanguageBibles:

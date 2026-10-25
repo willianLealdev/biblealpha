@@ -26,6 +26,10 @@ export default function AdminLayout() {
       <Stack.Screen name="devotionals/[day]" options={{ title: t('admin.devotionals') }} />
       <Stack.Screen name="languages/index" options={{ title: t('admin.languages') }} />
       <Stack.Screen name="languages/[code]" options={{ title: t('admin.languages') }} />
+      <Stack.Screen name="kids/index" options={{ title: t('adminKids.title') }} />
+      <Stack.Screen name="kids/[id]" options={{ title: t('adminKids.title') }} />
+      <Stack.Screen name="kids/verses" options={{ title: t('adminKids.versesOpen') }} />
+      <Stack.Screen name="kids/videos" options={{ title: t('adminKids.videosOpen') }} />
     </Stack>
   );
 }

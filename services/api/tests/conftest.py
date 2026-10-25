@@ -88,7 +88,9 @@ async def _clean():
                 "legal_acceptances, audit_logs, highlight_categories, highlights, bookmarks, annotations, "
                 "reading_progress, reading_history, ai_usage, ai_conversations, ai_messages, subscriptions, "
                 "payment_events, daily_devotionals, user_devotionals, plan_enrollments, "
-                "notification_preferences, sermons, sermon_versions, visual_studies, visual_images "
+                "notification_preferences, sermons, sermon_versions, visual_studies, visual_images, "
+                "kids_stories, kids_story_pages, kids_verses, kids_story_translations, "
+                "kids_videos, kids_video_chunks "
                 "RESTART IDENTITY CASCADE"
             )
         )

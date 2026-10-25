@@ -124,6 +124,6 @@ export function useShowBottomNav(signedIn: boolean): boolean {
   if (!signedIn || segments.length === 0) return false;
   if (segments[0] === '(app)') return false; // as abas já têm o menu
   if (segments[0] === 'sermon' && (segments.includes('pulpit') || segments.includes('present'))) return false;
-  if (segments[0] === 'screen' || segments[0] === 'welcome') return false;
+  if (segments[0] === 'screen' || segments[0] === 'welcome' || segments[0] === 'kids') return false;
   return !['sign-in', 'sign-up', 'forgot-password', 'verify-email', 'reset-password'].includes(segments[0]);
 }

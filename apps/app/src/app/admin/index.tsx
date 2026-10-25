@@ -80,6 +80,7 @@ export default function AdminHome() {
       <Button kind="secondary" icon="speedometer-outline" title={t('admin.limits.title')} onPress={() => router.push('/admin/limits')} />
       <Button kind="secondary" icon="key-outline" title={t('admin.integrations')} onPress={() => router.push('/admin/integrations')} />
       <Button kind="secondary" icon="calendar-number-outline" title={t('admin.devotionals')} onPress={() => router.push('/admin/devotionals')} />
+      <Button kind="secondary" icon="happy-outline" title={t('adminKids.open')} onPress={() => router.push('/admin/kids')} />
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <View style={{ flex: 1 }}>
           <Button kind="secondary" icon="book-outline" title={t('admin.bibles')} onPress={() => router.push('/admin/bibles')} />
