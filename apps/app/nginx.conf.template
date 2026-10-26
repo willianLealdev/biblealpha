@@ -54,6 +54,14 @@ server {
         try_files $uri =404;
     }
 
+    # BibleAlpha Kids: mesma página, com o manifesto e o ícone do Kids (app Kids da Microsoft Store)
+    location = /kids {
+        try_files /kids.html =404;
+    }
+    location /kids/ {
+        try_files $uri /kids.html;
+    }
+
     # Rotas do app (SPA)
     location / {
         try_files $uri /index.html;

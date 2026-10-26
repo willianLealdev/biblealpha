@@ -2,6 +2,7 @@ import { createElement, useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Svg, { Circle, Ellipse, Path, Rect } from 'react-native-svg';
 
+import { readStored, writeStored } from '@/kids/device-store';
 import { DRAWINGS, type Drawing, PALETTE, type Region } from '@/kids/drawings';
 import { GameEnd, GameShell } from '@/kids/game-ui';
 import { useKidsText } from '@/kids/strings';
@@ -13,23 +14,8 @@ const INK = '#2B2140';
 const key = (id: string) => `bakids.color.${id}`;
 
 // Cada desenho pintado fica guardado só neste aparelho
-function loadFills(id: string): Record<string, string> {
-  if (Platform.OS !== 'web') return {};
-  try {
-    return JSON.parse(globalThis.localStorage?.getItem(key(id)) ?? '{}');
-  } catch {
-    return {};
-  }
-}
-
-function saveFills(id: string, fills: Record<string, string>) {
-  if (Platform.OS !== 'web') return;
-  try {
-    globalThis.localStorage?.setItem(key(id), JSON.stringify(fills));
-  } catch {
-    // sem espaço: segue sem guardar
-  }
-}
+const loadFills = (id: string) => readStored<Record<string, string>>(key(id)) ?? {};
+const saveFills = (id: string, fills: Record<string, string>) => writeStored(key(id), fills);
 
 const geometry = (region: Region) =>
   region.kind === 'rect'

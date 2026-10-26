@@ -105,6 +105,11 @@ Esboço, ajustar ao ler o código:
 Músicas para cantar, colorir, quebra-cabeça da história, medalhas, quadro de progresso para os pais.
 
 ### Etapa 7 — Apps das lojas (só depois de tudo revisado no site)
+- **Feito (25/10/2026):** o app Kids sai do **mesmo código** do `apps/app` (não foi criado `apps/kids`, para o site e os apps nunca ficarem diferentes). `APP_VARIANT=kids` no `app.config.js` troca nome (BibleAlpha Kids), ícone (`assets/kids/app-*.png`, da ilustração da Ovelhinha), identificador `com.biblealpha.kids` (iOS e Android), projeto EAS `73f6af98-8e5d-45b8-b8cf-3858bb5b4efa` (`@willianleal/biblealpha-kids`) e a pasta de telas: `src/kids-app` (`_layout.tsx` próprio, `index.tsx` abre `/kids`; `src/kids-app/kids/*` são pontes geradas por `node scripts/kids-app-routes.js` para as telas de `src/app/kids`; o CI confere com `--check`). **Criou ou apagou tela do Kids: rodar o script.** Câmera, microfone e fotos ficam fora do app Kids (`scripts/eas-pre-install.js` + plugins tirados no `app.config.js`). Perfis `kids-preview` e `kids-production` no `eas.json`.
+- Nos apps: jogos guardam no aparelho (`kids/device-store.ts`, arquivo JSON por chave); notas do Louvor e trombeta tocam com `expo-audio` (`kids/tones.native.ts`, som criado no próprio app); vídeos tocam com `expo-video` (`kids/native-video.tsx`). Os dois módulos só são abertos se o app instalado já os tiver (app oficial 1.0.1 segue mostrando o aviso).
+- **Microsoft Store:** o nginx entrega `/kids` com `dist/kids.html` (manifesto `public/kids-manifest.json`, ícones `public/kids-icon-*.png`); o pacote é feito no PWABuilder com `https://biblealpha.com/kids` e se atualiza sozinho junto com o site.
+- **Atualização automática:** ver `docs/mapa-app-oficial.md` seção 6 (vale para os dois apps).
+- Falta (dono): criar o app nas 3 lojas, segredo `EXPO_TOKEN` no GitHub, primeiro build e envio.
 - Criar `apps/kids`; novo bundle id (ex. `com.biblealpha.kids`), ícone, capturas, textos das lojas.
 - Apple: categoria **Crianças** (faixa de idade), sem anúncio, sem link externo sem a trava dos pais, política de privacidade para crianças. Google: **Programa Famílias** e declaração de público infantil. Formulário de segurança dos dados: "não coleta dados".
 - Mesmo processo de publicação dos apps atuais (EAS Build/Submit; ver `docs/05-lojas.md` e a memória do projeto).

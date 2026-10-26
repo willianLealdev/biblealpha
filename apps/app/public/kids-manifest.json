@@ -1,0 +1,22 @@
+{
+  "name": "BibleAlpha Kids — Histórias da Bíblia e jogos",
+  "short_name": "BibleAlpha Kids",
+  "description": "Histórias da Bíblia com voz, jogos bíblicos, quiz e versículos para crianças. Sem anúncios, sem compras e sem login.",
+  "id": "/kids",
+  "start_url": "/kids",
+  "scope": "/kids",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#FFF7E8",
+  "background_color": "#FFF7E8",
+  "lang": "pt-BR",
+  "categories": ["kids", "education", "books"],
+  "icons": [
+    { "src": "/kids-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/kids-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/kids-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "launch_handler": { "client_mode": "focus-existing" }
+}

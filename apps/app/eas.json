@@ -30,6 +30,22 @@
       "android": {
         "buildType": "app-bundle"
       }
+    },
+    "kids-preview": {
+      "extends": "preview",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://biblealpha.com",
+        "EXPO_PUBLIC_APP_URL": "https://biblealpha.com",
+        "APP_VARIANT": "kids"
+      }
+    },
+    "kids-production": {
+      "extends": "production",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://biblealpha.com",
+        "EXPO_PUBLIC_APP_URL": "https://biblealpha.com",
+        "APP_VARIANT": "kids"
+      }
     }
   },
   "submit": {
@@ -40,6 +56,12 @@
       },
       "ios": {
         "ascAppId": "6824735409"
+      }
+    },
+    "kids-production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
       }
     }
   }

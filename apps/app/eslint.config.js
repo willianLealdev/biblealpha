@@ -7,4 +7,9 @@ module.exports = defineConfig([
   {
     ignores: ['dist/*'],
   },
+  {
+    // Scripts do Node (build do site, apps e publicação automática)
+    files: ['scripts/**/*.js'],
+    languageOptions: { globals: { __dirname: 'readonly', Buffer: 'readonly', process: 'readonly', require: 'readonly', module: 'writable' } },
+  },
 ]);

@@ -1,0 +1,72 @@
+name: Atualizar os apps
+
+# Atualização automática dos apps (BibleAlpha e BibleAlpha Kids) nas lojas, sem mandar versão nova:
+# de 10 em 10 minutos confere se o site no ar (Easypanel) já tem o código mais novo do GitHub.
+# Quando tem, e esse código ainda não foi mandado, publica a atualização (EAS Update) e os
+# aparelhos baixam sozinhos na próxima vez que abrirem o app.
+# Precisa do segredo EXPO_TOKEN no GitHub (Settings > Secrets and variables > Actions).
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ota
+  cancel-in-progress: false
+
+jobs:
+  ota:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: O site no ar já tem este código?
+        id: live
+        run: |
+          id=$(node scripts/build-id.js)
+          live=$(curl -fsS --max-time 20 https://biblealpha.com/version.json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{console.log(JSON.parse(s).build)}catch{console.log("nenhum")}})' || echo nenhum)
+          echo "código do GitHub: $id | site no ar: $live"
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+          if [ "$id" = "$live" ]; then echo "same=true" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Essa versão já foi mandada?
+        if: steps.live.outputs.same == 'true'
+        id: sent
+        uses: actions/cache/restore@v4
+        with:
+          path: apps/app/.ota-sent
+          key: ota-${{ steps.live.outputs.id }}
+          lookup-only: true
+
+      - uses: actions/setup-node@v4
+        if: steps.live.outputs.same == 'true' && steps.sent.outputs.cache-hit != 'true'
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/app/package-lock.json
+
+      - name: Publicar a atualização nos dois apps
+        if: steps.live.outputs.same == 'true' && steps.sent.outputs.cache-hit != 'true'
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_PUBLIC_API_URL: https://biblealpha.com
+          EXPO_PUBLIC_APP_URL: https://biblealpha.com
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then echo "Falta o segredo EXPO_TOKEN no GitHub."; exit 1; fi
+          npm ci --no-audit --no-fund
+          node scripts/kids-app-routes.js --check
+          msg="$(git log -1 --pretty=%s) [build:${{ steps.live.outputs.id }}]"
+          npx eas-cli@latest update --channel production --environment production --message "$msg" --non-interactive
+          APP_VARIANT=kids npx eas-cli@latest update --channel production --environment production --message "$msg" --non-interactive
+          echo "${{ steps.live.outputs.id }}" > .ota-sent
+
+      - name: Anotar que essa versão foi mandada
+        if: steps.live.outputs.same == 'true' && steps.sent.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: apps/app/.ota-sent
+          key: ota-${{ steps.live.outputs.id }}

@@ -9,6 +9,7 @@
     "@expo/ui": "~58.0.21",
     "@expo/vector-icons": "^15.0.2",
     "expo": "~58.0.16",
+    "expo-audio": "~58.0.10",
     "expo-camera": "~58.0.11",
     "expo-clipboard": "~58.0.3",
     "expo-constants": "~58.0.12",
@@ -32,6 +33,7 @@
     "expo-symbols": "~58.0.4",
     "expo-system-ui": "~58.0.6",
     "expo-updates": "~58.0.17",
+    "expo-video": "~58.0.12",
     "expo-web-browser": "~58.0.6",
     "qrcode": "^1.5.4",
     "react": "19.3.0",
@@ -64,7 +66,8 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "build:web": "expo export -p web && workbox generateSW workbox-config.js"
+    "build:web": "expo export -p web && node scripts/kids-web.js && node scripts/build-id.js dist/version.json && workbox generateSW workbox-config.js",
+    "eas-build-pre-install": "node scripts/eas-pre-install.js"
   },
   "private": true,
   "jest": {

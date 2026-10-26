@@ -49,7 +49,9 @@ Rotas em `api/routes/` (todas em `/api/v1`): `auth`, `me`, `bible`, `study`, `ai
 
 ## 6. Publicar
 - **Site e API (Easypanel):** o dono clica Implantar, **api primeiro, web depois**. A api roda `alembic upgrade head` ao subir. Cada implantação derruba o site por alguns minutos. Não mexer no token global do GitHub do Easypanel.
-- **Atualização automática dos apps (OTA)**, em `apps/app`:
+- **Atualização automática dos apps (sozinha, desde 25/10/2026):** `.github/workflows/ota.yml` roda de 10 em 10 minutos. Compara a impressão digital do código (`node scripts/build-id.js`) com `https://biblealpha.com/version.json` (gravado no build do site). Quando o site no ar já tem o código do GitHub e ele ainda não foi mandado, publica o EAS Update nos **dois apps** (BibleAlpha e BibleAlpha Kids). Ou seja: implantou o site no Easypanel, em até ~10 min os apps recebem. Precisa do segredo `EXPO_TOKEN` no GitHub. Mudança nativa (módulo novo) continua exigindo build de loja e versão nova.
+- Dois apps no mesmo código: `app.config.js` (`APP_VARIANT=kids` = BibleAlpha Kids; ver `docs/mapa-kids.md` Etapa 7). Sem a variável, o app oficial fica exatamente como o `app.json`.
+- **Atualização manual (se precisar)**, em `apps/app` (para o Kids, com `APP_VARIANT=kids` na frente):
   `EXPO_PUBLIC_API_URL=https://biblealpha.com EXPO_PUBLIC_APP_URL=https://biblealpha.com npx eas-cli@latest update --channel production --environment production --message "..." --non-interactive`
   (`--environment` é obrigatório; sem as variáveis o bundle pode apontar para localhost). Só alcança builds com a mesma versão (runtimeVersion = versão do app; hoje **1.0.1**). Mudança nativa ou versão nova exige build de loja.
 - **Pendente de build de loja:** `expo-image-picker` (foto própria na imagem do versículo) foi adicionado; nos apps 1.0.1 a tela avisa para atualizar e usa só os fundos prontos. Próximo build: subir para 1.0.2.

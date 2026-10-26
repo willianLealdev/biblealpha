@@ -2,9 +2,9 @@
 
 import { getLocales } from 'expo-localization';
 import { createContext, type ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { Platform } from 'react-native';
 
 import { kidsFetch, kidsPost } from './api';
+import { readStored, writeStored } from './device-store';
 import { GAME_EN, GAME_ES, GAME_PT } from './game-content';
 import { GAME2_EN, GAME2_ES, GAME2_PT } from './game-content-2';
 import { useChosenLanguage } from './progress';
@@ -123,7 +123,7 @@ const pt = {
   otherLanguages: 'Outros idiomas (traduzidos automaticamente):',
   videosTitle: 'Vídeos da Bíblia',
   noVideos: 'Os vídeos estão chegando!',
-  videosWebOnly: 'Por enquanto os vídeos tocam no site biblealpha.com/kids.',
+  videosWebOnly: 'Peça para um adulto atualizar o app na loja para ver os vídeos.',
 };
 
 type Dict = typeof pt;
@@ -237,7 +237,7 @@ const en: Dict = {
   otherLanguages: 'Other languages (translated automatically):',
   videosTitle: 'Bible videos',
   noVideos: 'Videos are on the way!',
-  videosWebOnly: 'For now, videos play on the website biblealpha.com/kids.',
+  videosWebOnly: 'Ask a grown-up to update the app in the store to watch the videos.',
 };
 
 const es: Dict = {
@@ -350,7 +350,7 @@ const es: Dict = {
   otherLanguages: 'Otros idiomas (traducidos automáticamente):',
   videosTitle: 'Videos de la Biblia',
   noVideos: '¡Los videos están llegando!',
-  videosWebOnly: 'Por ahora los videos se ven en el sitio biblealpha.com/kids.',
+  videosWebOnly: 'Pide a un adulto que actualice la app en la tienda para ver los videos.',
 };
 
 const DICTS: Record<Builtin, Dict> = { 'pt-BR': pt, en, es };
@@ -373,24 +373,9 @@ export function kidsLanguage(): KidsLanguage {
 type Pack = { version: number; texts: Partial<Dict>; books: Record<string, { name: string; abbr: string }> };
 const cacheKey = (code: string) => `bakids.ui.${code}`;
 
-function readCache(code: string): Pack | null {
-  if (Platform.OS !== 'web') return null;
-  try {
-    const raw = globalThis.localStorage?.getItem(cacheKey(code));
-    return raw ? (JSON.parse(raw) as Pack) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeCache(code: string, pack: Pack) {
-  if (Platform.OS !== 'web') return;
-  try {
-    globalThis.localStorage?.setItem(cacheKey(code), JSON.stringify(pack));
-  } catch {
-    // sem espaço ou navegação privada
-  }
-}
+// Cópia do idioma neste aparelho (site e apps), para abrir na hora da próxima vez
+const readCache = (code: string) => readStored<Pack>(cacheKey(code));
+const writeCache = (code: string, pack: Pack) => writeStored(cacheKey(code), pack);
 
 type Remote = { version: number; dictionary?: { kidsUi?: Partial<Dict> }; books?: Pack['books'] };
 

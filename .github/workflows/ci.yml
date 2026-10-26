@@ -52,6 +52,8 @@ jobs:
       - run: npm ci
       - name: Catálogo de livros igual ao do backend
         run: python3 ../../tools/sync_books.py --check
+      - name: Telas do app Kids em dia com as do site
+        run: node scripts/kids-app-routes.js --check
       - run: npm run typecheck
       - run: npm test
       - run: npm run build:web
