@@ -896,6 +896,8 @@ const es: DeepPartial<Dictionary> = {
     again: 'Nueva prueba',
   },
   journey: {
+    smaller: 'Letra más pequeña',
+    bigger: 'Letra más grande',
     howItWorks: 'Son {n} días. Cada día lees el pasaje dentro del plan, lo marcas como concluido y avanzas. Tu progreso queda guardado.',
     doneOf: '{done} de {total} días concluidos',
     finished: 'Plan concluido. ¡Felicitaciones!',

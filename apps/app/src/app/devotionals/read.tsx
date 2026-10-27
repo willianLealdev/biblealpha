@@ -5,6 +5,7 @@ import { ActivityIndicator, Animated, Pressable, ScrollView, Text as RNText, Vie
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useReadAloud } from '@/bible/read-aloud';
+import { TypeBar, useReadingType } from '@/components/type-bar';
 import { Button, Notice } from '@/components/ui';
 import { useI18n } from '@/i18n';
 import { devotionalApi, type Enrollment, type Reading } from '@/lib/devotional';
@@ -22,6 +23,7 @@ export default function PlanReading() {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const aloud = useReadAloud();
+  const { scale, lineHeight, setScale } = useReadingType();
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [readings, setReadings] = useState<Reading[] | null>(null);
   const [step, setStep] = useState(0);
@@ -107,6 +109,7 @@ export default function PlanReading() {
           {total > 1 ? <RNText style={{ color: colors.textMuted, fontFamily: fonts.body }}>{t('journey.readingOf', { n: step + 1, total })}</RNText> : null}
         </View>
 
+        <TypeBar scale={scale} onChange={setScale} />
         <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
           <Chip
             icon={aloud.playing ? 'stop-circle-outline' : 'headset-outline'}
@@ -130,10 +133,10 @@ export default function PlanReading() {
               {text.length > 1 || !reading?.verse_start ? (
                 <RNText style={{ color: colors.gold, fontFamily: fonts.bodyBold, fontSize: 14 }}>{t('journey.chapter', { n: c.chapter })}</RNText>
               ) : null}
-              <RNText style={{ color: colors.text, fontFamily: 'Literata_400Regular', fontSize: 19, lineHeight: 32 }}>
+              <RNText style={{ color: colors.text, fontFamily: 'Literata_400Regular', fontSize: 19 * scale, lineHeight: 19 * scale * lineHeight }}>
                 {c.verses.map((v) => (
                   <RNText key={v.verse}>
-                    <RNText style={{ color: colors.gold, fontSize: 12, fontFamily: fonts.bodyBold }}>{v.verse} </RNText>
+                    <RNText style={{ color: colors.gold, fontSize: 12 * scale, fontFamily: fonts.bodyBold }}>{v.verse} </RNText>
                     {v.text}{' '}
                   </RNText>
                 ))}

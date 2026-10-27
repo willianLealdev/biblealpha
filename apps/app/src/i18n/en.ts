@@ -894,6 +894,8 @@ const en: Dictionary = {
     again: 'New quiz',
   },
   journey: {
+    smaller: 'Smaller text',
+    bigger: 'Larger text',
     howItWorks: 'It takes {n} days. Each day you read the passage inside the plan, mark it as done and move on. Your progress is saved.',
     doneOf: '{done} of {total} days done',
     finished: 'Plan completed. Congratulations!',

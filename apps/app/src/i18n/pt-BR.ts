@@ -892,6 +892,8 @@ const ptBR = {
     again: 'Novo teste',
   },
   journey: {
+    smaller: 'Diminuir a letra',
+    bigger: 'Aumentar a letra',
     howItWorks: 'São {n} dias. A cada dia você lê o trecho dentro do plano, marca como concluído e avança. Seu progresso fica salvo.',
     doneOf: '{done} de {total} dias concluídos',
     finished: 'Plano concluído. Parabéns!',
