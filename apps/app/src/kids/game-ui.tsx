@@ -48,7 +48,7 @@ export function GameEnd({ game, stars, onAgain, extra }: { game: string; stars: 
     if (counted.current) return;
     counted.current = true;
     finishGame(game, won);
-    speak(`${t('game_end')} ${t(gameLesson(game))}`);
+    // Na vitória só o som e o confete (do Celebrate); o ensinamento se ouve tocando nele
     // só na primeira vez que o final aparece
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,7 +58,9 @@ export function GameEnd({ game, stars, onAgain, extra }: { game: string; stars: 
       <Celebrate title={extra ?? t('game_end')} subtitle={`${'⭐'.repeat(won)}  ${t('game_stars', { n: won })}`} />
       <View style={styles.lesson}>
         <Text style={styles.lessonTitle}>📜 {t('game_lesson')}</Text>
-        <Text style={styles.lessonText}>{t(gameLesson(game))}</Text>
+        <Text style={styles.lessonText} onPress={() => speak(t(gameLesson(game)))}>
+          🔊 {t(gameLesson(game))}
+        </Text>
         <Text style={styles.ref}>{t(gameRef(game))}</Text>
       </View>
       <View style={styles.row}>

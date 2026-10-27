@@ -41,8 +41,9 @@ export default function Missions() {
   function mark(n: number) {
     const now = [...done, n];
     setSaved({ day, done: now });
-    speak(t('mi_done'));
+    // Última missão: a vitória fala por si (confete e som)
     if (list.every((m) => now.includes(m))) setCelebrate(true);
+    else speak(t('mi_done'));
   }
 
   return (

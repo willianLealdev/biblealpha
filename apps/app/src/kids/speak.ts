@@ -11,6 +11,10 @@ const VOICE: Record<string, string> = { 'pt-BR': 'pt-BR', en: 'en-US', es: 'es-E
 // Navegador sem voz (alguns navegadores embutidos): os botões só não falam, sem erro
 const SUPPORTED = Platform.OS !== 'web' || (typeof window !== 'undefined' && 'speechSynthesis' in window);
 
+// A voz não lê emojis (falava "confete" no 🎉): eles saem do texto antes de falar
+const EMOJI = /[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{FE0F}\u{200D}\u{20E3}]/gu;
+const forVoice = (text: string) => text.replace(EMOJI, ' ').replace(/\s+/g, ' ').trim();
+
 function quietStop() {
   if (SUPPORTED) Speech.stop().catch(() => {});
 }
@@ -31,7 +35,7 @@ export function useSpeaker(language: KidsLanguage) {
       if (!SUPPORTED) return;
       quietStop();
       setSpeaking(true);
-      Speech.speak(text, {
+      Speech.speak(forVoice(text), {
         language: VOICE[language] ?? language,
         // Um pouco mais devagar e alegre para crianças
         rate: 0.9,

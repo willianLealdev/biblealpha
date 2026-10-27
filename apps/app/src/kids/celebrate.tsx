@@ -1,15 +1,20 @@
-// Comemoração curta: estrelas que pulam na tela.
+// Comemoração de vitória: estrelas que pulam, confete na tela inteira e som de vitória.
 
 import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 
+import { useConfetti } from './confetti';
 import { kidsColors, kidsFonts, kidsRadius } from './theme';
+import { victory } from './tones';
 
 export function Celebrate({ title, subtitle }: { title: string; subtitle?: string }) {
   const [scale] = useState(() => new Animated.Value(0.3));
+  const confetti = useConfetti();
   useEffect(() => {
     Animated.spring(scale, { toValue: 1, friction: 4, useNativeDriver: true }).start();
-  }, [scale]);
+    confetti();
+    victory();
+  }, [scale, confetti]);
   return (
     <View style={styles.box} accessibilityLiveRegion="polite">
       <Animated.Text style={[styles.stars, { transform: [{ scale }] }]}>🎉⭐🎉</Animated.Text>
