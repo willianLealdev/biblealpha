@@ -26,7 +26,11 @@ jobs:
 
       - name: O site no ar já tem este código?
         id: live
+        env:
+          HAS_TOKEN: ${{ secrets.EXPO_TOKEN != '' }}
         run: |
+          # Sem a chave do Expo ainda não dá para mandar: só avisa aqui, sem dar erro (nem e-mail)
+          if [ "$HAS_TOKEN" != "true" ]; then echo "::notice::Falta o segredo EXPO_TOKEN no GitHub; atualização dos apps desligada."; exit 0; fi
           id=$(node scripts/build-id.js)
           live=$(curl -fsS --max-time 20 https://biblealpha.com/version.json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{console.log(JSON.parse(s).build)}catch{console.log("nenhum")}})' || echo nenhum)
           echo "código do GitHub: $id | site no ar: $live"

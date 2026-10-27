@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -37,9 +38,12 @@ export default function KidsHome() {
         style={({ pressed }) => [styles.language, { opacity: pressed ? 0.7 : 1 }]}>
         <Text style={styles.languageText}>🌐 {LANGUAGE_LABEL[language] ?? language.toUpperCase()}</Text>
       </Pressable>
-      <Text style={styles.brand} accessibilityRole="header">
-        {t('appName')}
-      </Text>
+      <View style={styles.header}>
+        <Image source={require('@/assets/kids/logo-small.png')} style={styles.logo} contentFit="contain" accessibilityIgnoresInvertColors />
+        <Text style={styles.brand} accessibilityRole="header">
+          {t('appName')}
+        </Text>
+      </View>
       <Mascot message={t(message)} onPress={nextGreeting} />
       {stars > 0 ? (
         <Text style={styles.stars} accessibilityLabel={`${stars} ⭐`}>
@@ -77,6 +81,8 @@ export default function KidsHome() {
 }
 
 const styles = StyleSheet.create({
+  header: { alignItems: 'center', gap: 6 },
+  logo: { width: 150, height: 150 },
   language: {
     alignSelf: 'flex-end',
     backgroundColor: kidsColors.card,

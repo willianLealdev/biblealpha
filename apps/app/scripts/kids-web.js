@@ -9,7 +9,7 @@ const dist = path.join(__dirname, '..', 'dist');
 const html = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
 const swaps = [
   ['href="/manifest.json"', 'href="/kids-manifest.json"'],
-  ['href="/apple-touch-icon.png"', 'href="/kids-apple-touch-icon.png"'],
+  ['<link rel="apple-touch-icon" href="/apple-touch-icon.png" />', '<link rel="apple-touch-icon" href="/kids-apple-touch-icon.png" /><link rel="icon" type="image/png" href="/kids-favicon.png" />'],
   ['content="BibleAlpha"', 'content="BibleAlpha Kids"'],
   ['content="#0A0806"', 'content="#FFF7E8"'],
 ];

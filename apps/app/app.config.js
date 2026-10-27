@@ -45,7 +45,7 @@ module.exports = ({ config }) => {
     },
     android: {
       package: 'com.biblealpha.kids',
-      adaptiveIcon: { backgroundColor: '#FFF7E8', foregroundImage: './assets/kids/app-adaptive.png' },
+      adaptiveIcon: { backgroundColor: '#FFE9A8', foregroundImage: './assets/kids/app-adaptive.png' },
       predictiveBackGestureEnabled: false,
       permissions: [],
       blockedPermissions: [
